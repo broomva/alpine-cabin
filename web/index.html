@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cabaña Alpina · Digital Twin Interactivo</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <h1>Cabaña Alpina</h1>
+    <p class="tagline">Digital twin interactivo — 6 × 7 m sobre roca · open source · CC-BY-SA-4.0</p>
+  </div>
+  <nav>
+    <a href="https://github.com/broomva/alpine-cabin" target="_blank" rel="noopener">Repo ↗</a>
+    <a href="#construccion">Construcción</a>
+    <a href="#disclaimer">Aviso</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ============================================================== -->
+  <!--   1. HERO + 3D VIEWER                                          -->
+  <!-- ============================================================== -->
+  <section class="hero">
+    <div class="viewer-wrap">
+      <div id="viewer"></div>
+      <div class="viewer-controls">
+        <button id="btn-reset-camera">⟳ Reset cámara</button>
+        <button id="btn-toggle-grid">▦ Toggle grid</button>
+        <span id="viewer-status">Cargando modelo…</span>
+      </div>
+    </div>
+
+    <aside class="kpi-panel">
+      <h2>KPIs en vivo</h2>
+      <dl id="kpi-list"></dl>
+      <p class="kpi-note">Los KPIs se recalculan al mover los sliders. El modelo 3D representa el baseline; las variaciones se reflejan en KPIs y BOM, no en geometría en vivo.</p>
+    </aside>
+  </section>
+
+  <!-- ============================================================== -->
+  <!--   2. PARÁMETROS — SLIDERS                                      -->
+  <!-- ============================================================== -->
+  <section class="params" id="parametros">
+    <h2>Variar parámetros</h2>
+    <p>Cambia los parámetros para explorar el espacio de diseño. Los KPIs se actualizan en vivo. Cuando estés satisfecho, descarga el experimento como JSON y aplícalo al repo con <code>python cad/apply_experiment.py experimento.json</code>.</p>
+
+    <div class="slider-grid" id="sliders"></div>
+
+    <div class="experiment-actions">
+      <button id="btn-reset">Reset baseline</button>
+      <button id="btn-copy-url">Copiar URL del experimento</button>
+      <button id="btn-download" class="primary">Descargar experimento JSON</button>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!--   3. CONSTRUCCIÓN PASO A PASO                                  -->
+  <!-- ============================================================== -->
+  <section class="construction" id="construccion">
+    <h2>Construcción paso a paso</h2>
+    <ol class="steps">
+      <li>
+        <h3>1 · Levantamiento + replanteo</h3>
+        <p>Topografía de la huella 6 × 7 m, marcación de las 9 posiciones de columna sobre las peñas existentes, identificación visual + acústica de roca sana.</p>
+        <span class="step-meta">Cuadrilla: topógrafo + 1 ayudante · Duración: 1 día · Equipo: estación total, GPS</span>
+      </li>
+      <li>
+        <h3>2 · Limpieza + preparación del sitio</h3>
+        <p>Retiro del material orgánico de la huella, exposición de la cara superior de cada peña, marcación con pintura del punto exacto de cada anclaje.</p>
+        <span class="step-meta">Cuadrilla: 2 ayudantes · Duración: 1 día</span>
+      </li>
+      <li>
+        <h3>3 · Estudio geotécnico</h3>
+        <p>Sondeo en cada uno de los 9 puntos. Rechazar y reubicar columnas sobre roca fracturada o suelta. Definir profundidad de embebido del anclaje + tipo de epoxi según litología.</p>
+        <span class="step-meta">Ingeniero geotécnico · Duración: 1-2 días · Entrega: informe</span>
+      </li>
+      <li>
+        <h3>4 · Perforación + anclaje químico</h3>
+        <p>Perforación con SDS-max o corona en cada peña. Limpieza del orificio con aire comprimido. Inyección de epoxi. Inserción del perno. Curado 24 h.</p>
+        <span class="step-meta">Cuadrilla especialista perforación (2 personas) · Duración: 4-5 días · 42 anclajes total</span>
+      </li>
+      <li>
+        <h3>5 · Montaje de columnas + plataforma</h3>
+        <p>Izaje y nivelación de las 9 columnas. Soldadura/atornillado de placas capitel. Montaje de las vigas perimetrales IPE160. Tendido de viguetas C100×50 cada 30 cm. Tablero estructural sobre viguetas.</p>
+        <span class="step-meta">Cuadrilla estructural (soldador + 2 ayudantes) · Duración: 2-3 semanas · ~700 kg acero plataforma</span>
+      </li>
+      <li>
+        <h3>6 · Ensamble de pórticos A-frame</h3>
+        <p>Pre-ensamble en piso de cada uno de los 6 pórticos (par + par + tirante). Izaje al sitio. Atornillado al capitel de columnas. Instalación de cumbrera + correas.</p>
+        <span class="step-meta">Cuadrilla estructural + ayudantes adicionales para izaje · Duración: 1 semana · ~2.000 kg acero A-frame</span>
+      </li>
+      <li>
+        <h3>7 · Envolvente: cubierta + ventanal + cerramientos</h3>
+        <p>Bajo-cubierta impermeable + aislamiento PIR + lámina metálica negra. Cielo raso machimbre. Ventanal frontal templado/laminado en marco aluminio. Muro trasero treated wood. Deck frontal.</p>
+        <span class="step-meta">Cuadrilla envolvente (vidriería + cubierta + carpintería) · Duración: 3-4 semanas</span>
+      </li>
+      <li>
+        <h3>8 · Acabados + instalaciones + impermeabilización</h3>
+        <p>Eléctrica + hidrosanitaria rough-in. Estufa de leña + ducto. Barandales cable horizontal. Escalera lateral. Acabado piso interior. Drenaje perimetral. Anticorrosivo final acero. Entrega.</p>
+        <span class="step-meta">Cuadrilla acabados + técnicos eléctrico/hidráulico · Duración: 4-5 semanas</span>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ============================================================== -->
+  <!--   4. DOCUMENTACIÓN                                             -->
+  <!-- ============================================================== -->
+  <section class="docs-grid" id="documentacion">
+    <h2>Documentación del proyecto</h2>
+    <div class="doc-cards">
+      <a class="doc-card" href="https://github.com/broomva/alpine-cabin/blob/main/SPEC.md">
+        <h3>SPEC.md</h3>
+        <p>Especificación dimensional + sistema (manuscrito)</p>
+      </a>
+      <a class="doc-card" href="https://github.com/broomva/alpine-cabin/blob/main/BOM.md">
+        <h3>BOM.md</h3>
+        <p>Listado de materiales (auto-generado desde params.toml)</p>
+      </a>
+      <a class="doc-card" href="https://github.com/broomva/alpine-cabin/blob/main/PRESUPUESTO.md">
+        <h3>PRESUPUESTO.md</h3>
+        <p>Presupuesto Co/2026 con desglose por fase</p>
+      </a>
+      <a class="doc-card" href="https://github.com/broomva/alpine-cabin/blob/main/ARCHITECTURE.md">
+        <h3>ARCHITECTURE.md</h3>
+        <p>Arquitectura del digital twin + decisiones</p>
+      </a>
+      <a class="doc-card" href="https://github.com/broomva/alpine-cabin/blob/main/docs/SITE.md">
+        <h3>SITE.md</h3>
+        <p>Contexto del sitio + checklist de levantamiento</p>
+      </a>
+      <a class="doc-card" href="https://github.com/broomva/alpine-cabin/blob/main/docs/REFERENCE.md">
+        <h3>REFERENCE.md</h3>
+        <p>Intención de diseño + decisiones críticas</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!--   5. DISCLAIMER                                                -->
+  <!-- ============================================================== -->
+  <section class="disclaimer" id="disclaimer">
+    <h2>Aviso</h2>
+    <p>Esta página es exploratoria. Los KPIs son cálculos derivados de parámetros preliminares y no constituyen un proyecto estructural ni una cotización vinculante. Para construir, contrata un ingeniero estructural matriculado + un geotécnico que valide la roca + un presupuestador que confirme precios contra el mercado real.</p>
+    <p>Repo: <a href="https://github.com/broomva/alpine-cabin">github.com/broomva/alpine-cabin</a> · Licencia: <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.es">CC-BY-SA-4.0</a></p>
+  </section>
+
+</main>
+
+<footer>
+  <p>Generado con <a href="https://github.com/broomva/bstack">bstack</a> · build123d + Three.js</p>
+</footer>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.169.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.169.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module" src="js/app.js"></script>
+
+</body>
+</html>

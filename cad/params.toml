@@ -1,0 +1,151 @@
+# ===========================================================================
+# params.toml — FUENTE ÚNICA DE VERDAD del diseño
+# ===========================================================================
+# Editar este archivo y correr `make all` regenera BOM.md, PRESUPUESTO.md,
+# los modelos CAD (STEP/STL/GLTF), y los datos del HTML interactivo.
+#
+# Contrato definido en ARCHITECTURE.md §5.1. Validador: cad/parameters.py.
+# ===========================================================================
+
+schema_version = "1.0"
+
+# ---------------------------------------------------------------------------
+# Plataforma
+# ---------------------------------------------------------------------------
+
+[platform]
+width_m            = 6.0          # eje X (ancho frontal)
+depth_m            = 7.0          # eje Y (profundidad cabaña + terraza)
+column_grid_cols   = 3            # columnas en el eje X
+column_grid_rows   = 3            # filas en el eje Y
+
+# ---------------------------------------------------------------------------
+# Columnas — alturas variables por roca, perfil único
+# ---------------------------------------------------------------------------
+
+[columns]
+profile = "HSS_100x100x4"
+# Matriz [fila Y][col X], altura en metros sobre nivel de roca.
+# Fila 0 = aguas arriba (rocas más altas), fila 2 = aguas abajo (más bajas).
+heights_m = [
+    [1.8, 1.8, 1.8],   # fila 0 — back
+    [1.2, 1.2, 1.2],   # fila 1 — mid
+    [0.6, 0.6, 0.6],   # fila 2 — front
+]
+anchors_per_column = 4              # M16–M20 chemical anchors
+base_plate_mm      = [250, 250, 12] # ancho × largo × espesor
+cap_plate_mm       = [200, 200, 10]
+
+# ---------------------------------------------------------------------------
+# A-frame
+# ---------------------------------------------------------------------------
+
+[aframe]
+apex_height_m         = 6.2
+portal_count          = 6
+portal_spacing_m      = 1.0          # genera 5.0 m de profundidad cerrada con 6 pórticos
+rafter_profile        = "HSS_120x80x4"
+tie_beam_profile      = "HSS_100x50x3"
+ridge_profile         = "HSS_100x50x3"
+purlin_profile        = "C_80x40x2"
+purlin_rows_per_side  = 13
+
+# ---------------------------------------------------------------------------
+# Plataforma (vigas y viguetas)
+# ---------------------------------------------------------------------------
+
+[platform_structure]
+main_beam_profile        = "IPE_160"
+secondary_joist_profile  = "C_100x50"
+joist_spacing_m          = 0.30
+bracing_profile          = "L_50x50x4"
+
+# ---------------------------------------------------------------------------
+# Envolvente
+# ---------------------------------------------------------------------------
+
+[envelope]
+enclosed_depth_m       = 5.0
+terrace_depth_m        = 2.0
+front_glazing_m2       = 23.0           # incluye desperdicio
+rear_gable_m2          = 20.5
+roof_overhang_m        = 0.3
+roof_material          = "metal_standing_seam_black"
+roof_underlayment      = "membrane"
+roof_insulation        = "PIR_60mm"
+ceiling_lining         = "machimbre"
+deck_material          = "treated_wood"
+
+# ---------------------------------------------------------------------------
+# Acceso
+# ---------------------------------------------------------------------------
+
+[access]
+stair_steps                = 6
+railing_perimeter_m        = 11.0
+cable_rails_per_side       = 5
+
+# ---------------------------------------------------------------------------
+# Catálogo de perfiles de acero — peso por metro
+# ---------------------------------------------------------------------------
+# Si agregas un perfil nuevo, llénalo aquí. Las claves se referencian desde
+# las secciones de arriba (rafter_profile, main_beam_profile, etc.).
+
+[profiles.HSS_100x100x4]
+kg_per_m       = 12.1
+width_mm       = 100
+height_mm      = 100
+thickness_mm   = 4
+shape          = "hss"      # hss | c_channel | i_beam | angle
+
+[profiles.HSS_120x80x4]
+kg_per_m       = 12.1
+width_mm       = 80
+height_mm      = 120
+thickness_mm   = 4
+shape          = "hss"
+
+[profiles.HSS_100x50x3]
+kg_per_m       = 6.8
+width_mm       = 50
+height_mm      = 100
+thickness_mm   = 3
+shape          = "hss"
+
+[profiles.C_80x40x2]
+kg_per_m       = 3.0
+width_mm       = 40
+height_mm      = 80
+thickness_mm   = 2
+shape          = "c_channel"
+
+[profiles.C_100x50]
+kg_per_m       = 5.0
+width_mm       = 50
+height_mm      = 100
+thickness_mm   = 3
+shape          = "c_channel"
+
+[profiles.IPE_160]
+kg_per_m       = 15.8
+width_mm       = 82
+height_mm      = 160
+thickness_mm   = 5
+shape          = "i_beam"
+
+[profiles.L_50x50x4]
+kg_per_m       = 3.0
+width_mm       = 50
+height_mm      = 50
+thickness_mm   = 4
+shape          = "angle"
+
+# ---------------------------------------------------------------------------
+# Metadata del experimento — quién definió este params y por qué
+# ---------------------------------------------------------------------------
+
+[experiment]
+name    = "M0 baseline"
+source  = "manual"             # manual | html_export | engineer | contractor
+notes   = "Parámetros derivados del BOM M0 manuscrito + decisiones del SPEC.md inicial."
+created = 2026-05-18

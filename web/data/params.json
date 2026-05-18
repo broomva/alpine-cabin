@@ -1,0 +1,130 @@
+{
+  "schema_version": "1.0",
+  "platform": {
+    "width_m": 6.0,
+    "depth_m": 7.0,
+    "column_grid_cols": 3,
+    "column_grid_rows": 3
+  },
+  "columns": {
+    "profile": "HSS_100x100x4",
+    "heights_m": [
+      [
+        1.8,
+        1.8,
+        1.8
+      ],
+      [
+        1.2,
+        1.2,
+        1.2
+      ],
+      [
+        0.6,
+        0.6,
+        0.6
+      ]
+    ],
+    "anchors_per_column": 4,
+    "base_plate_mm": [
+      250,
+      250,
+      12
+    ],
+    "cap_plate_mm": [
+      200,
+      200,
+      10
+    ]
+  },
+  "aframe": {
+    "apex_height_m": 6.2,
+    "portal_count": 6,
+    "portal_spacing_m": 1.0,
+    "rafter_profile": "HSS_120x80x4",
+    "tie_beam_profile": "HSS_100x50x3",
+    "ridge_profile": "HSS_100x50x3",
+    "purlin_profile": "C_80x40x2",
+    "purlin_rows_per_side": 13
+  },
+  "platform_structure": {
+    "main_beam_profile": "IPE_160",
+    "secondary_joist_profile": "C_100x50",
+    "joist_spacing_m": 0.3,
+    "bracing_profile": "L_50x50x4"
+  },
+  "envelope": {
+    "enclosed_depth_m": 5.0,
+    "terrace_depth_m": 2.0,
+    "front_glazing_m2": 23.0,
+    "rear_gable_m2": 20.5,
+    "roof_overhang_m": 0.3,
+    "roof_material": "metal_standing_seam_black",
+    "roof_underlayment": "membrane",
+    "roof_insulation": "PIR_60mm",
+    "ceiling_lining": "machimbre",
+    "deck_material": "treated_wood"
+  },
+  "access": {
+    "stair_steps": 6,
+    "railing_perimeter_m": 11.0,
+    "cable_rails_per_side": 5
+  },
+  "profiles": {
+    "HSS_100x100x4": {
+      "kg_per_m": 12.1,
+      "width_mm": 100,
+      "height_mm": 100,
+      "thickness_mm": 4,
+      "shape": "hss"
+    },
+    "HSS_120x80x4": {
+      "kg_per_m": 12.1,
+      "width_mm": 80,
+      "height_mm": 120,
+      "thickness_mm": 4,
+      "shape": "hss"
+    },
+    "HSS_100x50x3": {
+      "kg_per_m": 6.8,
+      "width_mm": 50,
+      "height_mm": 100,
+      "thickness_mm": 3,
+      "shape": "hss"
+    },
+    "C_80x40x2": {
+      "kg_per_m": 3.0,
+      "width_mm": 40,
+      "height_mm": 80,
+      "thickness_mm": 2,
+      "shape": "c_channel"
+    },
+    "C_100x50": {
+      "kg_per_m": 5.0,
+      "width_mm": 50,
+      "height_mm": 100,
+      "thickness_mm": 3,
+      "shape": "c_channel"
+    },
+    "IPE_160": {
+      "kg_per_m": 15.8,
+      "width_mm": 82,
+      "height_mm": 160,
+      "thickness_mm": 5,
+      "shape": "i_beam"
+    },
+    "L_50x50x4": {
+      "kg_per_m": 3.0,
+      "width_mm": 50,
+      "height_mm": 50,
+      "thickness_mm": 4,
+      "shape": "angle"
+    }
+  },
+  "experiment": {
+    "name": "M0 baseline",
+    "source": "manual",
+    "notes": "Parámetros derivados del BOM M0 manuscrito + decisiones del SPEC.md inicial.",
+    "created": "2026-05-18"
+  }
+}

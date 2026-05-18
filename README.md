@@ -13,12 +13,32 @@ Cabaña tipo A-frame de 6 × 7 m elevada sobre plataforma de acero, apoyada en p
 | Archivo | Propósito |
 |---|---|
 | [`SPEC.md`](SPEC.md) | Especificación dimensional + sistema (plataforma, A-frame, envolvente) |
-| [`BOM.md`](BOM.md) | Listado preliminar de materiales — acero estructural, envolvente, fijaciones, acabados |
+| [`BOM.md`](BOM.md) | Listado de materiales — **auto-generado** desde `cad/params.toml` |
 | [`PRESUPUESTO.md`](PRESUPUESTO.md) | Presupuesto referencial Co/2026 — BOM con precios, mano de obra, indirectos, IVA, total |
+| [`ARCHITECTURE.md`](ARCHITECTURE.md) | Arquitectura del **digital twin** — pipeline params → BOM/CAD/HTML + decisiones |
+| [`cad/params.toml`](cad/params.toml) | **Fuente única de verdad** — geometría, perfiles, alturas de columna |
+| [`cad/prices.toml`](cad/prices.toml) | **Fuente única de verdad** — precios Co/2026 |
+| [`cad/cabin.py`](cad/cabin.py) | Modelo paramétrico build123d → STEP + STL + GLB |
+| [`web/index.html`](web/index.html) | Página interactiva — viewer 3D + sliders + KPIs en vivo |
 | [`docs/SITE.md`](docs/SITE.md) | Contexto del sitio — terreno, peñas de roca, vegetación, pendiente |
 | [`docs/REFERENCE.md`](docs/REFERENCE.md) | Intención de diseño + decisiones críticas para el ingeniero |
 | [`docs/NOTES.md`](docs/NOTES.md) | Preguntas abiertas, bitácora de decisiones, hitos |
 | [`assets/reference/`](assets/reference/) | Foto cabaña de referencia, foto del sitio, infografía del sistema |
+
+## Cómo correr el digital twin localmente
+
+```bash
+make setup     # crea venv + instala build123d + jinja2 (una vez)
+make all       # regenera BOM + CAD + datos del HTML desde params.toml
+make serve     # sirve la página en http://localhost:8765
+```
+
+Para experimentar:
+1. Edita `cad/params.toml` (o mueve los sliders en la página).
+2. `make all` regenera todo.
+3. Abre `http://localhost:8765` — el viewer 3D, los KPIs y el BOM están sincronizados con tus parámetros.
+
+Ver [`ARCHITECTURE.md`](ARCHITECTURE.md) para el diseño completo del sistema.
 
 ## Concepto
 

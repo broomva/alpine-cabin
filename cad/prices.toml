@@ -1,0 +1,540 @@
+# ===========================================================================
+# prices.toml — FUENTE ÚNICA DE VERDAD para precios Co/2026
+# ===========================================================================
+# Precios de referencia del mercado colombiano 2026. Reemplazar low/mid/high
+# con cotizaciones reales por línea cuando estén disponibles.
+#
+# Cambiar este archivo y correr `make all` regenera PRESUPUESTO.md.
+# ===========================================================================
+
+schema_version = "1.0"
+currency       = "COP"
+year           = 2026
+region         = "Cundinamarca / altiplano cundiboyacense"
+exchange_rate_usd_cop = 4000
+
+[overhead]
+indirect_pct   = 0.15      # 15% sobre directos
+contingency_pct = 0.10     # 10% sobre directos
+iva_pct        = 0.19      # 19% IVA Colombia
+
+# ===========================================================================
+# FASE M1 — Levantamiento + estudios previos
+# ===========================================================================
+
+[m1_studies.topo_survey]
+low = 1500000
+mid = 2200000
+high = 3500000
+unit = "servicio"
+
+[m1_studies.geotech]
+low = 2500000
+mid = 4000000
+high = 6500000
+unit = "servicio"
+
+[m1_studies.layout_marking]
+low = 400000
+mid = 600000
+high = 900000
+unit = "servicio"
+
+[m1_studies.site_clearing]
+low = 8000
+mid = 12000
+high = 18000
+unit = "m2"
+
+[m1_studies.permit_initial]
+low = 800000
+mid = 1500000
+high = 3000000
+unit = "gestión"
+
+# ===========================================================================
+# FASE M2 — Ingeniería estructural (honorarios profesionales)
+# ===========================================================================
+
+[m2_engineering.structural_design]
+low = 6000000
+mid = 10000000
+high = 16000000
+unit = "servicio"
+
+[m2_engineering.architectural_plans]
+low = 3000000
+mid = 5000000
+high = 8000000
+unit = "servicio"
+
+[m2_engineering.electrical_design]
+low = 1200000
+mid = 2000000
+high = 3500000
+unit = "servicio"
+
+[m2_engineering.plumbing_design]
+low = 1000000
+mid = 1800000
+high = 3000000
+unit = "servicio"
+
+[m2_engineering.permit_application]
+low = 2500000
+mid = 4000000
+high = 7000000
+unit = "gestión"
+
+# ===========================================================================
+# FASE M3 — Procura
+# ===========================================================================
+
+# Acero estructural fabricado, $/kg (incluye corte, soldadura, pintura epóxica + poliuretano, entregado en obra)
+[m3_procurement.steel_fabricated]
+low = 5500
+mid = 6800
+high = 9000
+unit = "kg"
+
+[m3_procurement.base_plate_250x250x12]
+low = 45000
+mid = 65000
+high = 90000
+unit = "u"
+
+[m3_procurement.cap_plate_200x200x10]
+low = 30000
+mid = 45000
+high = 65000
+unit = "u"
+
+[m3_procurement.gusset_plate]
+low = 15000
+mid = 25000
+high = 40000
+unit = "u"
+
+[m3_procurement.structural_bolt]
+low = 3500
+mid = 5500
+high = 9000
+unit = "u"
+
+# Anclajes
+[m3_procurement.rock_anchor]
+low = 18000
+mid = 28000
+high = 45000
+unit = "u"
+
+[m3_procurement.chemical_epoxy_cartridge]
+low = 70000
+mid = 110000
+high = 160000
+unit = "u"
+
+[m3_procurement.non_shrink_grout]
+low = 80000
+mid = 120000
+high = 180000
+unit = "u"
+
+[m3_procurement.galvanized_nut_washer_set]
+low = 4000
+mid = 6500
+high = 10000
+unit = "u"
+
+[m3_procurement.sds_max_bit]
+low = 180000
+mid = 280000
+high = 400000
+unit = "u"
+
+# Cubierta
+[m3_procurement.metal_roof_standing_seam]
+low = 55000
+mid = 85000
+high = 120000
+unit = "m2"
+
+[m3_procurement.roof_underlayment]
+low = 9000
+mid = 14000
+high = 22000
+unit = "m2"
+
+[m3_procurement.roof_insulation_pir]
+low = 18000
+mid = 30000
+high = 50000
+unit = "m2"
+
+[m3_procurement.ceiling_machimbre]
+low = 55000
+mid = 85000
+high = 130000
+unit = "m2"
+
+[m3_procurement.ridge_cap]
+low = 25000
+mid = 40000
+high = 65000
+unit = "m"
+
+[m3_procurement.rake_flashing]
+low = 20000
+mid = 32000
+high = 55000
+unit = "m"
+
+[m3_procurement.drip_edge]
+low = 18000
+mid = 28000
+high = 50000
+unit = "m"
+
+[m3_procurement.roof_screw_clip]
+low = 800
+mid = 1300
+high = 2200
+unit = "u"
+
+# Piso + deck
+[m3_procurement.osb_panel]
+low = 85000
+mid = 130000
+high = 180000
+unit = "u"
+
+[m3_procurement.floor_insulation]
+low = 25000
+mid = 40000
+high = 65000
+unit = "m2"
+
+[m3_procurement.vapor_barrier]
+low = 5000
+mid = 8000
+high = 14000
+unit = "m2"
+
+[m3_procurement.floor_finish_laminate]
+low = 55000
+mid = 90000
+high = 150000
+unit = "m2"
+
+[m3_procurement.deck_board_treated]
+low = 60000
+mid = 95000
+high = 160000
+unit = "u"
+
+[m3_procurement.deck_screw]
+low = 500
+mid = 850
+high = 1500
+unit = "u"
+
+[m3_procurement.deck_oil_gallon]
+low = 90000
+mid = 140000
+high = 220000
+unit = "galón"
+
+# Ventanal + carpintería frontal
+[m3_procurement.glass_facade_tempered]
+low = 260000
+mid = 380000
+high = 580000
+unit = "m2"
+
+[m3_procurement.sliding_door_glass]
+low = 1400000
+mid = 2200000
+high = 3500000
+unit = "u"
+
+[m3_procurement.front_wood_trim]
+low = 70000
+mid = 110000
+high = 180000
+unit = "m2"
+
+[m3_procurement.glazing_sealant_lot]
+low = 250000
+mid = 400000
+high = 700000
+unit = "lote"
+
+# Muro trasero
+[m3_procurement.rear_wall_structure_siding]
+low = 80000
+mid = 130000
+high = 200000
+unit = "m2"
+
+[m3_procurement.rear_wall_insulation]
+low = 25000
+mid = 40000
+high = 65000
+unit = "m2"
+
+[m3_procurement.rear_wall_interior_finish]
+low = 35000
+mid = 55000
+high = 90000
+unit = "m2"
+
+[m3_procurement.rear_window_door]
+low = 500000
+mid = 900000
+high = 1800000
+unit = "u"
+
+# Barandales + escalera
+[m3_procurement.railing_per_m]
+low = 180000
+mid = 280000
+high = 450000
+unit = "m"
+
+[m3_procurement.lateral_stair]
+low = 1800000
+mid = 2800000
+high = 4500000
+unit = "u"
+
+# MEP
+[m3_procurement.electrical_rough_per_m2]
+low = 35000
+mid = 55000
+high = 90000
+unit = "m2"
+
+[m3_procurement.plumbing_rough_per_m2]
+low = 25000
+mid = 40000
+high = 70000
+unit = "m2"
+
+[m3_procurement.kitchen_point_kit]
+low = 800000
+mid = 1400000
+high = 2500000
+unit = "kit"
+
+[m3_procurement.bathroom_set]
+low = 1500000
+mid = 2500000
+high = 4500000
+unit = "set"
+
+[m3_procurement.water_heater]
+low = 700000
+mid = 1300000
+high = 2500000
+unit = "u"
+
+[m3_procurement.wood_stove_kit]
+low = 1800000
+mid = 3000000
+high = 5500000
+unit = "u"
+
+# Impermeabilización
+[m3_procurement.epoxy_primer_gallon]
+low = 90000
+mid = 140000
+high = 220000
+unit = "galón"
+
+[m3_procurement.polyurethane_finish_gallon]
+low = 110000
+mid = 170000
+high = 260000
+unit = "galón"
+
+[m3_procurement.wood_protector_gallon]
+low = 80000
+mid = 130000
+high = 200000
+unit = "galón"
+
+[m3_procurement.poly_sealant_tube]
+low = 25000
+mid = 38000
+high = 60000
+unit = "tubo"
+
+[m3_procurement.flashing_tape]
+low = 4000
+mid = 7000
+high = 12000
+unit = "m"
+
+[m3_procurement.drainage_pipe_4in]
+low = 12000
+mid = 20000
+high = 35000
+unit = "m"
+
+[m3_procurement.drainage_gravel]
+low = 90000
+mid = 140000
+high = 220000
+unit = "m3"
+
+[m3_procurement.geotextile]
+low = 5000
+mid = 8000
+high = 14000
+unit = "m2"
+
+# Consumibles
+[m3_procurement.hardware_lot]
+low = 400000
+mid = 700000
+high = 1200000
+unit = "lote"
+
+[m3_procurement.welding_consumables_lot]
+low = 500000
+mid = 850000
+high = 1500000
+unit = "lote"
+
+[m3_procurement.cutting_disc]
+low = 8000
+mid = 13000
+high = 22000
+unit = "u"
+
+[m3_procurement.structural_adhesive_tube]
+low = 20000
+mid = 32000
+high = 55000
+unit = "tubo"
+
+# ===========================================================================
+# FASE M4 — Mano de obra (tarifa día por cuadrilla)
+# ===========================================================================
+
+[m4_labor.rock_anchor_crew]
+low = 400000
+mid = 600000
+high = 900000
+unit = "día"
+crew_size = 2
+
+[m4_labor.structural_crew]
+low = 450000
+mid = 650000
+high = 950000
+unit = "día"
+crew_size = 3
+
+[m4_labor.envelope_crew]
+low = 380000
+mid = 550000
+high = 800000
+unit = "día"
+crew_size = 3
+
+[m4_labor.finishing_crew]
+low = 320000
+mid = 480000
+high = 720000
+unit = "día"
+crew_size = 3
+
+[m4_labor.electrical_crew]
+low = 350000
+mid = 500000
+high = 750000
+unit = "día"
+crew_size = 2
+
+[m4_labor.plumbing_crew]
+low = 350000
+mid = 500000
+high = 750000
+unit = "día"
+crew_size = 2
+
+[m4_labor.site_director_half_time]
+low = 200000
+mid = 300000
+high = 450000
+unit = "día"
+crew_size = 1
+
+# ===========================================================================
+# FASE M4 — Equipos + transporte
+# ===========================================================================
+
+[m4_equipment.scaffold_rental_2m]
+low = 1500000
+mid = 2500000
+high = 4000000
+unit = "set"
+
+[m4_equipment.crane_day]
+low = 400000
+mid = 650000
+high = 1000000
+unit = "día"
+
+[m4_equipment.welding_set_rental_1m]
+low = 700000
+mid = 1100000
+high = 1700000
+unit = "set"
+
+[m4_equipment.drill_compressor_rental]
+low = 400000
+mid = 650000
+high = 1000000
+unit = "set"
+
+[m4_equipment.steel_transport_trip]
+low = 400000
+mid = 700000
+high = 1200000
+unit = "viaje"
+
+[m4_equipment.envelope_transport_trip]
+low = 300000
+mid = 500000
+high = 800000
+unit = "viaje"
+
+[m4_equipment.site_hauling_disposal]
+low = 800000
+mid = 1400000
+high = 2200000
+unit = "lote"
+
+# ===========================================================================
+# Días estimados de trabajo de cada cuadrilla (input al cálculo)
+# ===========================================================================
+
+[m4_labor_days]
+rock_anchor_crew         = 5
+structural_crew          = 25
+envelope_crew            = 20
+finishing_crew           = 25
+electrical_crew          = 8
+plumbing_crew            = 6
+site_director_half_time  = 60
+
+[m4_equipment_units]
+scaffold_rental_2m         = 1
+crane_day                  = 4
+welding_set_rental_1m      = 1
+drill_compressor_rental    = 1
+steel_transport_trip       = 2
+envelope_transport_trip    = 3
+site_hauling_disposal      = 1

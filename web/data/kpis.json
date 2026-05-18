@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-05-18T23:16:15.582258+00:00",
+  "kpis": {
+    "steel_lengths": {
+      "columns": 10.8,
+      "main_beams": 39.0,
+      "secondary_joists": 144.0,
+      "bracing": 24.0,
+      "rafters": 82.65204171706831,
+      "tie_beams": 36.0,
+      "ridge": 5.4,
+      "purlins": 140.4
+    },
+    "steel_raw_kg": 3241.689704776527,
+    "steel_fabricated_kg": 3646.900917873593,
+    "anchors": 36,
+    "areas": {
+      "enclosed_m2": 30.0,
+      "terrace_m2": 12.0,
+      "platform_m2": 42.0,
+      "roof_m2": 77.14190560259709
+    },
+    "cost": {
+      "direct_cop": 218322300,
+      "indirect_cop": 32748345.0,
+      "contingency_cop": 21832230.0,
+      "pre_iva_cop": 272902875.0,
+      "iva_cop": 51851546.25,
+      "total_cop": 324754421.25,
+      "total_usd": 81188.6053125,
+      "per_m2_enclosed_cop": 10825147.375
+    }
+  }
+}

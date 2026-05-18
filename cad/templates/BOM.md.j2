@@ -1,0 +1,95 @@
+<!--
+  ⚠ Archivo auto-generado por cad/bom_generator.py — NO EDITAR A MANO.
+  Fuente: cad/params.toml + cad/templates/BOM.md.j2
+  Regenerar: `make bom` o `python cad/bom_generator.py`
+-->
+
+# BOM — Listado Preliminar de Materiales (auto-generado)
+
+Estado: **{{ experiment.name }}** — generado el {{ generated_at }} desde commit `{{ git_commit }}`.
+
+> Este BOM es derivado de `cad/params.toml`. Las cantidades se recalculan automáticamente cuando cambian los parámetros. Margen de desperdicio aplicado: 10–15% según partida.
+
+## Supuestos
+
+- Plataforma: {{ "%.1f"|format(p.width_m) }} × {{ "%.1f"|format(p.depth_m) }} m = {{ "%.1f"|format(areas.platform_m2) }} m²
+- Cabaña cerrada: {{ "%.1f"|format(p.width_m) }} × {{ "%.1f"|format(p.enclosed_depth_m) }} m = {{ "%.1f"|format(areas.enclosed_m2) }} m²
+- Terraza: {{ "%.1f"|format(p.width_m) }} × {{ "%.1f"|format(p.terrace_depth_m) }} m = {{ "%.1f"|format(areas.terrace_m2) }} m²
+- A-frame: apex {{ p.apex_height_m }} m, {{ p.raw['aframe']['portal_count'] }} pórticos a {{ p.raw['aframe']['portal_spacing_m'] }} m
+- Rafter (calculado): √({{ "%.1f"|format(p.half_span_m) }}² + {{ p.apex_height_m }}²) = **{{ "%.3f"|format(p.rafter_length_m) }} m**
+
+## 1. Acero estructural — plataforma + cimentación
+
+| Elemento | Perfil | Longitud cruda | × waste | Pedir |
+|---|---|---|---|---|
+| Columnas | {{ p.raw['columns']['profile'] }} | {{ "%.1f"|format(sl.columns) }} m | 10% | **{{ "%.1f"|format(sl.columns * 1.10) }} m** |
+| Vigas principales | {{ p.raw['platform_structure']['main_beam_profile'] }} | {{ "%.1f"|format(sl.main_beams) }} m | 10% | **{{ "%.1f"|format(sl.main_beams * 1.10) }} m** |
+| Viguetas secundarias | {{ p.raw['platform_structure']['secondary_joist_profile'] }} | {{ "%.1f"|format(sl.secondary_joists) }} m | 10% | **{{ "%.1f"|format(sl.secondary_joists * 1.10) }} m** |
+| Arriostramiento diagonal | {{ p.raw['platform_structure']['bracing_profile'] }} | {{ "%.1f"|format(sl.bracing) }} m | 15% | **{{ "%.1f"|format(sl.bracing * 1.15) }} m** |
+| Placas base 250×250×12 | acero | {{ p.column_count }} u | 10% | **{{ (p.column_count * 1.10) | round(0, 'ceil') | int }} u** |
+| Placas capitel 200×200×10 | acero | {{ p.column_count }} u | 10% | **{{ (p.column_count * 1.10) | round(0, 'ceil') | int }} u** |
+| Anclajes a roca | M16–M20 | {{ p.anchor_count }} u | 15% | **{{ (p.anchor_count * 1.15) | round(0, 'ceil') | int }} u** |
+| Cartelas / rigidizadores | 8–10 mm | {{ p.column_count * 4 }} u | 10% | **{{ (p.column_count * 4 * 1.10) | round(0, 'ceil') | int }} u** |
+
+## 2. Acero estructural — cabaña A-frame
+
+| Elemento | Perfil | Cálculo | Longitud cruda | × waste | Pedir |
+|---|---|---|---|---|---|
+| Pares A-frame | {{ p.raw['aframe']['rafter_profile'] }} | {{ p.raw['aframe']['portal_count'] }} × 2 × {{ "%.3f"|format(p.rafter_length_m) }} m | {{ "%.1f"|format(sl.rafters) }} m | 10% | **{{ "%.1f"|format(sl.rafters * 1.10) }} m** |
+| Tirantes | {{ p.raw['aframe']['tie_beam_profile'] }} | {{ p.raw['aframe']['portal_count'] }} × {{ "%.1f"|format(p.width_m) }} m | {{ "%.1f"|format(sl.tie_beams) }} m | 10% | **{{ "%.1f"|format(sl.tie_beams * 1.10) }} m** |
+| Cumbrera | {{ p.raw['aframe']['ridge_profile'] }} | {{ "%.1f"|format(sl.ridge) }} m | {{ "%.1f"|format(sl.ridge) }} m | 10% | **{{ "%.1f"|format(sl.ridge * 1.10) }} m** |
+| Correas | {{ p.raw['aframe']['purlin_profile'] }} | {{ p.raw['aframe']['purlin_rows_per_side'] }} × 2 × ({{ "%.1f"|format(p.enclosed_depth_m) }} + 0.4) | {{ "%.1f"|format(sl.purlins) }} m | 10% | **{{ "%.1f"|format(sl.purlins * 1.10) }} m** |
+
+## 3. Resumen acero
+
+| Categoría | Longitud cruda | Peso (kg/m × m) |
+|---|---|---|
+| Columnas ({{ p.raw['columns']['profile'] }}) | {{ "%.1f"|format(sl.columns) }} m | {{ "%.0f"|format(sl.columns * p.profile(p.raw['columns']['profile']).kg_per_m) }} kg |
+| Vigas principales ({{ p.raw['platform_structure']['main_beam_profile'] }}) | {{ "%.1f"|format(sl.main_beams) }} m | {{ "%.0f"|format(sl.main_beams * p.profile(p.raw['platform_structure']['main_beam_profile']).kg_per_m) }} kg |
+| Viguetas ({{ p.raw['platform_structure']['secondary_joist_profile'] }}) | {{ "%.1f"|format(sl.secondary_joists) }} m | {{ "%.0f"|format(sl.secondary_joists * p.profile(p.raw['platform_structure']['secondary_joist_profile']).kg_per_m) }} kg |
+| Arriostramiento ({{ p.raw['platform_structure']['bracing_profile'] }}) | {{ "%.1f"|format(sl.bracing) }} m | {{ "%.0f"|format(sl.bracing * p.profile(p.raw['platform_structure']['bracing_profile']).kg_per_m) }} kg |
+| Pares ({{ p.raw['aframe']['rafter_profile'] }}) | {{ "%.1f"|format(sl.rafters) }} m | {{ "%.0f"|format(sl.rafters * p.profile(p.raw['aframe']['rafter_profile']).kg_per_m) }} kg |
+| Tirantes ({{ p.raw['aframe']['tie_beam_profile'] }}) | {{ "%.1f"|format(sl.tie_beams) }} m | {{ "%.0f"|format(sl.tie_beams * p.profile(p.raw['aframe']['tie_beam_profile']).kg_per_m) }} kg |
+| Cumbrera ({{ p.raw['aframe']['ridge_profile'] }}) | {{ "%.1f"|format(sl.ridge) }} m | {{ "%.0f"|format(sl.ridge * p.profile(p.raw['aframe']['ridge_profile']).kg_per_m) }} kg |
+| Correas ({{ p.raw['aframe']['purlin_profile'] }}) | {{ "%.1f"|format(sl.purlins) }} m | {{ "%.0f"|format(sl.purlins * p.profile(p.raw['aframe']['purlin_profile']).kg_per_m) }} kg |
+| **Total acero crudo** | **{{ "%.1f"|format(sl.total) }} m** | **{{ "%.0f"|format(steel_raw_kg) }} kg** |
+| Acero fabricado (×1.125) | | **{{ "%.0f"|format(steel_fabricated_kg) }} kg ≈ {{ "%.1f"|format(steel_fabricated_kg / 1000) }} t** |
+
+## 4. Envolvente
+
+| Elemento | Cantidad | Margen | Pedir |
+|---|---|---|---|
+| Cubierta metálica negra | {{ "%.1f"|format(areas.roof_m2) }} m² | 10% | {{ "%.1f"|format(areas.roof_m2 * 1.10) }} m² |
+| Bajo-cubierta impermeable | {{ "%.1f"|format(areas.roof_m2) }} m² | 10% | {{ "%.1f"|format(areas.roof_m2 * 1.10) }} m² |
+| Aislamiento cubierta | {{ "%.1f"|format(areas.roof_m2) }} m² | 10% | {{ "%.1f"|format(areas.roof_m2 * 1.10) }} m² |
+| Cielo raso machimbre | {{ "%.1f"|format(areas.roof_m2) }} m² | 10% | {{ "%.1f"|format(areas.roof_m2 * 1.10) }} m² |
+| Tablero estructural piso | {{ "%.1f"|format(areas.enclosed_m2) }} m² | 10% | {{ "%.1f"|format(areas.enclosed_m2 * 1.10) }} m² |
+| Acabado piso interior | {{ "%.1f"|format(areas.enclosed_m2) }} m² | 10% | {{ "%.1f"|format(areas.enclosed_m2 * 1.10) }} m² |
+| Deck exterior | {{ "%.1f"|format(areas.terrace_m2) }} m² | 15% | {{ "%.1f"|format(areas.terrace_m2 * 1.15) }} m² |
+| Ventanal frontal vidrio | {{ p.raw['envelope']['front_glazing_m2'] }} m² | — | {{ p.raw['envelope']['front_glazing_m2'] }} m² |
+| Muro trasero | {{ p.raw['envelope']['rear_gable_m2'] }} m² | — | {{ p.raw['envelope']['rear_gable_m2'] }} m² |
+
+## 5. Acceso
+
+| Elemento | Cantidad |
+|---|---|
+| Barandal terraza | {{ p.raw['access']['railing_perimeter_m'] }} m |
+| Cables horizontales | {{ p.raw['access']['cable_rails_per_side'] * p.raw['access']['railing_perimeter_m'] }} m |
+| Escalera lateral | 1 unidad ({{ p.raw['access']['stair_steps'] }} pasos) |
+
+## Resumen ejecutivo
+
+| Métrica | Valor |
+|---|---|
+| Plataforma total | {{ "%.0f"|format(areas.platform_m2) }} m² |
+| Cabaña cerrada | {{ "%.0f"|format(areas.enclosed_m2) }} m² |
+| Acero crudo | {{ "%.0f"|format(steel_raw_kg) }} kg |
+| **Acero fabricado a procurar** | **{{ "%.0f"|format(steel_fabricated_kg) }} kg ≈ {{ "%.1f"|format(steel_fabricated_kg / 1000) }} t** |
+| Anclajes a roca (sin margen) | {{ p.anchor_count }} u |
+| Anclajes a procurar (15% margen) | {{ (p.anchor_count * 1.15) | round(0, 'ceil') | int }} u |
+| Cubierta | {{ "%.0f"|format(areas.roof_m2) }} m² |
+| Ventanal | {{ p.raw['envelope']['front_glazing_m2'] }} m² |
+
+Ver [`PRESUPUESTO.md`](PRESUPUESTO.md) para precios y total estimado.
+
+Ver [`ARCHITECTURE.md`](ARCHITECTURE.md) para cómo regenerar este BOM cuando cambian los parámetros.

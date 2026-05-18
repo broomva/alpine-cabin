@@ -35,6 +35,7 @@
 | 2026-05-18 | El BOM es preliminar, no listo para procura | Todas las cantidades sujetas al ingeniero estructural + levantamiento de sitio |
 | 2026-05-18 | Repo en español como primario, inglés sigue accesible vía git history del commit M0 | Audiencia primaria son constructores/ingenieros colombianos y de LATAM |
 | 2026-05-18 | Presupuesto referencial Co/2026 publicado en `PRESUPUESTO.md` (BRO-1173) | Necesario para llevar el proyecto a contratista; valor referencial total ≈ $325 M COP (≈ USD 81 K) con IVA — sujeto a cotización real |
+| 2026-05-18 | Digital twin M0.3 shipped (BRO-1175) — params.toml como fuente única, build123d genera CAD, HTML interactivo con Three.js | Cambias parámetros en un solo lugar y todo (BOM, CAD, HTML) se regenera coherente. Ver `ARCHITECTURE.md` |
 
 ## Riesgos
 

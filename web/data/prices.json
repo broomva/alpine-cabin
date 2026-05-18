@@ -1,0 +1,509 @@
+{
+  "schema_version": "1.0",
+  "currency": "COP",
+  "year": 2026,
+  "region": "Cundinamarca / altiplano cundiboyacense",
+  "exchange_rate_usd_cop": 4000,
+  "overhead": {
+    "indirect_pct": 0.15,
+    "contingency_pct": 0.1,
+    "iva_pct": 0.19
+  },
+  "m1_studies": {
+    "topo_survey": {
+      "low": 1500000,
+      "mid": 2200000,
+      "high": 3500000,
+      "unit": "servicio"
+    },
+    "geotech": {
+      "low": 2500000,
+      "mid": 4000000,
+      "high": 6500000,
+      "unit": "servicio"
+    },
+    "layout_marking": {
+      "low": 400000,
+      "mid": 600000,
+      "high": 900000,
+      "unit": "servicio"
+    },
+    "site_clearing": {
+      "low": 8000,
+      "mid": 12000,
+      "high": 18000,
+      "unit": "m2"
+    },
+    "permit_initial": {
+      "low": 800000,
+      "mid": 1500000,
+      "high": 3000000,
+      "unit": "gestión"
+    }
+  },
+  "m2_engineering": {
+    "structural_design": {
+      "low": 6000000,
+      "mid": 10000000,
+      "high": 16000000,
+      "unit": "servicio"
+    },
+    "architectural_plans": {
+      "low": 3000000,
+      "mid": 5000000,
+      "high": 8000000,
+      "unit": "servicio"
+    },
+    "electrical_design": {
+      "low": 1200000,
+      "mid": 2000000,
+      "high": 3500000,
+      "unit": "servicio"
+    },
+    "plumbing_design": {
+      "low": 1000000,
+      "mid": 1800000,
+      "high": 3000000,
+      "unit": "servicio"
+    },
+    "permit_application": {
+      "low": 2500000,
+      "mid": 4000000,
+      "high": 7000000,
+      "unit": "gestión"
+    }
+  },
+  "m3_procurement": {
+    "steel_fabricated": {
+      "low": 5500,
+      "mid": 6800,
+      "high": 9000,
+      "unit": "kg"
+    },
+    "base_plate_250x250x12": {
+      "low": 45000,
+      "mid": 65000,
+      "high": 90000,
+      "unit": "u"
+    },
+    "cap_plate_200x200x10": {
+      "low": 30000,
+      "mid": 45000,
+      "high": 65000,
+      "unit": "u"
+    },
+    "gusset_plate": {
+      "low": 15000,
+      "mid": 25000,
+      "high": 40000,
+      "unit": "u"
+    },
+    "structural_bolt": {
+      "low": 3500,
+      "mid": 5500,
+      "high": 9000,
+      "unit": "u"
+    },
+    "rock_anchor": {
+      "low": 18000,
+      "mid": 28000,
+      "high": 45000,
+      "unit": "u"
+    },
+    "chemical_epoxy_cartridge": {
+      "low": 70000,
+      "mid": 110000,
+      "high": 160000,
+      "unit": "u"
+    },
+    "non_shrink_grout": {
+      "low": 80000,
+      "mid": 120000,
+      "high": 180000,
+      "unit": "u"
+    },
+    "galvanized_nut_washer_set": {
+      "low": 4000,
+      "mid": 6500,
+      "high": 10000,
+      "unit": "u"
+    },
+    "sds_max_bit": {
+      "low": 180000,
+      "mid": 280000,
+      "high": 400000,
+      "unit": "u"
+    },
+    "metal_roof_standing_seam": {
+      "low": 55000,
+      "mid": 85000,
+      "high": 120000,
+      "unit": "m2"
+    },
+    "roof_underlayment": {
+      "low": 9000,
+      "mid": 14000,
+      "high": 22000,
+      "unit": "m2"
+    },
+    "roof_insulation_pir": {
+      "low": 18000,
+      "mid": 30000,
+      "high": 50000,
+      "unit": "m2"
+    },
+    "ceiling_machimbre": {
+      "low": 55000,
+      "mid": 85000,
+      "high": 130000,
+      "unit": "m2"
+    },
+    "ridge_cap": {
+      "low": 25000,
+      "mid": 40000,
+      "high": 65000,
+      "unit": "m"
+    },
+    "rake_flashing": {
+      "low": 20000,
+      "mid": 32000,
+      "high": 55000,
+      "unit": "m"
+    },
+    "drip_edge": {
+      "low": 18000,
+      "mid": 28000,
+      "high": 50000,
+      "unit": "m"
+    },
+    "roof_screw_clip": {
+      "low": 800,
+      "mid": 1300,
+      "high": 2200,
+      "unit": "u"
+    },
+    "osb_panel": {
+      "low": 85000,
+      "mid": 130000,
+      "high": 180000,
+      "unit": "u"
+    },
+    "floor_insulation": {
+      "low": 25000,
+      "mid": 40000,
+      "high": 65000,
+      "unit": "m2"
+    },
+    "vapor_barrier": {
+      "low": 5000,
+      "mid": 8000,
+      "high": 14000,
+      "unit": "m2"
+    },
+    "floor_finish_laminate": {
+      "low": 55000,
+      "mid": 90000,
+      "high": 150000,
+      "unit": "m2"
+    },
+    "deck_board_treated": {
+      "low": 60000,
+      "mid": 95000,
+      "high": 160000,
+      "unit": "u"
+    },
+    "deck_screw": {
+      "low": 500,
+      "mid": 850,
+      "high": 1500,
+      "unit": "u"
+    },
+    "deck_oil_gallon": {
+      "low": 90000,
+      "mid": 140000,
+      "high": 220000,
+      "unit": "galón"
+    },
+    "glass_facade_tempered": {
+      "low": 260000,
+      "mid": 380000,
+      "high": 580000,
+      "unit": "m2"
+    },
+    "sliding_door_glass": {
+      "low": 1400000,
+      "mid": 2200000,
+      "high": 3500000,
+      "unit": "u"
+    },
+    "front_wood_trim": {
+      "low": 70000,
+      "mid": 110000,
+      "high": 180000,
+      "unit": "m2"
+    },
+    "glazing_sealant_lot": {
+      "low": 250000,
+      "mid": 400000,
+      "high": 700000,
+      "unit": "lote"
+    },
+    "rear_wall_structure_siding": {
+      "low": 80000,
+      "mid": 130000,
+      "high": 200000,
+      "unit": "m2"
+    },
+    "rear_wall_insulation": {
+      "low": 25000,
+      "mid": 40000,
+      "high": 65000,
+      "unit": "m2"
+    },
+    "rear_wall_interior_finish": {
+      "low": 35000,
+      "mid": 55000,
+      "high": 90000,
+      "unit": "m2"
+    },
+    "rear_window_door": {
+      "low": 500000,
+      "mid": 900000,
+      "high": 1800000,
+      "unit": "u"
+    },
+    "railing_per_m": {
+      "low": 180000,
+      "mid": 280000,
+      "high": 450000,
+      "unit": "m"
+    },
+    "lateral_stair": {
+      "low": 1800000,
+      "mid": 2800000,
+      "high": 4500000,
+      "unit": "u"
+    },
+    "electrical_rough_per_m2": {
+      "low": 35000,
+      "mid": 55000,
+      "high": 90000,
+      "unit": "m2"
+    },
+    "plumbing_rough_per_m2": {
+      "low": 25000,
+      "mid": 40000,
+      "high": 70000,
+      "unit": "m2"
+    },
+    "kitchen_point_kit": {
+      "low": 800000,
+      "mid": 1400000,
+      "high": 2500000,
+      "unit": "kit"
+    },
+    "bathroom_set": {
+      "low": 1500000,
+      "mid": 2500000,
+      "high": 4500000,
+      "unit": "set"
+    },
+    "water_heater": {
+      "low": 700000,
+      "mid": 1300000,
+      "high": 2500000,
+      "unit": "u"
+    },
+    "wood_stove_kit": {
+      "low": 1800000,
+      "mid": 3000000,
+      "high": 5500000,
+      "unit": "u"
+    },
+    "epoxy_primer_gallon": {
+      "low": 90000,
+      "mid": 140000,
+      "high": 220000,
+      "unit": "galón"
+    },
+    "polyurethane_finish_gallon": {
+      "low": 110000,
+      "mid": 170000,
+      "high": 260000,
+      "unit": "galón"
+    },
+    "wood_protector_gallon": {
+      "low": 80000,
+      "mid": 130000,
+      "high": 200000,
+      "unit": "galón"
+    },
+    "poly_sealant_tube": {
+      "low": 25000,
+      "mid": 38000,
+      "high": 60000,
+      "unit": "tubo"
+    },
+    "flashing_tape": {
+      "low": 4000,
+      "mid": 7000,
+      "high": 12000,
+      "unit": "m"
+    },
+    "drainage_pipe_4in": {
+      "low": 12000,
+      "mid": 20000,
+      "high": 35000,
+      "unit": "m"
+    },
+    "drainage_gravel": {
+      "low": 90000,
+      "mid": 140000,
+      "high": 220000,
+      "unit": "m3"
+    },
+    "geotextile": {
+      "low": 5000,
+      "mid": 8000,
+      "high": 14000,
+      "unit": "m2"
+    },
+    "hardware_lot": {
+      "low": 400000,
+      "mid": 700000,
+      "high": 1200000,
+      "unit": "lote"
+    },
+    "welding_consumables_lot": {
+      "low": 500000,
+      "mid": 850000,
+      "high": 1500000,
+      "unit": "lote"
+    },
+    "cutting_disc": {
+      "low": 8000,
+      "mid": 13000,
+      "high": 22000,
+      "unit": "u"
+    },
+    "structural_adhesive_tube": {
+      "low": 20000,
+      "mid": 32000,
+      "high": 55000,
+      "unit": "tubo"
+    }
+  },
+  "m4_labor": {
+    "rock_anchor_crew": {
+      "low": 400000,
+      "mid": 600000,
+      "high": 900000,
+      "unit": "día",
+      "crew_size": 2
+    },
+    "structural_crew": {
+      "low": 450000,
+      "mid": 650000,
+      "high": 950000,
+      "unit": "día",
+      "crew_size": 3
+    },
+    "envelope_crew": {
+      "low": 380000,
+      "mid": 550000,
+      "high": 800000,
+      "unit": "día",
+      "crew_size": 3
+    },
+    "finishing_crew": {
+      "low": 320000,
+      "mid": 480000,
+      "high": 720000,
+      "unit": "día",
+      "crew_size": 3
+    },
+    "electrical_crew": {
+      "low": 350000,
+      "mid": 500000,
+      "high": 750000,
+      "unit": "día",
+      "crew_size": 2
+    },
+    "plumbing_crew": {
+      "low": 350000,
+      "mid": 500000,
+      "high": 750000,
+      "unit": "día",
+      "crew_size": 2
+    },
+    "site_director_half_time": {
+      "low": 200000,
+      "mid": 300000,
+      "high": 450000,
+      "unit": "día",
+      "crew_size": 1
+    }
+  },
+  "m4_equipment": {
+    "scaffold_rental_2m": {
+      "low": 1500000,
+      "mid": 2500000,
+      "high": 4000000,
+      "unit": "set"
+    },
+    "crane_day": {
+      "low": 400000,
+      "mid": 650000,
+      "high": 1000000,
+      "unit": "día"
+    },
+    "welding_set_rental_1m": {
+      "low": 700000,
+      "mid": 1100000,
+      "high": 1700000,
+      "unit": "set"
+    },
+    "drill_compressor_rental": {
+      "low": 400000,
+      "mid": 650000,
+      "high": 1000000,
+      "unit": "set"
+    },
+    "steel_transport_trip": {
+      "low": 400000,
+      "mid": 700000,
+      "high": 1200000,
+      "unit": "viaje"
+    },
+    "envelope_transport_trip": {
+      "low": 300000,
+      "mid": 500000,
+      "high": 800000,
+      "unit": "viaje"
+    },
+    "site_hauling_disposal": {
+      "low": 800000,
+      "mid": 1400000,
+      "high": 2200000,
+      "unit": "lote"
+    }
+  },
+  "m4_labor_days": {
+    "rock_anchor_crew": 5,
+    "structural_crew": 25,
+    "envelope_crew": 20,
+    "finishing_crew": 25,
+    "electrical_crew": 8,
+    "plumbing_crew": 6,
+    "site_director_half_time": 60
+  },
+  "m4_equipment_units": {
+    "scaffold_rental_2m": 1,
+    "crane_day": 4,
+    "welding_set_rental_1m": 1,
+    "drill_compressor_rental": 1,
+    "steel_transport_trip": 2,
+    "envelope_transport_trip": 3,
+    "site_hauling_disposal": 1
+  }
+}
