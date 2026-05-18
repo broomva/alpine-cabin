@@ -34,6 +34,7 @@
 | 2026-05-18 | Chimenea sale por agua trasera, no por cumbrera | Preserva el gable frontal limpio; paga la complejidad del flashing |
 | 2026-05-18 | El BOM es preliminar, no listo para procura | Todas las cantidades sujetas al ingeniero estructural + levantamiento de sitio |
 | 2026-05-18 | Repo en español como primario, inglés sigue accesible vía git history del commit M0 | Audiencia primaria son constructores/ingenieros colombianos y de LATAM |
+| 2026-05-18 | Presupuesto referencial Co/2026 publicado en `PRESUPUESTO.md` (BRO-1173) | Necesario para llevar el proyecto a contratista; valor referencial total ≈ $325 M COP (≈ USD 81 K) con IVA — sujeto a cotización real |
 
 ## Riesgos
 

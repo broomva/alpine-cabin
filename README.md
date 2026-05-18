@@ -14,6 +14,7 @@ Cabaña tipo A-frame de 6 × 7 m elevada sobre plataforma de acero, apoyada en p
 |---|---|
 | [`SPEC.md`](SPEC.md) | Especificación dimensional + sistema (plataforma, A-frame, envolvente) |
 | [`BOM.md`](BOM.md) | Listado preliminar de materiales — acero estructural, envolvente, fijaciones, acabados |
+| [`PRESUPUESTO.md`](PRESUPUESTO.md) | Presupuesto referencial Co/2026 — BOM con precios, mano de obra, indirectos, IVA, total |
 | [`docs/SITE.md`](docs/SITE.md) | Contexto del sitio — terreno, peñas de roca, vegetación, pendiente |
 | [`docs/REFERENCE.md`](docs/REFERENCE.md) | Intención de diseño + decisiones críticas para el ingeniero |
 | [`docs/NOTES.md`](docs/NOTES.md) | Preguntas abiertas, bitácora de decisiones, hitos |
