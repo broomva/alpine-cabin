@@ -1,86 +1,86 @@
-# SPEC — Alpine Cabin
+# SPEC — Cabaña Alpina
 
-Status: **M0 preliminary.** Subject to structural engineer review.
+Estado: **M0 preliminar.** Sujeto a revisión del ingeniero estructural.
 
-## 1. Geometry
+## 1. Geometría
 
-| Element | Dimension |
+| Elemento | Dimensión |
 |---|---|
-| Platform width | 6.0 m |
-| Platform depth | 7.0 m |
-| Total platform area | 42 m² |
-| Enclosed cabin area | ~6.0 × 5.0 m = 30 m² |
-| Terrace / deck area | 6.0 × 2.0 m = 12 m² |
-| A-frame total height | ~6.2 m (6.0 – 6.5 m range) |
-| Half-span of roof | 3.0 m |
-| Rafter length (each side) | √(3.0² + 6.2²) ≈ 6.89 m |
-| Roof area (both sides) | 2 × 6.89 × 5.4 ≈ 74.4 m² |
+| Ancho de plataforma | 6.0 m |
+| Profundidad de plataforma | 7.0 m |
+| Área total de plataforma | 42 m² |
+| Área de cabaña cerrada | ~6.0 × 5.0 m = 30 m² |
+| Área de terraza | 6.0 × 2.0 m = 12 m² |
+| Altura total A-frame | ~6.2 m (rango 6.0 – 6.5 m) |
+| Semi-luz de cubierta | 3.0 m |
+| Longitud de par/cabio (cada lado) | √(3.0² + 6.2²) ≈ 6.89 m |
+| Área de cubierta (ambas aguas) | 2 × 6.89 × 5.4 ≈ 74.4 m² |
 
-## 2. Support system
+## 2. Sistema de apoyo
 
-- **9 steel columns** in a 3 × 3 grid:
-  - Width axis: 0 m / 3 m / 6 m
-  - Depth axis: 0 m / 3.5 m / 7 m
-- **Column heights vary** with terrain — assumed 0.6 m / 1.2 m / 1.8 m across the rows depending on which rock peña each column lands on. Heights to be finalized after topographic survey.
-- **Suggested profile**: HSS / tubular 100 × 100 × 4 mm.
-- **Bases**: 250 × 250 × 12 mm steel plates, anchored with 4 × M16–M20 chemical/mechanical anchors per column into sound rock.
-- **Caps**: 200 × 200 × 10 mm plates at column tops for beam connection.
-- **Bracing**: L50 × 50 × 4 or flat-bar diagonals between columns for lateral stability (wind + seismic).
+- **9 columnas metálicas** en malla 3 × 3:
+  - Eje ancho: 0 m / 3 m / 6 m
+  - Eje profundidad: 0 m / 3.5 m / 7 m
+- **Alturas de columna variables** según el terreno — asumidas en 0.6 m / 1.2 m / 1.8 m a lo largo de las filas según la peña sobre la que cae cada columna. Las alturas se cierran después del levantamiento topográfico.
+- **Perfil sugerido**: HSS / tubular 100 × 100 × 4 mm.
+- **Bases**: placas de acero 250 × 250 × 12 mm, ancladas con 4 × M16–M20 anclajes químicos/mecánicos por columna a roca sana.
+- **Capiteles**: placas 200 × 200 × 10 mm en la parte superior de cada columna para conexión a viga.
+- **Arriostramiento**: diagonales L50 × 50 × 4 o platina entre columnas para estabilidad lateral (viento + sismo).
 
-## 3. Platform structure
+## 3. Estructura de plataforma
 
-| Member | Profile | Notes |
+| Elemento | Perfil | Notas |
 |---|---|---|
-| Main beams (depth direction) | IPE160 or equivalent | 3 lines × 7 m |
-| Main beams (width direction) | IPE160 or equivalent | 3 lines × 6 m |
-| Secondary joists | C100×50 or tube 80×40 | ~19 joists × 6 m, spaced ~30 cm o.c. |
-| Floor deck | Structural OSB / plywood 18–21 mm | 30 m² enclosed area |
-| Insulation | 80–100 mm rigid / mineral wool | 30 m² |
-| Vapor barrier | Membrane | 30 m² |
-| Interior finish | Wood / laminate / vinyl | 30 m² |
+| Vigas principales (sentido profundidad) | IPE160 o equivalente | 3 líneas × 7 m |
+| Vigas principales (sentido ancho) | IPE160 o equivalente | 3 líneas × 6 m |
+| Viguetas secundarias | C100×50 o tubo 80×40 | ~19 viguetas × 6 m, espaciadas ~30 cm c/c |
+| Tablero estructural de piso | OSB / contrachapado estructural 18–21 mm | 30 m² zona cerrada |
+| Aislamiento | 80–100 mm rígido / lana mineral | 30 m² |
+| Barrera de vapor | Membrana | 30 m² |
+| Acabado interior | Madera / laminado / vinilo | 30 m² |
 
-## 4. A-frame structure
+## 4. Estructura A-frame
 
-- **6 portals** spaced ~1.0 m along the 5.0 m enclosed depth (frames at 0/1/2/3/4/5 m).
-- **Rafters**: HSS 120 × 80 × 4 mm, 6.89 m each, 2 per portal → 12 rafters total.
-- **Lower tie beams**: HSS 100 × 50 × 3 mm, 6 m each, 1 per portal → 6 tie beams.
-- **Ridge beam**: HSS 100 × 50 × 3 mm, ~5.4 m.
-- **Purlins**: C80 × 40 × 2 mm, ~13 rows × 2 sides × 5.4 m.
-- **Connections**: 8–10 mm steel plates at apex, base, knee joints. M12–M16 galvanized structural bolts.
+- **6 pórticos** espaciados ~1.0 m a lo largo de los 5.0 m de profundidad cerrada (pórticos en 0/1/2/3/4/5 m).
+- **Pares/cabios**: HSS 120 × 80 × 4 mm, 6.89 m cada uno, 2 por pórtico → 12 pares en total.
+- **Vigas inferiores de amarre (tirantes)**: HSS 100 × 50 × 3 mm, 6 m cada uno, 1 por pórtico → 6 tirantes.
+- **Cumbrera**: HSS 100 × 50 × 3 mm, ~5.4 m.
+- **Correas**: C80 × 40 × 2 mm, ~13 filas × 2 aguas × 5.4 m.
+- **Conexiones**: cartelas de acero 8–10 mm en ápice, base y rodilla. Pernos estructurales galvanizados M12–M16.
 
-## 5. Envelope
+## 5. Envolvente
 
-| Surface | Material | Area |
+| Superficie | Material | Área |
 |---|---|---|
-| Roof | Black standing-seam or trapezoidal metal | 82 m² (incl. waste) |
-| Roof underlayment | Waterproof membrane | 82 m² |
-| Roof insulation | PIR or mineral wool | 82 m² |
-| Roof interior lining | Machimbre wood panels | 82 m² |
-| Front gable | Floor-to-ceiling tempered/laminated glass + aluminum frame | ~23 m² |
-| Rear gable | Treated wood siding + 80–100 mm insulation + interior lining | ~20.5 m² |
-| Terrace deck | Treated wood or WPC | ~14 m² |
+| Cubierta | Lámina metálica negra standing-seam o trapezoidal | 82 m² (incl. desperdicio) |
+| Membrana impermeable de cubierta | Bajo-cubierta | 82 m² |
+| Aislamiento de cubierta | PIR o lana mineral | 82 m² |
+| Cielo raso interior | Machimbre en madera | 82 m² |
+| Gable frontal | Vidrio templado/laminado piso-techo + marco de aluminio | ~23 m² |
+| Gable trasero | Madera tratada + 80–100 mm aislamiento + acabado interior | ~20.5 m² |
+| Tarima de terraza (deck) | Madera tratada o WPC | ~14 m² |
 
-## 6. Access + safety
+## 6. Acceso + seguridad
 
-- **Lateral stair** along one side of the platform (~5–7 steps).
-- **Terrace railing**: ~11 m perimeter, wood/steel posts + 4–5 horizontal cable rails.
-- **Stair handrails**: both sides, ~3 m each.
-- **Chimney**: black metal flue exiting through the rear gable / rear roof slope.
+- **Escalera lateral** sobre un costado de la plataforma (~5–7 pasos).
+- **Barandal de terraza**: ~11 m de perímetro, postes de madera/acero + 4–5 cables horizontales.
+- **Pasamanos de escalera**: en ambos costados, ~3 m cada uno.
+- **Chimenea**: ducto metálico negro saliendo por el agua trasera del techo / gable trasero.
 
-## 7. Open structural questions (engineer to resolve)
+## 7. Preguntas estructurales abiertas (a resolver por el ingeniero)
 
-1. **Wind load** at apex (6.5 m above platform, ~7+ m above ground). Site is exposed.
-2. **Seismic class** for the site location (TBD).
-3. **Snow / hail load** — site is in a tropical highland with hail but no snow; conservative 50 kg/m² assumed.
-4. **Column splice or single-piece?** 1.8 m max column means single-piece is feasible.
-5. **Rafter splice strategy** — 6.89 m rafters exceed standard 6 m stock. Options: (a) order 12 m custom stock and cut to length, (b) bolt-spliced two-piece rafter with engineered gusset at midpoint, (c) welded splice with NDT inspection.
-6. **Diaphragm action of the floor deck** — does structural plywood + steel joist composite count toward lateral stiffness, or do we need full diagonal bracing in the floor plane?
-7. **Anchor depth + epoxy spec** — must be matched to actual rock type (igneous? metamorphic? weathered?) per geotech report.
+1. **Carga de viento** en el ápice (6.5 m sobre plataforma, ~7+ m sobre terreno). El sitio está expuesto.
+2. **Clasificación sísmica** según ubicación del sitio (por definir).
+3. **Carga de nieve / granizo** — sitio en altiplano tropical con granizo pero sin nieve; se asume 50 kg/m² conservador.
+4. **¿Columna empalmada o pieza única?** Con máximo 1.8 m de altura, pieza única es viable.
+5. **Estrategia de empalme de pares** — los pares de 6.89 m exceden el largo comercial estándar de 6 m. Opciones: (a) pedir stock custom de 12 m y cortar a la medida, (b) empalme atornillado en dos piezas con cartela ingenieril a media luz, (c) empalme soldado con inspección no-destructiva.
+6. **Acción diafragma del tablero de piso** — ¿el tablero estructural compuesto con viguetas metálicas aporta rigidez lateral, o se requiere arriostramiento diagonal completo en el plano del piso?
+7. **Profundidad de anclaje + especificación del epoxi** — debe ajustarse al tipo real de roca (ígnea, metamórfica, meteorizada) según informe geotécnico.
 
-## 8. Non-negotiable invariants
+## 8. Invariantes no negociables
 
-- Anchors land in **sound, continuous rock** — never in fractured surface stone or loose boulders.
-- Steel gets **anti-corrosion treatment** (galvanized OR epoxy primer + polyurethane finish) — exposed steel in a humid alpine environment is a multi-year liability.
-- Floor is **separated from terrain** with an air gap for ventilation + humidity control.
-- **Perimeter drainage** directs rainwater away from anchor points.
-- **Treated wood** for any exterior exposure (deck, railings, gable cladding, fascia).
+- Los anclajes deben caer en **roca sana y continua** — nunca en piedra superficial fracturada ni en bloques sueltos.
+- El acero recibe **tratamiento anticorrosivo** (galvanizado O imprimante epóxico + acabado en poliuretano) — el acero expuesto en clima alpino húmedo es un pasivo a varios años vista.
+- El piso queda **separado del terreno** con cámara de aire para ventilación + control de humedad.
+- **Drenaje perimetral** redirige aguas lluvias lejos de los puntos de anclaje.
+- **Madera tratada** para toda exposición exterior (deck, barandales, gable trasero, fascias).

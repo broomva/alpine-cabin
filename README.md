@@ -1,53 +1,53 @@
-# Alpine Cabin — Open-Source Build
+# Cabaña Alpina — Construcción Open Source
 
-A 6 × 7 m elevated A-frame cabin on a steel platform, supported on existing rock outcroppings. Open-sourced from M0 so anyone can fork the design, the bill of materials, and the build log.
+Cabaña tipo A-frame de 6 × 7 m elevada sobre plataforma de acero, apoyada en peñas de roca existentes. Liberada en open source desde M0 para que cualquiera pueda hacer fork del diseño, del listado de materiales y de la bitácora de obra.
 
-![Reference cabin](assets/reference/01-reference-cabin.png)
+![Cabaña de referencia](assets/reference/01-reference-cabin.png)
 
-## Status
+## Estado
 
-**M0 — Preliminary spec + BOM.** Dimensions and quantities are first-pass and explicitly marked preliminary. Final profiles, anchors, welds, and bracing must be validated by a licensed structural engineer after a geotechnical survey of the site (rock quality, slope, wind, seismic).
+**M0 — Especificación + BOM preliminar.** Dimensiones y cantidades son de primera pasada y están marcadas explícitamente como preliminares. Perfiles, anclajes, soldaduras y arriostramientos finales deben ser validados por un ingeniero estructural matriculado, después de un estudio geotécnico del sitio (calidad de roca, pendiente, viento, sismicidad).
 
-## What's here
+## Qué hay en este repo
 
-| File | Purpose |
+| Archivo | Propósito |
 |---|---|
-| [`SPEC.md`](SPEC.md) | Dimensional + system spec (platform, A-frame, envelope) |
-| [`BOM.md`](BOM.md) | Preliminary bill of materials — structural steel, envelope, fasteners, finishes |
-| [`docs/SITE.md`](docs/SITE.md) | Site context — terrain, rock outcroppings, vegetation, slope |
-| [`docs/REFERENCE.md`](docs/REFERENCE.md) | Reference design notes + critical decisions for the engineer |
-| [`docs/NOTES.md`](docs/NOTES.md) | Open questions, decision log, milestones |
-| [`assets/reference/`](assets/reference/) | Reference cabin photo, site photo, system infographic |
+| [`SPEC.md`](SPEC.md) | Especificación dimensional + sistema (plataforma, A-frame, envolvente) |
+| [`BOM.md`](BOM.md) | Listado preliminar de materiales — acero estructural, envolvente, fijaciones, acabados |
+| [`docs/SITE.md`](docs/SITE.md) | Contexto del sitio — terreno, peñas de roca, vegetación, pendiente |
+| [`docs/REFERENCE.md`](docs/REFERENCE.md) | Intención de diseño + decisiones críticas para el ingeniero |
+| [`docs/NOTES.md`](docs/NOTES.md) | Preguntas abiertas, bitácora de decisiones, hitos |
+| [`assets/reference/`](assets/reference/) | Foto cabaña de referencia, foto del sitio, infografía del sistema |
 
-## Concept
+## Concepto
 
-- **Footprint**: 6.0 × 7.0 m elevated platform (42 m²)
-- **Enclosed cabin**: ~6.0 × 5.0 m (30 m²)
-- **Front terrace**: 6.0 × 2.0 m (12 m²)
-- **Roof**: A-frame, ~6.2 m apex, black metal standing seam
-- **Support**: 9 steel columns (3 × 3 grid) anchored to existing rocks
-- **Structure**: Steel platform + steel A-frame portals every ~1.0 m
-- **Envelope**: Floor-to-ceiling front glazing, treated-wood gable, machimbre interior lining
+- **Huella**: plataforma elevada 6.0 × 7.0 m (42 m²)
+- **Cabaña cerrada**: ~6.0 × 5.0 m (30 m²)
+- **Terraza frontal**: 6.0 × 2.0 m (12 m²)
+- **Cubierta**: A-frame, ápice ~6.2 m, lámina metálica negra tipo standing seam
+- **Apoyo**: 9 columnas metálicas (malla 3 × 3) ancladas a peñas existentes
+- **Estructura**: plataforma metálica + pórticos A-frame cada ~1.0 m
+- **Envolvente**: ventanal frontal piso-techo, gable trasero en madera tratada, cielo raso interior en machimbre
 
-The system reuses the site's existing rock outcroppings as foundations — minimal earthworks, minimal concrete. See the system infographic:
+El sistema reutiliza las peñas de roca naturales del sitio como cimentación — mínimo movimiento de tierra, mínimo concreto. Ver la infografía del sistema:
 
-![System infographic](assets/reference/03-system-infographic.png)
+![Infografía del sistema](assets/reference/03-system-infographic.png)
 
-## License
+## Licencia
 
-- **Plans, drawings, documentation, BOM** — [Creative Commons Attribution-ShareAlike 4.0](LICENSE) (CC-BY-SA-4.0)
-- **Any future scripts/tooling** — Apache-2.0 (will be added under `tools/` with separate `LICENSE-CODE` when introduced)
+- **Planos, dibujos, documentación, BOM** — [Creative Commons Atribución-CompartirIgual 4.0](LICENSE) (CC-BY-SA-4.0)
+- **Scripts / herramientas futuras** — Apache-2.0 (se agregarán bajo `tools/` con un `LICENSE-CODE` separado cuando aparezcan)
 
-You are free to use, fork, modify, and build from these plans. If you publish derivatives, share them under the same license and credit `broomva/alpine-cabin`.
+Eres libre de usar, hacer fork, modificar y construir a partir de estos planos. Si publicas derivados, compártelos bajo la misma licencia y dale crédito a `broomva/alpine-cabin`.
 
-## Engineering disclaimer
+## Aviso de ingeniería
 
-Nothing in this repository is a substitute for stamped engineering drawings, a geotechnical report, or a code-compliant building permit. Build at your own risk; consult licensed professionals before procuring steel or drilling rock anchors. The author assumes no liability for any structure built from these documents.
+Nada en este repositorio sustituye planos firmados por un ingeniero matriculado, un estudio geotécnico ni una licencia de construcción que cumpla la normativa local. Quien construya a partir de estos documentos lo hace bajo su propio riesgo y debe contratar profesionales licenciados (ingeniero estructural, ingeniero geotécnico, autoridad de construcción local) antes de empezar la obra. El autor no asume ninguna responsabilidad por estructuras construidas a partir de estos documentos.
 
-## Contributing
+## Contribuciones
 
-Issues + PRs welcome. Open an issue first if you want to propose a design change so the discussion is searchable.
+Issues y PRs bienvenidos. Si quieres proponer un cambio de diseño, abre primero un issue para que la discusión quede buscable.
 
-## Project provenance
+## Procedencia del proyecto
 
-Bootstrapped under the [bstack](https://github.com/broomva/bstack) discipline at `~/broomva/builds/alpine-cabin/`. See [`CLAUDE.md`](CLAUDE.md) for the governance contract that applies to agent-driven edits in this repo.
+Iniciado bajo la disciplina [bstack](https://github.com/broomva/bstack) en `~/broomva/builds/alpine-cabin/`. Ver [`CLAUDE.md`](CLAUDE.md) para el contrato de gobernanza que aplica a ediciones hechas por agentes en este repo.

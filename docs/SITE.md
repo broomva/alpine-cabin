@@ -1,56 +1,56 @@
-# SITE — Terrain context
+# SITIO — Contexto del terreno
 
-Status: **M0 — visual reconnaissance only.** No topo survey, no geotech, no GPS coordinates yet.
+Estado: **M0 — reconocimiento visual únicamente.** Sin levantamiento topográfico, sin estudio geotécnico, sin coordenadas GPS aún.
 
-![Terrain site](../assets/reference/02-terrain-site.jpeg)
+![Sitio del terreno](../assets/reference/02-terrain-site.jpeg)
 
-## Observations from site photo
+## Observaciones a partir de la foto del sitio
 
-- **Slope**: moderate, sloping downhill from upper rocks toward the foreground grass strip.
-- **Vegetation**: native shrubs, eucalyptus, mixed woody species. Some clearing already done — the cleared zone in the foreground is the candidate platform footprint.
-- **Rocks**: at least 4–5 large boulders visible:
-  - Two stacked boulders top-right (the largest cluster — likely good for the upslope column line).
-  - One mid-frame boulder partially exposed (candidate for a middle support).
-  - One smaller foreground boulder bottom-right.
-  - One foreground boulder bottom-left (partial).
-- **Surface debris**: organic debris mound visible front-left — must be cleared before survey.
-- **Existing features**: a wooden post wrapped with rope/cloth on the right edge (utility marker or boundary marker).
+- **Pendiente**: moderada, descendiendo desde las rocas superiores hacia la franja de césped en primer plano.
+- **Vegetación**: arbustos nativos, eucalipto, especies leñosas mezcladas. Ya hay zona despejada — el área limpia en primer plano es la huella candidata para la plataforma.
+- **Rocas**: al menos 4–5 peñas grandes visibles:
+  - Dos peñas apiladas en la esquina superior derecha (el cúmulo más grande — probable candidata para la línea de columnas aguas arriba).
+  - Una peña a media imagen parcialmente expuesta (candidata para un apoyo intermedio).
+  - Una peña pequeña en primer plano inferior derecho.
+  - Una peña en primer plano inferior izquierdo (parcial).
+- **Material orgánico**: montón de material orgánico visible al frente izquierdo — debe retirarse antes del levantamiento.
+- **Elementos existentes**: poste de madera envuelto en cuerda/tela al borde derecho (marcador de servicio o linderos).
 
-## What we still don't know
+## Lo que aún no sabemos
 
-| Unknown | How to resolve |
+| Incógnita | Cómo resolverla |
 |---|---|
-| Exact GPS coordinates | Site visit + handheld GPS or phone |
-| Elevation above sea level | GPS / topo map |
-| Slope angle and direction | Topographic survey |
-| Prevailing wind direction | Local met data / multi-day site observation |
-| Seismic zone classification | Local building code lookup |
-| Rock type (igneous? metamorphic? weathered?) | Geotech sample / lithology lookup |
-| Rock continuity (massive vs. fractured) | Visual + acoustic test (sound on hammer strike) |
-| Rock bearing capacity | Geotech compression test |
-| Soil between rocks (organic, clay, sand?) | Test pit |
-| Drainage path | Site walk during rain event |
-| Sun path (for front-facing glazing orientation) | Compass + season check |
-| Access road for material delivery | Site walk + measure clearance for steel-truck access |
-| Water source | Site survey / well report / municipal connection |
-| Electrical service | Distance to grid / candidate for off-grid solar |
-| Permitting jurisdiction | Local cadastre lookup |
-| Setback / boundary distances | Cadastre survey |
+| Coordenadas GPS exactas | Visita a sitio + GPS de mano o celular |
+| Elevación sobre nivel del mar | GPS / mapa topográfico |
+| Ángulo y dirección de pendiente | Levantamiento topográfico |
+| Dirección predominante del viento | Datos meteo locales / observación de sitio multi-día |
+| Clasificación de zona sísmica | Consulta normativa local |
+| Tipo de roca (ígnea, metamórfica, meteorizada) | Muestra geotécnica / consulta litológica |
+| Continuidad de la roca (maciza vs. fracturada) | Visual + prueba acústica (sonido al golpear con martillo) |
+| Capacidad portante de la roca | Ensayo geotécnico de compresión |
+| Suelo entre rocas (orgánico, arcilla, arena) | Apique de prueba |
+| Ruta de drenaje | Caminata de sitio durante un evento de lluvia |
+| Recorrido solar (para orientación del ventanal frontal) | Brújula + verificación según estación |
+| Vía de acceso para entrega de material | Caminata de sitio + medir gálibo para acceso de camión con acero |
+| Fuente de agua | Encuesta de sitio / informe de pozo / conexión municipal |
+| Servicio eléctrico | Distancia a la red / candidato a solar off-grid |
+| Jurisdicción de licencia de construcción | Consulta catastral local |
+| Distancias de aislamiento / linderos | Levantamiento catastral |
 
-## Critical decisions blocked by site survey
+## Decisiones críticas bloqueadas por el levantamiento de sitio
 
-1. **Exact column heights** — until we have topo elevations at each of the 9 column positions, BOM column-length estimates are guesses.
-2. **Anchor placement** — which rocks actually hold anchors? Some visible boulders may sit on softer ground and be unsuitable.
-3. **Front orientation** — A-frame should face the best view AND the least wind exposure AND avoid direct afternoon sun overheating the glass. These three may conflict.
-4. **Drainage runs** — perimeter drains must direct water away from anchor points; we need to know which way water naturally runs.
+1. **Alturas exactas de columna** — hasta que tengamos elevaciones topográficas en cada una de las 9 posiciones de columna, las estimaciones de longitud de columna en el BOM son aproximadas.
+2. **Ubicación de anclajes** — ¿qué rocas realmente sostienen anclajes? Algunas peñas visibles pueden estar sobre suelo blando y no servir.
+3. **Orientación frontal** — el A-frame debe apuntar a la mejor vista Y la menor exposición al viento Y evitar sobrecalentar el vidrio con sol de la tarde. Estos tres pueden entrar en conflicto.
+4. **Trazado de drenajes** — los drenajes perimetrales deben sacar el agua lejos de los puntos de anclaje; necesitamos saber por dónde corre el agua naturalmente.
 
-## Pre-construction site work checklist
+## Checklist de obra previa al sitio
 
-- [ ] Topographic survey (9 column positions + perimeter)
-- [ ] Geotech / rock sample at each candidate anchor point
-- [ ] Clear organic debris from platform footprint
-- [ ] Mark column positions on rocks with paint
-- [ ] Mock-up A-frame footprint with stakes + string at full 6 × 7 m
-- [ ] Photograph footprint mock-up from all 4 cardinal directions
-- [ ] Local code + permit review
-- [ ] Confirm material delivery access route
+- [ ] Levantamiento topográfico (9 posiciones de columna + perímetro)
+- [ ] Estudio geotécnico / muestra de roca en cada punto de anclaje candidato
+- [ ] Retirar material orgánico de la huella de la plataforma
+- [ ] Marcar posiciones de columna sobre las rocas con pintura
+- [ ] Maqueta in situ con estacas y cuerda a tamaño real 6 × 7 m
+- [ ] Fotografiar la maqueta desde los 4 puntos cardinales
+- [ ] Revisión de normativa local y trámite de licencia
+- [ ] Confirmar ruta de acceso para entrega de material

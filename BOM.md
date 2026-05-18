@@ -1,295 +1,295 @@
-# BOM — Preliminary Bill of Materials
+# BOM — Listado Preliminar de Materiales
 
-Status: **M0 preliminary.** Quantities include 10–15% waste allowance unless noted. Profiles, anchors, welds, and bracing must be validated by a structural engineer.
+Estado: **M0 preliminar.** Las cantidades incluyen un margen de desperdicio de 10–15% salvo indicación contraria. Perfiles, anclajes, soldaduras y arriostramientos deben ser validados por un ingeniero estructural.
 
-## Assumptions
+## Supuestos
 
-- Total elevated platform: 6.0 × 7.0 m = 42 m²
-- Enclosed cabin: ~6.0 × 5.0 m = 30 m²
-- Front terrace: ~6.0 × 2.0 m = 12 m²
-- A-frame height: ~6.2 m
-- Support: 9 steel columns on existing rocks in 3 × 3 grid
-- Column heights vary 0.6 m – 1.8 m
+- Plataforma elevada total: 6.0 × 7.0 m = 42 m²
+- Cabaña cerrada: ~6.0 × 5.0 m = 30 m²
+- Terraza frontal: ~6.0 × 2.0 m = 12 m²
+- Altura del A-frame: ~6.2 m
+- Apoyo: 9 columnas metálicas sobre peñas existentes en malla 3 × 3
+- Altura de columnas variable 0.6 m – 1.8 m
 
-## Rafter length
+## Longitud del par/cabio
 
-Roof slope length (each side):
+Longitud de la pendiente de cubierta (cada lado):
 ```
-rafter = √(3.0² + 6.2²) = √47.44 ≈ 6.89 m
+par = √(3.0² + 6.2²) = √47.44 ≈ 6.89 m
 ```
 
 ---
 
-## 1. Structural steel — platform + foundations
+## 1. Acero estructural — plataforma + cimentación
 
-Column grid (3 × 3 = 9 supports):
-- Width: 0 / 3 / 6 m
-- Depth: 0 / 3.5 / 7 m
+Malla de columnas (3 × 3 = 9 apoyos):
+- Ancho: 0 / 3 / 6 m
+- Profundidad: 0 / 3.5 / 7 m
 
-| Item | Profile | Calculation | Raw length | Waste | Order |
+| Elemento | Perfil | Cálculo | Long. cruda | Desperdicio | Pedir |
 |---|---|---|---|---|---|
-| Steel columns | HSS 100×100×4 mm | 3×1.8 + 3×1.2 + 3×0.6 | 10.8 m | 10% | **11.9 m** |
-| Main platform beams | IPE160 or eq. | 3×7 m + 3×6 m | 39.0 m | 10% | **42.9 m** |
-| Secondary floor joists | C100×50 / tube 80×40 | 19 joists × 6 m | 114.0 m | 10% | **125.4 m** |
-| Diagonal bracing | L50×50×4 / flat | X-bracing between posts | 24.0 m | 15% | **27.6 m** |
-| Base plates | 250×250×12 mm | 1 per column | 9 units | 10% | **10 units** |
-| Top/cap plates | 200×200×10 mm | 1 per column | 9 units | 10% | **10 units** |
-| Anchor bolts into rock | M16–M20 + epoxy | 4 per base plate | 36 units | 15% | **42 units** |
-| Column stiffener plates | 8–10 mm triangular gussets | 4 per column | 36 units | 10% | **40 units** |
+| Columnas | HSS 100×100×4 mm | 3×1.8 + 3×1.2 + 3×0.6 | 10.8 m | 10% | **11.9 m** |
+| Vigas principales de plataforma | IPE160 o eq. | 3×7 m + 3×6 m | 39.0 m | 10% | **42.9 m** |
+| Viguetas secundarias de piso | C100×50 / tubo 80×40 | 19 viguetas × 6 m | 114.0 m | 10% | **125.4 m** |
+| Arriostramiento diagonal | L50×50×4 / platina | Cruz entre postes | 24.0 m | 15% | **27.6 m** |
+| Placas base | 250×250×12 mm | 1 por columna | 9 unid. | 10% | **10 unid.** |
+| Placas de capitel | 200×200×10 mm | 1 por columna | 9 unid. | 10% | **10 unid.** |
+| Anclajes a roca | M16–M20 + epoxi | 4 por placa base | 36 unid. | 15% | **42 unid.** |
+| Cartelas / rigidizadores | 8–10 mm triangulares | 4 por columna | 36 unid. | 10% | **40 unid.** |
 
-**Platform steel subtotal**
+**Subtotal acero plataforma**
 
-| Group | Total |
+| Grupo | Total |
 |---|---|
-| Structural steel length | 207.8 m |
-| Base/cap plates | 20 units |
-| Rock anchors | 42 units |
-| Gusset/stiffener plates | 40 units |
+| Longitud de acero estructural | 207.8 m |
+| Placas base/capitel | 20 unid. |
+| Anclajes a roca | 42 unid. |
+| Cartelas/rigidizadores | 40 unid. |
 
 ---
 
-## 2. Structural steel — A-frame cabin
+## 2. Acero estructural — cabaña A-frame
 
-Portals every 1.0 m along the 5.0 m enclosed depth → **6 portals**.
-Each portal = 2 rafters × 6.89 m = 13.78 m.
+Pórticos cada 1.0 m a lo largo de los 5.0 m de profundidad cerrada → **6 pórticos**.
+Cada pórtico = 2 pares × 6.89 m = 13.78 m.
 
-| Item | Profile | Calculation | Raw length | Waste | Order |
+| Elemento | Perfil | Cálculo | Long. cruda | Desperdicio | Pedir |
 |---|---|---|---|---|---|
-| Inclined A-frame rafters | HSS 120×80×4 mm | 6 × 2 × 6.89 m | 82.7 m | 10% | **90.9 m** |
-| Lower tie beams | HSS 100×50×3 mm | 6 × 6 m | 36.0 m | 10% | **39.6 m** |
-| Ridge beam | HSS 100×50×3 mm | 1 × 5.4 m | 5.4 m | 10% | **5.9 m** |
-| Roof purlins/correas | C80×40×2 mm | 13 × 2 × 5.4 m | 140.4 m | 10% | **154.4 m** |
-| Connection plates | 8–10 mm steel | apex / base / knee | — | — | **30–40 plates** |
-| Structural bolts | M12–M16 galvanized | frame + purlin | — | — | **150–220 units** |
+| Pares/cabios inclinados A-frame | HSS 120×80×4 mm | 6 × 2 × 6.89 m | 82.7 m | 10% | **90.9 m** |
+| Tirantes inferiores | HSS 100×50×3 mm | 6 × 6 m | 36.0 m | 10% | **39.6 m** |
+| Cumbrera | HSS 100×50×3 mm | 1 × 5.4 m | 5.4 m | 10% | **5.9 m** |
+| Correas de cubierta | C80×40×2 mm | 13 × 2 × 5.4 m | 140.4 m | 10% | **154.4 m** |
+| Cartelas de conexión | acero 8–10 mm | ápice / base / rodilla | — | — | **30–40 unid.** |
+| Pernos estructurales | M12–M16 galvanizados | pórtico + correa | — | — | **150–220 unid.** |
 
 ---
 
-## 3. Total structural steel estimate
+## 3. Estimación total de acero estructural
 
-| Group | Order length |
+| Grupo | Longitud a pedir |
 |---|---|
-| Steel columns | 11.9 m |
-| Main platform beams | 42.9 m |
-| Secondary joists | 125.4 m |
-| Bracing | 27.6 m |
-| A-frame rafters | 90.9 m |
-| Lower tie beams | 39.6 m |
-| Ridge beam | 5.9 m |
-| Roof purlins | 154.4 m |
-| **Total steel length** | **498.6 m** |
+| Columnas | 11.9 m |
+| Vigas principales de plataforma | 42.9 m |
+| Viguetas secundarias | 125.4 m |
+| Arriostramiento | 27.6 m |
+| Pares A-frame | 90.9 m |
+| Tirantes | 39.6 m |
+| Cumbrera | 5.9 m |
+| Correas de cubierta | 154.4 m |
+| **Longitud total de acero** | **498.6 m** |
 
-### Approximate steel weight
+### Peso aproximado del acero
 
-| Item | Length | kg/m | Weight |
+| Elemento | Longitud | kg/m | Peso |
 |---|---|---|---|
-| Columns 100×100×4 | 11.9 m | 12.1 | 144 kg |
-| Main beams IPE160 | 42.9 m | 15.8 | 678 kg |
-| Secondary joists | 125.4 m | 5.0 | 627 kg |
-| Bracing | 27.6 m | 3.0 | 83 kg |
-| A-frame rafters | 90.9 m | 12.1 | 1,100 kg |
-| Lower tie beams | 39.6 m | 6.8 | 269 kg |
-| Ridge beam | 5.9 m | 6.8 | 40 kg |
-| Roof purlins | 154.4 m | 3.0 | 463 kg |
-| **Subtotal** | | | **≈ 3,404 kg** |
+| Columnas 100×100×4 | 11.9 m | 12.1 | 144 kg |
+| Vigas principales IPE160 | 42.9 m | 15.8 | 678 kg |
+| Viguetas secundarias | 125.4 m | 5.0 | 627 kg |
+| Arriostramiento | 27.6 m | 3.0 | 83 kg |
+| Pares A-frame | 90.9 m | 12.1 | 1.100 kg |
+| Tirantes | 39.6 m | 6.8 | 269 kg |
+| Cumbrera | 5.9 m | 6.8 | 40 kg |
+| Correas | 154.4 m | 3.0 | 463 kg |
+| **Subtotal** | | | **≈ 3.404 kg** |
 
-Add plates, welds, bolts, brackets, fabrication allowance (×1.10 – 1.15):
+Sumando placas, soldaduras, pernos, ganchos, margen de fabricación (×1.10 – 1.15):
 
-**Practical procurement target: 3.8 – 4.0 tons of fabricated steel.**
+**Meta práctica de procura: 3.8 – 4.0 toneladas de acero fabricado.**
 
 ---
 
-## 4. Procurement cut-list (commercial 6 m stock)
+## 4. Lista de corte para procura (stock comercial de 6 m)
 
-| Item | Order length | 6 m pieces |
+| Elemento | Longitud a pedir | Piezas de 6 m |
 |---|---|---|
-| Columns 100×100×4 | 11.9 m | 2 |
-| Main beams IPE160 | 42.9 m | 8 |
-| Secondary joists | 125.4 m | 21 |
-| Diagonal bracing | 27.6 m | 5 |
-| A-frame rafters | 90.9 m | 16 |
-| Lower tie beams | 39.6 m | 7 |
-| Ridge beam | 5.9 m | 1 |
-| Roof purlins | 154.4 m | 26 |
-| **Total** | | **~86 pieces of 6 m stock** |
+| Columnas 100×100×4 | 11.9 m | 2 |
+| Vigas principales IPE160 | 42.9 m | 8 |
+| Viguetas secundarias | 125.4 m | 21 |
+| Arriostramiento diagonal | 27.6 m | 5 |
+| Pares A-frame | 90.9 m | 16 |
+| Tirantes | 39.6 m | 7 |
+| Cumbrera | 5.9 m | 1 |
+| Correas de cubierta | 154.4 m | 26 |
+| **Total** | | **~86 piezas de 6 m** |
 
-> ⚠ Rafters are 6.89 m. Order custom lengths, 12 m stock cut on site, or engineered bolted/welded splices. **Do not improvise splices at the peak without structural design.**
-
----
-
-## 5. Floor, deck, platform
-
-### Interior floor (30 m²)
-
-| Item | Spec | Raw | Waste | Order |
-|---|---|---|---|---|
-| Structural OSB / plywood | 18–21 mm | 30 m² | 10% | 33 m² |
-| Floor insulation | 80–100 mm | 30 m² | 10% | 33 m² |
-| Vapor / humidity barrier | Membrane | 30 m² | 10% | 33 m² |
-| Interior finish flooring | Wood / laminate / vinyl | 30 m² | 10% | 33 m² |
-
-Boards 1.22 × 2.44 m (2.98 m² each): 33 / 2.98 ≈ 11.1 → **12 boards minimum**.
-
-### Exterior terrace / deck (12 m²)
-
-| Item | Spec | Raw | Waste | Order |
-|---|---|---|---|---|
-| Exterior deck boards | Treated wood / WPC | 12 m² | 15% | 13.8 m² |
-| Deck screws | Stainless / galvanized | — | — | 600–800 units |
-| Deck oil / sealer | Exterior-grade | 12–14 m² | — | 1–2 gallons |
-
-Boards 140 mm × 3.0 m (0.42 m² each): 13.8 / 0.42 ≈ 33 → **33–36 deck boards**.
+> ⚠ Los pares miden 6.89 m. Pedir largos custom, stock de 12 m cortado en obra, o empalmes atornillados/soldados ingenierizados. **No improvisar empalmes en el ápice sin diseño estructural.**
 
 ---
 
-## 6. Roof + envelope (74.4 m² → 82 m² with waste)
+## 5. Piso, deck y plataforma
 
-| Item | Spec | Raw | Waste | Order |
+### Piso interior (30 m²)
+
+| Elemento | Especificación | Cruda | Desperdicio | Pedir |
 |---|---|---|---|---|
-| Metal roof sheets | Black standing-seam / trapezoidal | 74.4 m² | 10% | 82 m² |
-| Waterproof underlayment | Roof membrane | 74.4 m² | 10% | 82 m² |
-| Roof insulation | PIR / mineral wool | 74.4 m² | 10% | 82 m² |
-| Interior wood ceiling | Machimbre panels | 74.4 m² | 10% | 82 m² |
-| Ridge cap | Black metal flashing | 5.4 m | 15% | 6.2 m |
-| Rake / edge flashing | Black metal | 27.6 m | 15% | 31.8 m |
-| Eave / drip edge | Black metal | 10.8 m | 15% | 12.4 m |
-| Roof screws / clips | For metal roof | — | — | 500–700 units |
+| Tablero estructural OSB / contrachapado | 18–21 mm | 30 m² | 10% | 33 m² |
+| Aislamiento de piso | 80–100 mm | 30 m² | 10% | 33 m² |
+| Barrera de vapor / humedad | Membrana | 30 m² | 10% | 33 m² |
+| Acabado interior de piso | Madera / laminado / vinilo | 30 m² | 10% | 33 m² |
 
-Metal sheets 1.0 m effective width × 6.9 m length: 5.4 / 1.0 = 6 sheets per side × 2 = **12 sheets** (order 12–14).
+Tableros 1.22 × 2.44 m (2.98 m² c/u): 33 / 2.98 ≈ 11.1 → **mínimo 12 tableros**.
+
+### Terraza / deck exterior (12 m²)
+
+| Elemento | Especificación | Cruda | Desperdicio | Pedir |
+|---|---|---|---|---|
+| Tablones de deck exterior | Madera tratada / WPC | 12 m² | 15% | 13.8 m² |
+| Tornillos de deck | Inox / galvanizados | — | — | 600–800 unid. |
+| Aceite / sellador de deck | Grado exterior | 12–14 m² | — | 1–2 galones |
+
+Tablones 140 mm × 3.0 m (0.42 m² c/u): 13.8 / 0.42 ≈ 33 → **33–36 tablones**.
 
 ---
 
-## 7. Front façade, walls, glazing
+## 6. Cubierta + envolvente (74.4 m² → 82 m² con desperdicio)
 
-Each gable triangle area = 0.5 × 6.0 × 6.2 = **18.6 m²**.
-
-### Front (glass)
-
-| Item | Spec | Raw | Waste | Order |
+| Elemento | Especificación | Cruda | Desperdicio | Pedir |
 |---|---|---|---|---|
-| Glass façade | Tempered / laminated + aluminum frame | 21 m² | 10% | 23 m² |
-| Sliding / front doors | Glass + aluminum | 2 units | — | 2 units |
-| Front wood trim / cladding | Treated wood | 4–6 m² | 15% | 6–7 m² |
-| Sealants / gaskets | Exterior glazing | — | — | 1 lot |
+| Láminas metálicas | Negra standing-seam / trapezoidal | 74.4 m² | 10% | 82 m² |
+| Bajo-cubierta impermeable | Membrana | 74.4 m² | 10% | 82 m² |
+| Aislamiento de cubierta | PIR / lana mineral | 74.4 m² | 10% | 82 m² |
+| Cielo raso interior | Machimbre en madera | 74.4 m² | 10% | 82 m² |
+| Caballete (ridge) | Flashing metálico negro | 5.4 m | 15% | 6.2 m |
+| Flashing de borde / fascia | Metálico negro | 27.6 m | 15% | 31.8 m |
+| Vierteaguas / goterón | Metálico negro | 10.8 m | 15% | 12.4 m |
+| Tornillos / clips de cubierta | Para lámina metálica | — | — | 500–700 unid. |
 
-### Rear gable
-
-| Item | Spec | Raw | Waste | Order |
-|---|---|---|---|---|
-| Rear wall framing + cladding | Wood/steel subframe + siding | 18.6 m² | 10% | 20.5 m² |
-| Rear wall insulation | 80–100 mm | 18.6 m² | 10% | 20.5 m² |
-| Interior wall lining | Wood / gypsum / OSB | 18.6 m² | 10% | 20.5 m² |
-| Rear window / door | Optional | 2–4 m² | — | optional |
+Láminas de 1.0 m ancho efectivo × 6.9 m largo: 5.4 / 1.0 = 6 láminas por agua × 2 = **12 láminas** (pedir 12–14).
 
 ---
 
-## 8. Railings, stairs, access
+## 7. Fachada frontal, muros, ventanería
 
-Front railing perimeter: 6 + 2 + 2 = **10 m**.
+Área de cada gable triangular = 0.5 × 6.0 × 6.2 = **18.6 m²**.
 
-| Item | Spec | Raw | Waste | Order |
+### Frontal (vidrio)
+
+| Elemento | Especificación | Cruda | Desperdicio | Pedir |
 |---|---|---|---|---|
-| Terrace railing | Wood/steel posts + cable/wood rails | 10.0 m | 10% | 11.0 m |
-| Railing posts | every 1.2 m | 10 / 1.2 | — | 9–10 posts |
-| Handrail | Wood or metal | 10.0 m | 10% | 11.0 m |
-| Cable rails / horizontal | 4–5 rows × 10 m | 50 m | 10% | 55 m |
-| Lateral stair | Steel + wood treads | — | 20% | 1 unit |
-| Stair stringers | Steel | 2 × 3 m | 10% | 6.6 m |
-| Stair handrails | Both sides | 2 × 3 m | 10% | 6.6 m |
-| Stair treads | Wood / metal | 5–7 steps | — | 6–8 treads |
+| Ventanal frontal | Vidrio templado / laminado + marco aluminio | 21 m² | 10% | 23 m² |
+| Puerta frontal corrediza | Vidrio + aluminio | 2 unid. | — | 2 unid. |
+| Trim / cladding frontal | Madera tratada | 4–6 m² | 15% | 6–7 m² |
+| Sellos / empaques | Vidriería exterior | — | — | 1 lote |
+
+### Gable trasero
+
+| Elemento | Especificación | Cruda | Desperdicio | Pedir |
+|---|---|---|---|---|
+| Estructura + revestimiento muro trasero | Subestructura madera/acero + siding | 18.6 m² | 10% | 20.5 m² |
+| Aislamiento muro trasero | 80–100 mm | 18.6 m² | 10% | 20.5 m² |
+| Acabado interior muro | Madera / drywall / OSB | 18.6 m² | 10% | 20.5 m² |
+| Ventana / puerta trasera | Opcional | 2–4 m² | — | opcional |
 
 ---
 
-## 9. Anchoring + rock foundation
+## 8. Barandales, escaleras, acceso
 
-Per column base: 1 base plate + 4 rock anchors + epoxy/chemical anchor + grout + nuts/washers.
+Perímetro de barandal frontal: 6 + 2 + 2 = **10 m**.
 
-| Item | Spec | Quantity |
+| Elemento | Especificación | Cruda | Desperdicio | Pedir |
+|---|---|---|---|---|
+| Barandal de terraza | Postes madera/acero + cables/madera | 10.0 m | 10% | 11.0 m |
+| Postes de barandal | cada 1.2 m | 10 / 1.2 | — | 9–10 postes |
+| Pasamanos | Madera o metal | 10.0 m | 10% | 11.0 m |
+| Cables horizontales | 4–5 filas × 10 m | 50 m | 10% | 55 m |
+| Escalera lateral | Acero + huellas en madera | — | 20% | 1 unidad |
+| Zancas de escalera | Acero | 2 × 3 m | 10% | 6.6 m |
+| Pasamanos de escalera | Ambos lados | 2 × 3 m | 10% | 6.6 m |
+| Huellas de escalera | Madera / metal | 5–7 pasos | — | 6–8 huellas |
+
+---
+
+## 9. Anclaje + cimentación en roca
+
+Por cada base de columna: 1 placa base + 4 anclajes a roca + epoxi/químico + grout + tuercas/arandelas.
+
+| Elemento | Especificación | Cantidad |
 |---|---|---|
-| Rock anchors | M16–M20 | 42 units |
-| Chemical anchor epoxy | 500 ml cartridges | 10–12 cartridges |
-| Non-shrink grout | leveling | 1–2 bags |
-| Galvanized nuts / washers | matched | 42–50 sets |
-| Base plate shims | steel / stainless | 1 lot |
-| Rock drilling bits | SDS-max or core | 2–4 bits |
+| Anclajes a roca | M16–M20 | 42 unid. |
+| Epoxi de anclaje químico | Cartuchos 500 ml | 10–12 cartuchos |
+| Grout sin retracción | nivelación | 1–2 bultos |
+| Tuercas / arandelas galvanizadas | medida | 42–50 juegos |
+| Cuñas de nivelación de placa | acero / inox | 1 lote |
+| Brocas de perforación de roca | SDS-max o corona | 2–4 brocas |
 
-> ⚠ Anchors must land in **sound, continuous rock**. The best-looking rock is not always the best structural rock. Geotech assessment required.
+> ⚠ Los anclajes deben caer en **roca sana y continua**. La roca que mejor se ve no siempre es la mejor estructuralmente. Se requiere evaluación geotécnica.
 
 ---
 
-## 10. Waterproofing + protection
+## 10. Impermeabilización + protección
 
-| Item | Spec | Quantity |
+| Elemento | Especificación | Cantidad |
 |---|---|---|
-| Steel primer | Epoxy anticorrosive | 60–70 m² coverage |
-| Steel finish coat | Polyurethane / exterior enamel | 60–70 m² coverage |
-| Wood protector | Lasur / oil / stain | 35–50 m² coverage |
-| Roof sealant | Polyurethane / butyl | 12–20 tubes |
-| Flashing tape | Openings + roof edges | 30–50 m |
-| Perimeter drainage pipe | 4" perforated | 15–25 m |
-| Gravel for drainage | Washed | 1–2 m³ |
-| Geotextile | Drainage wrap | 20–30 m² |
+| Imprimante para acero | Anticorrosivo epóxico | rendimiento 60–70 m² |
+| Acabado para acero | Poliuretano / esmalte exterior | rendimiento 60–70 m² |
+| Protector de madera | Lasur / aceite / tinte | rendimiento 35–50 m² |
+| Sellador de cubierta | Poliuretano / butilo | 12–20 tubos |
+| Cinta flashing | Vanos + bordes de cubierta | 30–50 m |
+| Tubería drenaje perimetral | 4" perforada | 15–25 m |
+| Gravilla para drenaje | Lavada | 1–2 m³ |
+| Geotextil | Envoltura de drenaje | 20–30 m² |
 
 ---
 
-## 11. Fasteners + consumables
+## 11. Fijaciones + consumibles
 
-| Item | Quantity |
+| Elemento | Cantidad |
 |---|---|
-| Structural bolts M12–M16 | 150–220 units |
-| Self-drilling screws for steel | 300–500 units |
-| Roof screws / clips | 500–700 units |
-| Deck screws | 600–800 units |
-| Wood screws | 800–1,200 units |
-| Welding electrodes / wire | 1 lot |
-| Grinding / cutting discs | 20–40 units |
-| Silicone / polyurethane sealant | 20–30 tubes |
-| Flashing tape | 30–50 m |
-| Construction adhesive | 10–20 tubes |
+| Pernos estructurales M12–M16 | 150–220 unid. |
+| Tornillos autoperforantes para acero | 300–500 unid. |
+| Tornillos / clips de cubierta | 500–700 unid. |
+| Tornillos de deck | 600–800 unid. |
+| Tornillos de madera | 800–1.200 unid. |
+| Electrodos / alambre de soldadura | 1 lote |
+| Discos de corte / pulido | 20–40 unid. |
+| Sellador silicona / poliuretano | 20–30 tubos |
+| Cinta flashing | 30–50 m |
+| Adhesivo estructural | 10–20 tubos |
 
 ---
 
-## 12. Summary totals
+## 12. Totales resumen
 
-| Category | Total |
+| Categoría | Total |
 |---|---|
-| Total elevated platform area | 42 m² |
-| Enclosed cabin area | 30 m² |
-| Terrace area | 12 m² |
-| Total steel length | ≈ 499 m |
-| Estimated fabricated steel weight | ≈ 3.8 – 4.0 tons |
-| Roof area to order | ≈ 82 m² |
-| Floor system to order | ≈ 33 m² |
-| Decking to order | ≈ 14 m² |
-| Front glazing | ≈ 23 m² |
-| Rear gable wall | ≈ 20.5 m² |
-| Rock anchors | ≈ 42 units |
-| Base/cap plates | ≈ 20 units |
-| Railing length | ≈ 11 m |
+| Área total de plataforma elevada | 42 m² |
+| Área de cabaña cerrada | 30 m² |
+| Área de terraza | 12 m² |
+| Longitud total de acero | ≈ 499 m |
+| Peso fabricado estimado de acero | ≈ 3.8 – 4.0 toneladas |
+| Área de cubierta a pedir | ≈ 82 m² |
+| Sistema de piso a pedir | ≈ 33 m² |
+| Deck a pedir | ≈ 14 m² |
+| Ventanal frontal | ≈ 23 m² |
+| Gable trasero | ≈ 20.5 m² |
+| Anclajes a roca | ≈ 42 unid. |
+| Placas base/capitel | ≈ 20 unid. |
+| Longitud de barandal | ≈ 11 m |
 
 ---
 
-## 13. Simplified procurement list (for contractor quotation)
+## 13. Lista simplificada de procura (para cotización con contratista)
 
-| Package | Quantity |
+| Paquete | Cantidad |
 |---|---|
-| Fabricated steel structure | 3.8–4.0 tons |
-| Steel base plates + connection plates | 1 lot |
-| Rock drilling + chemical anchoring | 42 anchors |
-| Elevated floor structure | 42 m² |
-| Interior structural floor panels | 33 m² |
-| Exterior deck boards | 14 m² |
-| A-frame metal roof system | 82 m² |
-| Roof insulation + membrane | 82 m² each |
-| Interior wood ceiling lining | 82 m² |
-| Front glass façade | 23 m² |
-| Rear wall cladding + insulation | 20.5 m² |
-| Terrace railing | 11 m |
-| Access stair | 1 unit |
-| Drainage + waterproofing | 1 lot |
-| Electrical + plumbing rough-in | 1 lot |
+| Estructura de acero fabricada | 3.8–4.0 toneladas |
+| Placas base + cartelas de conexión | 1 lote |
+| Perforación de roca + anclaje químico | 42 anclajes |
+| Estructura de piso elevado | 42 m² |
+| Tableros estructurales de piso interior | 33 m² |
+| Tablones de deck exterior | 14 m² |
+| Sistema de cubierta metálica A-frame | 82 m² |
+| Aislamiento + membrana de cubierta | 82 m² c/u |
+| Cielo raso interior en machimbre | 82 m² |
+| Ventanal frontal en vidrio | 23 m² |
+| Revestimiento + aislamiento muro trasero | 20.5 m² |
+| Barandal de terraza | 11 m |
+| Escalera de acceso | 1 unidad |
+| Drenaje + impermeabilización | 1 lote |
+| Instalaciones gruesas eléctricas + hidrosanitarias | 1 lote |
 
 ---
 
-## Next step
+## Siguiente paso
 
-Convert this into a **structural cut plan**: exact column heights from a terrain survey, exact rock anchor positions, exact steel member sizes after load calculations (wind / seismic / live / dead).
+Convertir esto en un **plano de corte estructural**: alturas exactas de columna a partir de levantamiento topográfico, posiciones exactas de anclaje, secciones exactas de cada miembro de acero después del cálculo de cargas (viento / sismo / viva / muerta).

@@ -1,6 +1,9 @@
 Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+Creative Commons Atribución-CompartirIgual 4.0 Internacional (CC BY-SA 4.0)
 
 Copyright (c) 2026 Carlos D. Escobar-Valbuena / broomva
+
+=== English (canonical) ===
 
 You are free to:
   - Share — copy and redistribute the material in any medium or format
@@ -9,9 +12,7 @@ You are free to:
 
 Under the following terms:
   - Attribution — You must give appropriate credit, provide a link to the
-    license, and indicate if changes were made. You may do so in any
-    reasonable manner, but not in any way that suggests the licensor
-    endorses you or your use.
+    license, and indicate if changes were made.
   - ShareAlike — If you remix, transform, or build upon the material, you
     must distribute your contributions under the same license as the
     original.
@@ -21,14 +22,40 @@ Under the following terms:
 
 Full legal code: https://creativecommons.org/licenses/by-sa/4.0/legalcode
 
-Notices:
-  - No warranties are given. The license may not give you all of the
-    permissions necessary for your intended use. For example, other rights
-    such as publicity, privacy, or moral rights may limit how you use the
-    material.
-  - The author makes no warranty as to the structural soundness, code
-    compliance, or fitness for purpose of any design, drawing, bill of
-    materials, or other document in this repository. Anyone building from
-    these documents does so at their own risk and must engage licensed
-    professionals (structural engineer, geotechnical engineer, local
-    building authority) before construction.
+The author makes no warranty as to the structural soundness, code
+compliance, or fitness for purpose of any design, drawing, bill of
+materials, or other document in this repository. Anyone building from
+these documents does so at their own risk and must engage licensed
+professionals (structural engineer, geotechnical engineer, local
+building authority) before construction.
+
+=== Español (traducción de cortesía, no vinculante legalmente) ===
+
+Eres libre de:
+  - Compartir — copiar y redistribuir el material en cualquier medio o
+    formato.
+  - Adaptar — remezclar, transformar y construir a partir del material
+    para cualquier propósito, incluso comercialmente.
+
+Bajo las siguientes condiciones:
+  - Atribución — Debes dar el crédito apropiado, proporcionar un enlace
+    a la licencia e indicar si se realizaron cambios.
+  - CompartirIgual — Si remezclas, transformas o construyes a partir del
+    material, debes distribuir tus contribuciones bajo la misma licencia
+    que el original.
+  - Sin restricciones adicionales — No puedes aplicar términos legales o
+    medidas tecnológicas que restrinjan legalmente a otros de hacer
+    cualquier cosa que la licencia permita.
+
+Código legal completo (versión vinculante en inglés):
+https://creativecommons.org/licenses/by-sa/4.0/legalcode
+Resumen amigable en español:
+https://creativecommons.org/licenses/by-sa/4.0/deed.es
+
+El autor no ofrece ninguna garantía sobre la solidez estructural, el
+cumplimiento normativo o la aptitud para un propósito determinado de
+ningún diseño, plano, listado de materiales u otro documento de este
+repositorio. Cualquier persona que construya a partir de estos documentos
+lo hace bajo su propio riesgo y debe contratar profesionales matriculados
+(ingeniero estructural, ingeniero geotécnico, autoridad de construcción
+local) antes de iniciar la obra.
