@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+title: "alpine-cabin: Open-Source Design of a 6×7 m Elevated A-Frame Cabin on Rock Outcroppings"
+message: "Si usás este diseño, plano, BOM o digital twin en tu obra, publicación o derivado, cítalo así."
+type: dataset
+authors:
+  - family-names: Escobar-Valbuena
+    given-names: "Carlos D."
+    affiliation: "BroomVA Tech"
+    email: carlos@broomva.tech
+repository-code: https://github.com/broomva/alpine-cabin
+url: https://broomva.github.io/alpine-cabin/
+abstract: >
+  Open-source design package for a 6 × 7 m elevated A-frame alpine cabin
+  supported by a 3×3 grid of steel columns anchored to existing rock
+  outcroppings. Includes parametric CAD (build123d), auto-generated bill
+  of materials, preliminary budget (Colombian market 2026), interactive
+  HTML digital twin with Three.js viewer, and step-by-step construction
+  guide. All artifacts derive from a single source of truth (cad/params.toml).
+keywords:
+  - open-source-construction
+  - parametric-cad
+  - a-frame-cabin
+  - digital-twin
+  - build123d
+  - oss-hardware
+license: CC-BY-SA-4.0
+version: "0.3.7"
+date-released: "2026-05-18"

@@ -1,0 +1,33 @@
+name: "✨ Feature — mejora al digital twin / docs"
+description: "Proponer mejora al HTML interactivo, al pipeline build123d, a las plantillas, a la documentación."
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: ¿Qué problema resuelve?
+      description: "Quién se beneficia y de qué."
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Propuesta
+      description: "Cómo te imaginás que funcionaría."
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternativas consideradas
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Alcance
+      options:
+        - "Documentación (markdown / README)"
+        - "HTML interactivo (web/)"
+        - "Pipeline CAD (cad/)"
+        - "Plantillas (templates/)"
+        - "Governance (CLAUDE.md / AGENTS.md / .control)"
+        - "Otro"

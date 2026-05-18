@@ -1,0 +1,30 @@
+name: "🏗 Revisión de ingeniería"
+description: "Revisión técnica del SPEC, BOM, perfiles, cálculos, asunciones estructurales."
+labels: ["engineering", "needs-review"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Este template es para revisión técnica del diseño. Si encontrás un riesgo de seguridad, también marcá con `risk:high` y considerá `SECURITY.md`.
+  - type: input
+    id: credentials
+    attributes:
+      label: "Credenciales (opcional)"
+      description: "Ej: 'Ingeniero estructural matriculado COPNIA' o 'Estudiante 5to año IC'. Ayuda a quien revise tu observación."
+  - type: textarea
+    id: observation
+    attributes:
+      label: Observación
+      description: "Sé específico. ¿Qué te llamó la atención? ¿Por qué?"
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Propuesta (opcional)
+      description: "¿Cómo lo harías diferente? ¿Qué perfil / valor / asunción cambiarías?"
+  - type: textarea
+    id: references
+    attributes:
+      label: Referencias técnicas
+      description: "Norma colombiana, código (NSR-10, ASCE, etc.), paper, libro."

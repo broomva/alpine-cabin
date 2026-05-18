@@ -1,0 +1,38 @@
+name: "🐛 Bug — error en docs / código / cálculo"
+description: "Reportar un error en BOM, SPEC, cantidades, scripts, o el HTML interactivo."
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Gracias por reportar. Para errores de **riesgo estructural** en una obra real, usa la etiqueta `risk:high` y ver `SECURITY.md`.
+  - type: input
+    id: file
+    attributes:
+      label: Archivo afectado
+      description: "Path + número de línea si aplica (ej: SPEC.md:42 o cad/cabin.py:88)"
+      placeholder: "BOM.md:55"
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: ¿Qué está mal?
+      description: "Descripción concreta. Cita el valor o frase específicamente."
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: ¿Qué debería decir / valer?
+      description: "Si conocés la respuesta correcta, ponela acá con su fuente."
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severidad
+      options:
+        - "low — molestia, no afecta seguridad"
+        - "medium — afecta cantidades / presupuesto"
+        - "high — afecta seguridad estructural (también marcá con risk:high)"
+    validations:
+      required: true

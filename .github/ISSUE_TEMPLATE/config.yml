@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "📖 Documentación"
+    url: https://github.com/broomva/alpine-cabin#readme
+    about: "Antes de abrir un issue, revisa el README, ARCHITECTURE.md, y los docs/"
+  - name: "🌐 Digital twin live"
+    url: https://broomva.github.io/alpine-cabin/
+    about: "Página interactiva con el modelo 3D, BOM, presupuesto y guía de construcción"
+  - name: "🔒 Reportar vulnerabilidad de seguridad"
+    url: https://github.com/broomva/alpine-cabin/blob/main/SECURITY.md
+    about: "Para vulnerabilidades de software o riesgos estructurales que afecten obras en curso, ver SECURITY.md"

@@ -1,0 +1,160 @@
+# .control/policy.yaml — Control gates para agentes editando este repo
+#
+# Este archivo declara las invariantes de gobernanza enforced por el harness
+# bstack del workspace madre. NO es un firewall fuerte — es una lista
+# de invariantes que los agentes deben respetar y que pre-commit/CI puede
+# enforce conditionally en el futuro.
+
+schema_version: "1.0"
+repo: alpine-cabin
+license: CC-BY-SA-4.0
+governance:
+  parent_workspace: broomva
+  bstack_version: ">=0.3.0"
+
+# ============================================================
+# G1 — Source of truth integrity
+# ============================================================
+# El BOM y los archivos JSON del web NO deben editarse a mano.
+# Deben regenerarse vía `make all`.
+
+g1_source_of_truth:
+  enforce_level: warn  # warn | block
+  no_manual_edit:
+    - BOM.md
+    - web/data/params.json
+    - web/data/prices.json
+    - web/data/kpis.json
+    - web/data/cabin.glb
+    - cad/exports/*
+    - assets/renders/*
+    - assets/dogfood/*
+  regenerate_with:
+    - "make all"
+
+# ============================================================
+# G2 — License + disclaimer integrity
+# ============================================================
+
+g2_license_disclaimer:
+  enforce_level: block
+  protected_files:
+    - LICENSE
+  required_phrases_in:
+    LICENSE:
+      - "Creative Commons Attribution-ShareAlike 4.0"
+      - "no warranty"
+      - "licensed professionals"
+    SPEC.md:
+      - "preliminar"
+    README.md:
+      - "Engineering disclaimer"
+      - "CC-BY-SA-4.0"
+
+# ============================================================
+# G3 — Structural-safety gate
+# ============================================================
+# Cambios a parámetros con implicación estructural requieren mención
+# explícita en el commit / PR de cómo se validó (engineer review,
+# norma técnica, etc.).
+
+g3_structural_safety:
+  enforce_level: warn
+  structural_parameters:
+    - cad/params.toml:platform.width_m
+    - cad/params.toml:platform.depth_m
+    - cad/params.toml:aframe.apex_height_m
+    - cad/params.toml:aframe.portal_count
+    - cad/params.toml:aframe.rafter_profile
+    - cad/params.toml:aframe.tie_beam_profile
+    - cad/params.toml:columns.profile
+    - cad/params.toml:columns.heights_m
+    - cad/params.toml:columns.anchors_per_column
+    - cad/params.toml:platform_structure.main_beam_profile
+  require_in_commit_body:
+    - "engineer review|structural validation|NSR-10|ASCE|geotech"
+
+# ============================================================
+# G4 — Secrets + private data
+# ============================================================
+
+g4_no_secrets:
+  enforce_level: block
+  block_patterns:
+    - "API[_-]?KEY"
+    - "SECRET[_-]?"
+    - "PRIVATE[_-]?KEY"
+    - "BEGIN RSA PRIVATE"
+    - "BEGIN OPENSSH PRIVATE"
+  block_files:
+    - ".env"
+    - ".env.local"
+    - "credentials.json"
+    - "*.pem"
+    - "*.key"
+  no_exact_gps_in:
+    - docs/SITE.md  # Aviso: usar región/área aproximada, no coordenadas exactas
+
+# ============================================================
+# G5 — Commit message hygiene
+# ============================================================
+
+g5_conventional_commits:
+  enforce_level: warn
+  required_prefix_regex: "^(feat|fix|docs|refactor|chore|ci|i18n|test|build|perf)(\\([\\w/-]+\\))?: "
+  require_coauthor_if_ai: true
+  ai_coauthor_pattern: "Co-Authored-By: Claude|GPT|Gemini|Codex"
+
+# ============================================================
+# G6 — Audience-correct formatting (P18)
+# ============================================================
+
+g6_p18_audience:
+  enforce_level: warn
+  rules:
+    - "Specs/plans/ADRs for human review → HTML or markdown >100 lines"
+    - "BOM/Budget/README/AGENTS — markdown"
+    - "Renders/diagrams — PNG/SVG, NOT ASCII art"
+    - "Interactive UI → HTML"
+  forbidden_patterns:
+    - "ASCII pseudo-diagrams over 8 lines (use SVG instead)"
+
+# ============================================================
+# G7 — Test coverage / dogfood
+# ============================================================
+
+g7_dogfood:
+  enforce_level: warn
+  before_pr_merge:
+    - "make all  # regenera todos los derivados"
+    - "python cad/dogfood.py  # smoke test del HTML"
+  required_if_touched:
+    "web/**": ["python cad/dogfood.py"]
+    "cad/cabin.py": ["make cad", "python cad/render_views.py"]
+    "cad/params.toml": ["make all"]
+    "cad/prices.toml": ["make all"]
+
+# ============================================================
+# G8 — bstack primitives compliance
+# ============================================================
+
+g8_bstack:
+  primitives_applied:
+    - P3   # Tickets — GitHub issues / Linear BRO
+    - P4   # PR pipeline — workflow validation
+    - P10  # Worktree hygiene — clean status
+    - P11  # Empirical — `make` validates
+    - P14  # Dep-chain — PR body lists upstream/downstream
+    - P15  # Snapshot — git status + branch before action
+    - P18  # Audience — md vs html
+    - P20  # Cross-review — required for substantive PRs
+
+# ============================================================
+# Notes
+# ============================================================
+
+notes:
+  - This policy is a declaration of invariants, not (yet) a fully-automated enforcement layer.
+  - Pre-commit hooks can be added in .githooks/ to enforce subsets.
+  - CI workflows can validate g1, g4, g5, g6 automatically.
+  - g2, g3 require human judgment + agent reflexivity.

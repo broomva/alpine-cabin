@@ -3,156 +3,242 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Cabaña Alpina · Digital Twin Interactivo · 6×7 m sobre roca · Open Source CC-BY-SA-4.0" />
 <title>Cabaña Alpina · Digital Twin Interactivo</title>
 <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
-<header>
-  <div class="brand">
-    <h1>Cabaña Alpina</h1>
-    <p class="tagline">Digital twin interactivo — 6 × 7 m sobre roca · open source · CC-BY-SA-4.0</p>
+<header class="app-header">
+  <div class="app-header-inner">
+    <div class="brand">
+      <h1>Cabaña Alpina</h1>
+      <span class="tagline">digital twin · 6 × 7 m sobre roca</span>
+    </div>
+    <div class="header-actions">
+      <a href="https://github.com/broomva/alpine-cabin" target="_blank" rel="noopener">repo ↗</a>
+      <a href="https://github.com/broomva/alpine-cabin/blob/main/ARCHITECTURE.md" target="_blank" rel="noopener">arquitectura</a>
+      <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.es" target="_blank" rel="noopener">CC-BY-SA-4.0</a>
+    </div>
   </div>
-  <nav>
-    <a href="https://github.com/broomva/alpine-cabin" target="_blank" rel="noopener">Repo ↗</a>
-    <a href="#construccion">Construcción</a>
-    <a href="#disclaimer">Aviso</a>
+
+  <nav class="tab-nav" role="tablist">
+    <button class="tab-btn" role="tab" data-tab="overview">Overview</button>
+    <button class="tab-btn" role="tab" data-tab="construir">Construir <span class="badge" id="construir-badge">0/8</span></button>
+    <button class="tab-btn" role="tab" data-tab="parametros">Parámetros</button>
+    <button class="tab-btn" role="tab" data-tab="bom">BOM</button>
+    <button class="tab-btn" role="tab" data-tab="presupuesto">Presupuesto</button>
+    <button class="tab-btn" role="tab" data-tab="cad3d">3D</button>
+    <button class="tab-btn" role="tab" data-tab="progreso">Progreso</button>
   </nav>
 </header>
 
 <main>
 
   <!-- ============================================================== -->
-  <!--   1. HERO + 3D VIEWER                                          -->
+  <!--   OVERVIEW                                                     -->
   <!-- ============================================================== -->
-  <section class="hero">
-    <div class="viewer-wrap">
-      <div id="viewer"></div>
-      <div class="viewer-controls">
-        <button id="btn-reset-camera">⟳ Reset cámara</button>
-        <button id="btn-toggle-grid">▦ Toggle grid</button>
-        <span id="viewer-status">Cargando modelo…</span>
+  <section class="tab-panel" id="tab-overview" role="tabpanel">
+    <h2>Resumen del proyecto</h2>
+    <p class="lede">Una cabaña A-frame de 6 × 7 m elevada sobre 9 columnas de acero ancladas a peñas existentes. Open source desde M0 — el diseño, las cantidades, el presupuesto y el modelo 3D están sincronizados desde una sola fuente de verdad (<code>cad/params.toml</code>).</p>
+
+    <div class="overview-grid">
+      <div class="card hero-viewer">
+        <div id="viewer"></div>
+        <div class="viewer-buttons">
+          <button id="btn-reset-camera">⟳ Reset</button>
+          <button id="btn-toggle-grid">▦ Grid</button>
+        </div>
+        <div class="viewer-overlay">
+          <span id="viewer-status">Cargando modelo…</span>
+          <span class="mono">arrastra · scroll zoom · shift+drag pan</span>
+        </div>
+      </div>
+
+      <div class="card kpi-panel">
+        <h3>KPIs en vivo</h3>
+        <dl id="kpi-list"></dl>
+        <p class="kpi-note">Los KPIs se recalculan al mover los sliders en la pestaña Parámetros. El modelo 3D representa el baseline.</p>
       </div>
     </div>
 
-    <aside class="kpi-panel">
-      <h2>KPIs en vivo</h2>
-      <dl id="kpi-list"></dl>
-      <p class="kpi-note">Los KPIs se recalculan al mover los sliders. El modelo 3D representa el baseline; las variaciones se reflejan en KPIs y BOM, no en geometría en vivo.</p>
-    </aside>
+    <div class="summary-cards">
+      <div class="card summary-card">
+        <span class="label">Plataforma</span>
+        <span class="big">42 <small>m²</small></span>
+        <span class="sub">6 × 7 m · 30 m² cabaña cerrada + 12 m² terraza</span>
+      </div>
+      <div class="card summary-card">
+        <span class="label">Acero fabricado</span>
+        <span class="big blue">3.6 <small>t</small></span>
+        <span class="sub">≈ 482 m de perfiles · 36 anclajes a roca</span>
+      </div>
+      <div class="card summary-card">
+        <span class="label">Presupuesto referencial</span>
+        <span class="big orange">$325 <small>M COP</small></span>
+        <span class="sub">≈ USD 81 K · con IVA · Co/2026</span>
+      </div>
+      <div class="card summary-card">
+        <span class="label">Duración estimada</span>
+        <span class="big">~5 <small>meses</small></span>
+        <span class="sub">8 fases · M1 levantamiento → M8 entrega</span>
+      </div>
+    </div>
   </section>
 
   <!-- ============================================================== -->
-  <!--   2. PARÁMETROS — SLIDERS                                      -->
+  <!--   CONSTRUIR — 8 fases con detalle                              -->
   <!-- ============================================================== -->
-  <section class="params" id="parametros">
+  <section class="tab-panel" id="tab-construir" role="tabpanel">
+    <h2>Guía de construcción</h2>
+    <p class="lede">Cada fase tiene su propósito, herramientas, materiales, paso-a-paso detallado, definición de done, y riesgos conocidos. Marca los pasos como completados — tu progreso se guarda localmente y se puede exportar como JSON.</p>
+
+    <div class="phases-layout">
+      <nav class="phases-sidebar" id="phases-sidebar"></nav>
+      <div class="phase-content card elev" id="phase-content"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!--   PARÁMETROS                                                   -->
+  <!-- ============================================================== -->
+  <section class="tab-panel" id="tab-parametros" role="tabpanel">
     <h2>Variar parámetros</h2>
-    <p>Cambia los parámetros para explorar el espacio de diseño. Los KPIs se actualizan en vivo. Cuando estés satisfecho, descarga el experimento como JSON y aplícalo al repo con <code>python cad/apply_experiment.py experimento.json</code>.</p>
+    <p class="lede">Mueve los sliders para explorar el espacio de diseño. Los KPIs se actualizan en vivo. Cuando estés satisfecho, descarga el experimento JSON y aplícalo al repo con <code>python cad/apply_experiment.py</code> para regenerar el BOM, el presupuesto y el modelo 3D.</p>
 
-    <div class="slider-grid" id="sliders"></div>
+    <div class="params-layout">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Parámetros editables</h3>
+          <span class="card-eyebrow">cad/params.toml</span>
+        </div>
+        <div class="slider-grid" id="sliders"></div>
 
-    <div class="experiment-actions">
-      <button id="btn-reset">Reset baseline</button>
-      <button id="btn-copy-url">Copiar URL del experimento</button>
-      <button id="btn-download" class="primary">Descargar experimento JSON</button>
+        <div class="experiment-actions">
+          <button id="btn-reset">Reset baseline</button>
+          <button id="btn-copy-url">Copiar URL del experimento</button>
+          <button id="btn-download" class="primary">Descargar experimento JSON</button>
+        </div>
+      </div>
+
+      <div class="card kpi-panel">
+        <h3>KPIs en vivo</h3>
+        <dl id="kpi-list-params"></dl>
+      </div>
     </div>
   </section>
 
   <!-- ============================================================== -->
-  <!--   3. CONSTRUCCIÓN PASO A PASO                                  -->
+  <!--   BOM                                                          -->
   <!-- ============================================================== -->
-  <section class="construction" id="construccion">
-    <h2>Construcción paso a paso</h2>
-    <ol class="steps">
-      <li>
-        <h3>1 · Levantamiento + replanteo</h3>
-        <p>Topografía de la huella 6 × 7 m, marcación de las 9 posiciones de columna sobre las peñas existentes, identificación visual + acústica de roca sana.</p>
-        <span class="step-meta">Cuadrilla: topógrafo + 1 ayudante · Duración: 1 día · Equipo: estación total, GPS</span>
-      </li>
-      <li>
-        <h3>2 · Limpieza + preparación del sitio</h3>
-        <p>Retiro del material orgánico de la huella, exposición de la cara superior de cada peña, marcación con pintura del punto exacto de cada anclaje.</p>
-        <span class="step-meta">Cuadrilla: 2 ayudantes · Duración: 1 día</span>
-      </li>
-      <li>
-        <h3>3 · Estudio geotécnico</h3>
-        <p>Sondeo en cada uno de los 9 puntos. Rechazar y reubicar columnas sobre roca fracturada o suelta. Definir profundidad de embebido del anclaje + tipo de epoxi según litología.</p>
-        <span class="step-meta">Ingeniero geotécnico · Duración: 1-2 días · Entrega: informe</span>
-      </li>
-      <li>
-        <h3>4 · Perforación + anclaje químico</h3>
-        <p>Perforación con SDS-max o corona en cada peña. Limpieza del orificio con aire comprimido. Inyección de epoxi. Inserción del perno. Curado 24 h.</p>
-        <span class="step-meta">Cuadrilla especialista perforación (2 personas) · Duración: 4-5 días · 42 anclajes total</span>
-      </li>
-      <li>
-        <h3>5 · Montaje de columnas + plataforma</h3>
-        <p>Izaje y nivelación de las 9 columnas. Soldadura/atornillado de placas capitel. Montaje de las vigas perimetrales IPE160. Tendido de viguetas C100×50 cada 30 cm. Tablero estructural sobre viguetas.</p>
-        <span class="step-meta">Cuadrilla estructural (soldador + 2 ayudantes) · Duración: 2-3 semanas · ~700 kg acero plataforma</span>
-      </li>
-      <li>
-        <h3>6 · Ensamble de pórticos A-frame</h3>
-        <p>Pre-ensamble en piso de cada uno de los 6 pórticos (par + par + tirante). Izaje al sitio. Atornillado al capitel de columnas. Instalación de cumbrera + correas.</p>
-        <span class="step-meta">Cuadrilla estructural + ayudantes adicionales para izaje · Duración: 1 semana · ~2.000 kg acero A-frame</span>
-      </li>
-      <li>
-        <h3>7 · Envolvente: cubierta + ventanal + cerramientos</h3>
-        <p>Bajo-cubierta impermeable + aislamiento PIR + lámina metálica negra. Cielo raso machimbre. Ventanal frontal templado/laminado en marco aluminio. Muro trasero treated wood. Deck frontal.</p>
-        <span class="step-meta">Cuadrilla envolvente (vidriería + cubierta + carpintería) · Duración: 3-4 semanas</span>
-      </li>
-      <li>
-        <h3>8 · Acabados + instalaciones + impermeabilización</h3>
-        <p>Eléctrica + hidrosanitaria rough-in. Estufa de leña + ducto. Barandales cable horizontal. Escalera lateral. Acabado piso interior. Drenaje perimetral. Anticorrosivo final acero. Entrega.</p>
-        <span class="step-meta">Cuadrilla acabados + técnicos eléctrico/hidráulico · Duración: 4-5 semanas</span>
-      </li>
-    </ol>
-  </section>
-
-  <!-- ============================================================== -->
-  <!--   4. DOCUMENTACIÓN                                             -->
-  <!-- ============================================================== -->
-  <section class="docs-grid" id="documentacion">
-    <h2>Documentación del proyecto</h2>
-    <div class="doc-cards">
-      <a class="doc-card" href="https://github.com/broomva/alpine-cabin/blob/main/SPEC.md">
-        <h3>SPEC.md</h3>
-        <p>Especificación dimensional + sistema (manuscrito)</p>
-      </a>
-      <a class="doc-card" href="https://github.com/broomva/alpine-cabin/blob/main/BOM.md">
-        <h3>BOM.md</h3>
-        <p>Listado de materiales (auto-generado desde params.toml)</p>
-      </a>
-      <a class="doc-card" href="https://github.com/broomva/alpine-cabin/blob/main/PRESUPUESTO.md">
-        <h3>PRESUPUESTO.md</h3>
-        <p>Presupuesto Co/2026 con desglose por fase</p>
-      </a>
-      <a class="doc-card" href="https://github.com/broomva/alpine-cabin/blob/main/ARCHITECTURE.md">
-        <h3>ARCHITECTURE.md</h3>
-        <p>Arquitectura del digital twin + decisiones</p>
-      </a>
-      <a class="doc-card" href="https://github.com/broomva/alpine-cabin/blob/main/docs/SITE.md">
-        <h3>SITE.md</h3>
-        <p>Contexto del sitio + checklist de levantamiento</p>
-      </a>
-      <a class="doc-card" href="https://github.com/broomva/alpine-cabin/blob/main/docs/REFERENCE.md">
-        <h3>REFERENCE.md</h3>
-        <p>Intención de diseño + decisiones críticas</p>
-      </a>
+  <section class="tab-panel" id="tab-bom" role="tabpanel">
+    <h2>Bill of Materials (BOM)</h2>
+    <p class="lede">Cantidades auto-derivadas de <code>cad/params.toml</code>. Margen de desperdicio aplicado según partida (10–15%). Ver <a href="https://github.com/broomva/alpine-cabin/blob/main/BOM.md" target="_blank">BOM.md</a> en el repo para la versión markdown completa.</p>
+    <div class="card">
+      <table class="data-table" id="bom-table"><tbody><tr><td>Cargando…</td></tr></tbody></table>
     </div>
   </section>
 
   <!-- ============================================================== -->
-  <!--   5. DISCLAIMER                                                -->
+  <!--   PRESUPUESTO                                                  -->
   <!-- ============================================================== -->
-  <section class="disclaimer" id="disclaimer">
-    <h2>Aviso</h2>
-    <p>Esta página es exploratoria. Los KPIs son cálculos derivados de parámetros preliminares y no constituyen un proyecto estructural ni una cotización vinculante. Para construir, contrata un ingeniero estructural matriculado + un geotécnico que valide la roca + un presupuestador que confirme precios contra el mercado real.</p>
-    <p>Repo: <a href="https://github.com/broomva/alpine-cabin">github.com/broomva/alpine-cabin</a> · Licencia: <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.es">CC-BY-SA-4.0</a></p>
+  <section class="tab-panel" id="tab-presupuesto" role="tabpanel">
+    <h2>Presupuesto referencial Co/2026</h2>
+    <p class="lede">Estimado preliminar basado en precios típicos del mercado colombiano 2026 (Cundinamarca). <strong>No es una cotización vinculante.</strong> Ver <a href="https://github.com/broomva/alpine-cabin/blob/main/PRESUPUESTO.md" target="_blank">PRESUPUESTO.md</a> para el desglose completo.</p>
+
+    <div class="summary-cards">
+      <div class="card summary-card">
+        <span class="label">Total directos</span>
+        <span class="big" id="budget-direct">$218 M</span>
+        <span class="sub">materiales + mano de obra + equipos</span>
+      </div>
+      <div class="card summary-card">
+        <span class="label">Indirectos + contingencia</span>
+        <span class="big" id="budget-overhead">$55 M</span>
+        <span class="sub">15% indirectos + 10% contingencia</span>
+      </div>
+      <div class="card summary-card">
+        <span class="label">IVA</span>
+        <span class="big" id="budget-iva">$52 M</span>
+        <span class="sub">19% sobre subtotal</span>
+      </div>
+      <div class="card summary-card">
+        <span class="label">TOTAL</span>
+        <span class="big orange" id="budget-total">$325 M</span>
+        <span class="sub" id="budget-usd">≈ USD 81 K</span>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 1.5rem">
+      <div class="card-header">
+        <h3 class="card-title">Desglose por fase</h3>
+        <span class="card-eyebrow">cad/prices.toml</span>
+      </div>
+      <table class="data-table" id="budget-table"><tbody><tr><td>Cargando…</td></tr></tbody></table>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!--   3D Full-screen                                               -->
+  <!-- ============================================================== -->
+  <section class="tab-panel" id="tab-cad3d" role="tabpanel">
+    <h2>Modelo CAD 3D</h2>
+    <p class="lede">Modelo paramétrico generado con <a href="https://github.com/gumyr/build123d" target="_blank">build123d</a> desde <code>cad/params.toml</code>. Disponible también como STEP (<a href="https://github.com/broomva/alpine-cabin/blob/main/cad/exports/cabin.step" target="_blank">descargar</a>) y STL para fabricación.</p>
+    <div class="card full-viewer-wrap">
+      <div id="viewer-full"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!--   PROGRESO                                                     -->
+  <!-- ============================================================== -->
+  <section class="tab-panel" id="tab-progreso" role="tabpanel">
+    <h2>Progreso del proyecto</h2>
+    <p class="lede">Asistente de seguimiento: marca pasos completados, agrega notas, exporta tu estado como JSON para respaldarlo o compartirlo.</p>
+
+    <div class="progress-grid">
+      <div>
+        <div class="card" style="margin-bottom: 1.5rem">
+          <div class="card-header">
+            <h3 class="card-title">Avance global</h3>
+            <span id="overall-pct" class="mono">0%</span>
+          </div>
+          <div class="progress-bar"><div class="fill" id="overall-fill" style="width: 0%"></div></div>
+          <div id="phase-progress-list" style="margin-top: 1rem"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Bitácora</h3>
+            <span class="card-eyebrow">localStorage</span>
+          </div>
+          <div id="log-list"></div>
+        </div>
+      </div>
+
+      <div class="assistant-card">
+        <h3>🤖 Asistente</h3>
+        <div class="suggestion" id="assistant-message">
+          Bienvenido. Marca completados los pasos en la pestaña <strong>Construir</strong> para avanzar el proyecto.
+        </div>
+        <div>
+          <div style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.4rem">Próxima fase</div>
+          <div class="next-phase" id="assistant-next">Fase 1 · Levantamiento + replanteo</div>
+        </div>
+        <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap">
+          <button id="btn-export-progress" class="primary" style="flex: 1; min-width: 130px">⬇ Exportar JSON</button>
+          <button id="btn-import-progress" style="flex: 1; min-width: 130px">⬆ Importar JSON</button>
+        </div>
+        <button id="btn-reset-progress" style="font-size: 0.78rem; color: var(--danger); border-color: rgba(224,116,116,0.3)">🗑 Reset completo</button>
+        <input type="file" id="import-file" accept=".json" style="display:none">
+      </div>
+    </div>
   </section>
 
 </main>
 
 <footer>
-  <p>Generado con <a href="https://github.com/broomva/bstack">bstack</a> · build123d + Three.js</p>
+  <p>Generado con <a href="https://github.com/broomva/bstack" target="_blank">bstack</a> · build123d + Three.js · <a href="https://github.com/broomva/alpine-cabin">contribuir ↗</a></p>
 </footer>
 
 <script type="importmap">

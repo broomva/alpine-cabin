@@ -1,0 +1,33 @@
+name: "🛠 Build log — replicaste esta cabaña"
+description: "Compartir tu experiencia construyendo (o adaptando) este diseño en tu sitio."
+labels: ["build-log"]
+body:
+  - type: input
+    id: location
+    attributes:
+      label: Ubicación general
+      description: "Ej: 'Cundinamarca, Colombia' o 'Andes peruanos'. Sin coordenadas exactas si querés privacidad."
+    validations:
+      required: true
+  - type: textarea
+    id: variations
+    attributes:
+      label: Variaciones respecto al diseño base
+      description: "Qué cambiaste y por qué. Suelo, clima, materiales locales disponibles, código local."
+    validations:
+      required: true
+  - type: textarea
+    id: numbers
+    attributes:
+      label: Números reales
+      description: "Costo real total, duración real, toneladas de acero finales, número de anclajes que sirvieron, etc. Sin presión — lo que tengas."
+  - type: textarea
+    id: lessons
+    attributes:
+      label: Lo que aprendiste
+      description: "Lo que habrías hecho diferente, lo que funcionó mejor de lo esperado, sorpresas."
+  - type: input
+    id: photos
+    attributes:
+      label: Set fotográfico (link)
+      description: "Drive, Imgur, fotos en este issue, etc. Open source = compartido."

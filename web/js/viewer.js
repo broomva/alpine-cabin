@@ -14,13 +14,12 @@ export async function mountViewer(container, glbUrl, onLoaded) {
 
   // ----- Scene -----
   scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x0a0a0a);
-  scene.fog = new THREE.Fog(0x0a0a0a, 30000, 80000);
+  scene.background = new THREE.Color(0x141820);
+  scene.fog = new THREE.Fog(0x141820, 30000, 80000);
 
-  // ----- Camera -----
-  camera = new THREE.PerspectiveCamera(40, w / h, 100, 200000);
-  camera.position.set(15000, -12000, 8000);
-  camera.up.set(0, 0, 1);
+  // ----- Camera (Y-up — build123d exporta gltf con Y como altura) -----
+  camera = new THREE.PerspectiveCamera(38, w / h, 0.1, 500);
+  camera.position.set(18, 10, 16);
 
   // ----- Renderer -----
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -29,52 +28,58 @@ export async function mountViewer(container, glbUrl, onLoaded) {
   renderer.shadowMap.enabled = true;
   container.appendChild(renderer.domElement);
 
-  // ----- Lights -----
-  const ambient = new THREE.AmbientLight(0xffffff, 0.45);
+  // ----- Lights (en METROS, modelo viene escalado de build123d gltf) -----
+  const ambient = new THREE.AmbientLight(0xffffff, 0.55);
   scene.add(ambient);
 
-  const sun = new THREE.DirectionalLight(0xfff0d8, 1.2);
-  sun.position.set(15000, -15000, 20000);
+  const sun = new THREE.DirectionalLight(0xfff0d8, 1.4);
+  sun.position.set(20, 30, 15);
   sun.castShadow = true;
   sun.shadow.mapSize.set(2048, 2048);
-  sun.shadow.camera.left = -15000;
-  sun.shadow.camera.right = 15000;
-  sun.shadow.camera.top = 15000;
-  sun.shadow.camera.bottom = -15000;
-  sun.shadow.camera.near = 1000;
-  sun.shadow.camera.far = 50000;
+  sun.shadow.camera.left = -20;
+  sun.shadow.camera.right = 20;
+  sun.shadow.camera.top = 20;
+  sun.shadow.camera.bottom = -20;
+  sun.shadow.camera.near = 1;
+  sun.shadow.camera.far = 80;
   scene.add(sun);
 
-  const rim = new THREE.DirectionalLight(0xd18948, 0.4);
-  rim.position.set(-10000, 8000, 5000);
+  const rim = new THREE.DirectionalLight(0xd18948, 0.5);
+  rim.position.set(-15, 8, -10);
   scene.add(rim);
 
-  // ----- Ground -----
-  const groundGeom = new THREE.PlaneGeometry(60000, 60000);
+  // Hemisphere para llenar sombras
+  const hemi = new THREE.HemisphereLight(0xb0c8e8, 0x3a4228, 0.35);
+  hemi.position.set(0, 30, 0);
+  scene.add(hemi);
+
+  // ----- Ground (XZ plane en Y-up, en metros) -----
+  const groundGeom = new THREE.PlaneGeometry(60, 60);
   const groundMat = new THREE.MeshStandardMaterial({
-    color: 0x1f2410,
-    roughness: 0.9,
+    color: 0x3a4228,
+    roughness: 0.95,
     metalness: 0.0,
   });
   const ground = new THREE.Mesh(groundGeom, groundMat);
-  ground.rotation.x = 0;
-  ground.position.z = -1;
+  ground.rotation.x = -Math.PI / 2; // de XY a XZ (horizontal en Y-up)
+  ground.position.y = -4.01;         // justo bajo la base del modelo
+  ground.position.x = 3;
+  ground.position.z = -3.5;
   ground.receiveShadow = true;
   scene.add(ground);
 
   // ----- Grid helper -----
-  gridHelper = new THREE.GridHelper(20000, 20, 0x2a2a2a, 0x1f1f1f);
-  gridHelper.rotation.x = Math.PI / 2;
-  gridHelper.position.z = 0.5;
+  gridHelper = new THREE.GridHelper(30, 30, 0x4a4a4a, 0x2a2a2a);
+  gridHelper.position.set(3, -3.99, -3.5);
   scene.add(gridHelper);
 
-  // ----- Controls -----
+  // ----- Controls (en metros) -----
   controls = new OrbitControls(camera, renderer.domElement);
-  controls.target.set(3000, 3500, 3000);
+  controls.target.set(3, 2, -3.5);
   controls.enableDamping = true;
   controls.dampingFactor = 0.08;
-  controls.maxDistance = 60000;
-  controls.minDistance = 3000;
+  controls.maxDistance = 80;
+  controls.minDistance = 4;
   controls.update();
 
   // ----- Load GLB -----
@@ -92,9 +97,10 @@ export async function mountViewer(container, glbUrl, onLoaded) {
             node.receiveShadow = true;
             // Material por defecto plano — sobreescribir con un material steel-like
             node.material = new THREE.MeshStandardMaterial({
-              color: 0x1a1a1a,
-              metalness: 0.85,
-              roughness: 0.38,
+              color: 0x4a4d57,
+              metalness: 0.78,
+              roughness: 0.32,
+              envMapIntensity: 0.8,
             });
           }
         });
@@ -132,7 +138,7 @@ export async function mountViewer(container, glbUrl, onLoaded) {
 
   // ----- Buttons -----
   document.getElementById("btn-reset-camera").addEventListener("click", () => {
-    camera.position.set(15000, -12000, 8000);
+    camera.position.set(18, 10, 16);
     const box = new THREE.Box3().setFromObject(model);
     const center = box.getCenter(new THREE.Vector3());
     controls.target.copy(center);
@@ -142,4 +148,9 @@ export async function mountViewer(container, glbUrl, onLoaded) {
   document.getElementById("btn-toggle-grid").addEventListener("click", () => {
     gridHelper.visible = !gridHelper.visible;
   });
+
+  // Exponer camera/controls para scripts externos (ej. cad/render_views.py).
+  window.__cabinCamera = camera;
+  window.__cabinControls = controls;
+  window.__cabinScene = scene;
 }
