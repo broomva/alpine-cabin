@@ -13,6 +13,7 @@ from pathlib import Path
 import build123d as bd
 
 from parameters import Params, load_params
+from envelope import build_envelope
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 EXPORTS_DIR = REPO_ROOT / "cad" / "exports"
@@ -186,9 +187,14 @@ def build_cabin(p: Params) -> bd.Compound:
     columns = build_columns(p)
     platform = build_platform(p, platform_z_mm)
     aframe = build_aframe(p, platform_z_mm)
-    deck = build_deck_marker(p, platform_z_mm)
+    envelope = build_envelope(p, platform_z_mm)
 
-    return bd.Compound(label="cabin", children=[columns, platform, aframe, deck])
+    # Etiquetas para que viewer.js detecte tipo de superficie.
+    columns.label = "cabin/columns"
+    platform.label = "cabin/platform"
+    aframe.label = "cabin/aframe"
+
+    return bd.Compound(label="cabin", children=[columns, platform, aframe, envelope])
 
 
 def export_all(cabin: bd.Compound) -> dict[str, Path]:

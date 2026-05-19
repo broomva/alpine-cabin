@@ -4,6 +4,50 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
+/**
+ * Determina el tipo de componente caminando hacia arriba en el árbol de
+ * nodos del GLB, buscando un label de la forma "cabin/<kind>/...". Las
+ * etiquetas las pone cad/envelope.py y cad/cabin.py.
+ */
+function nodeKind(node) {
+  let cur = node;
+  while (cur) {
+    const name = (cur.name || "").toLowerCase();
+    if (name.includes("roof"))        return "roof";
+    if (name.includes("glass"))       return "glass";
+    if (name.includes("rear_wall"))   return "wood_wall";
+    if (name.includes("deck"))        return "wood_deck";
+    if (name.includes("platform"))    return "platform";
+    if (name.includes("aframe"))      return "steel";
+    if (name.includes("columns"))     return "steel";
+    cur = cur.parent;
+  }
+  return "steel";
+}
+
+const MATERIALS = {
+  steel:     () => new THREE.MeshStandardMaterial({ color: 0x4a4d57, metalness: 0.78, roughness: 0.32 }),
+  platform:  () => new THREE.MeshStandardMaterial({ color: 0x2a2c33, metalness: 0.55, roughness: 0.55 }),
+  roof:      () => new THREE.MeshStandardMaterial({ color: 0x161616, metalness: 0.62, roughness: 0.42 }),
+  glass:     () => new THREE.MeshPhysicalMaterial({
+    color: 0x88aaff,
+    metalness: 0.0,
+    roughness: 0.05,
+    transmission: 0.85,
+    transparent: true,
+    opacity: 0.35,
+    ior: 1.5,
+    thickness: 0.012,
+  }),
+  wood_deck: () => new THREE.MeshStandardMaterial({ color: 0x8c5e3f, metalness: 0.05, roughness: 0.78 }),
+  wood_wall: () => new THREE.MeshStandardMaterial({ color: 0x6b4a30, metalness: 0.05, roughness: 0.85 }),
+};
+
+function materialFor(kind) {
+  const fn = MATERIALS[kind] || MATERIALS.steel;
+  return fn();
+}
+
 let scene, camera, renderer, controls, gridHelper;
 let model = null;
 let onResize = null;
@@ -95,13 +139,7 @@ export async function mountViewer(container, glbUrl, onLoaded) {
           if (node.isMesh) {
             node.castShadow = true;
             node.receiveShadow = true;
-            // Material por defecto plano — sobreescribir con un material steel-like
-            node.material = new THREE.MeshStandardMaterial({
-              color: 0x4a4d57,
-              metalness: 0.78,
-              roughness: 0.32,
-              envMapIntensity: 0.8,
-            });
+            node.material = materialFor(nodeKind(node));
           }
         });
         scene.add(model);
