@@ -7,15 +7,14 @@ Uso: `python cad/budget_generator.py`
 """
 from __future__ import annotations
 
+import hashlib
 import math
-import subprocess
 from dataclasses import dataclass
-from datetime import datetime, timezone
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
-from parameters import load_params, load_prices
+from parameters import load_params, load_prices, PARAMS_PATH, PRICES_PATH
 from kpis import all_kpis
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -192,14 +191,13 @@ def m4_equipment_lines(p, pr) -> list[LineItem]:
 # Renderer
 # =============================================================================
 
-def git_commit_short() -> str:
-    try:
-        return subprocess.check_output(
-            ["git", "rev-parse", "--short", "HEAD"],
-            cwd=REPO_ROOT, text=True,
-        ).strip()
-    except Exception:
-        return "uncommitted"
+def inputs_hash() -> str:
+    """Hash determinístico de params + prices. Reemplaza git_commit que era
+    no-determinístico (cambia con cada push aunque los inputs no cambien)."""
+    h = hashlib.sha256()
+    h.update(PARAMS_PATH.read_bytes())
+    h.update(PRICES_PATH.read_bytes())
+    return h.hexdigest()[:12]
 
 
 def fmt_cop(v: float) -> str:
@@ -243,7 +241,7 @@ def main():
     md = tpl.render(
         p=p, pr=pr,
         experiment_name=p.raw["experiment"]["name"],
-        git_commit=git_commit_short(),
+        git_commit=inputs_hash(),
         steel_fabricated_kg=k.steel_fabricated_kg,
         anchors=k.anchors,
         roof_m2=k.areas.roof_m2,

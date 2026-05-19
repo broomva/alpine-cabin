@@ -4,13 +4,12 @@ Uso: `python cad/bom_generator.py` (desde la raíz del repo o desde cad/).
 """
 from __future__ import annotations
 
-import subprocess
-from datetime import datetime, timezone
+import hashlib
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
-from parameters import load_params, load_prices
+from parameters import load_params, load_prices, PARAMS_PATH
 from kpis import all_kpis
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -18,15 +17,12 @@ TEMPLATES_DIR = Path(__file__).resolve().parent / "templates"
 BOM_PATH = REPO_ROOT / "BOM.md"
 
 
-def git_commit_short() -> str:
-    try:
-        out = subprocess.check_output(
-            ["git", "rev-parse", "--short", "HEAD"],
-            cwd=REPO_ROOT, text=True,
-        ).strip()
-        return out
-    except Exception:
-        return "uncommitted"
+def params_hash() -> str:
+    """Hash determinístico del contenido de params.toml. Reemplaza
+    git_commit que era no-determinístico entre commits (cada push cambia
+    HEAD pero los archivos generados no deberían cambiar si los inputs
+    no cambiaron)."""
+    return hashlib.sha256(PARAMS_PATH.read_bytes()).hexdigest()[:12]
 
 
 def render_bom() -> str:
@@ -50,7 +46,7 @@ def render_bom() -> str:
         steel_raw_kg=k.steel_raw_kg,
         steel_fabricated_kg=k.steel_fabricated_kg,
         experiment=p.raw["experiment"],
-        git_commit=git_commit_short(),
+        git_commit=params_hash(),
     )
 
 

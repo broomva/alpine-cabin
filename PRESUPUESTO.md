@@ -6,7 +6,7 @@
 
 # PRESUPUESTO — Cabaña Alpina (auto-generado)
 
-Estado: **M0 baseline** — generado desde commit `725c5ee` · params.toml v1.0.
+Estado: **M0 baseline** — inputs hash `43bb6e36655c` · schema v1.0.
 
 Este presupuesto es un **estimado referencial** basado en `cad/params.toml` (cantidades) y `cad/prices.toml` (precios). **No es una cotización vinculante**. Reemplazar los precios `mid` con cotizaciones reales antes de comprometer financiación.
 
