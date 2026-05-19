@@ -28,11 +28,18 @@ def make_steel_member(length_m: float, profile_width_mm: float, profile_height_m
     suficiente para visualización 3D y validación de geometría / ensamble.
     Las secciones reales se introducen en M0.3.4.1 cuando el ingeniero
     estructural cierre los perfiles definitivos.
+
+    Convención de alineación:
+      - X = MIN (origen en el extremo izquierdo, longitud extiende a +X)
+      - Y = CENTER (perfil simétrico horizontal)
+      - Z = MIN (apoya en z=0, espesor extiende a +Z)
+    Esto hace que las rotaciones alrededor de Y o Z pivoteen sobre la
+    cara inferior del miembro, no su centro (fix M0.3.8 BRO-1177).
     """
     L = length_m * 1000  # mm en build123d
     w = profile_width_mm
     h = profile_height_mm
-    return bd.Box(L, w, h, align=(bd.Align.MIN, bd.Align.CENTER, bd.Align.CENTER))
+    return bd.Box(L, w, h, align=(bd.Align.MIN, bd.Align.CENTER, bd.Align.MIN))
 
 
 def build_columns(p: Params) -> bd.Compound:
@@ -106,15 +113,20 @@ def build_aframe(p: Params, platform_z_mm: float) -> bd.Compound:
         y_m = y_start_m + i * spacing_m
         y_mm = y_m * 1000
 
-        # Rafter izquierdo (de columna izquierda al ápice)
+        # Rafter izquierdo: de columna izquierda al ápice (sube hacia +Z).
+        # En build123d (Z-up), rotar +X por -angle_deg alrededor de +Y manda
+        # el extremo a (cos·L, 0, +sin·L) — ascendente. El signo positivo
+        # mandaría a -Z (descendente), bug detectado en M0.3.8.
         rafter_l = make_steel_member(p.rafter_length_m, rafter_prof.width_mm, rafter_prof.height_mm)
-        rafter_l = rafter_l.rotate(bd.Axis.Y, angle_deg)
+        rafter_l = rafter_l.rotate(bd.Axis.Y, -angle_deg)
         rafter_l = rafter_l.translate((0, y_mm, platform_z_mm))
         parts.append(rafter_l)
 
-        # Rafter derecho (espejado)
+        # Rafter derecho: espejo del izquierdo, también ascendente.
+        # Rotación -(180 - angle_deg) = angle_deg - 180. Esto manda +X a
+        # (-cos·L, 0, +sin·L) — apex hacia el centro y arriba.
         rafter_r = make_steel_member(p.rafter_length_m, rafter_prof.width_mm, rafter_prof.height_mm)
-        rafter_r = rafter_r.rotate(bd.Axis.Y, 180 - angle_deg)
+        rafter_r = rafter_r.rotate(bd.Axis.Y, angle_deg - 180)
         rafter_r = rafter_r.translate((width_m * 1000, y_mm, platform_z_mm))
         parts.append(rafter_r)
 
