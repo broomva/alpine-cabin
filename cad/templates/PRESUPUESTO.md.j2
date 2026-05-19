@@ -1,0 +1,123 @@
+<!--
+  ⚠ Archivo auto-generado por cad/budget_generator.py — NO EDITAR A MANO.
+  Fuente: cad/params.toml + cad/prices.toml + cad/templates/PRESUPUESTO.md.j2
+  Regenerar: `make budget` o `python cad/budget_generator.py`
+-->
+
+# PRESUPUESTO — Cabaña Alpina (auto-generado)
+
+Estado: **{{ experiment_name }}** — generado desde commit `{{ git_commit }}` · params.toml v{{ p.raw.schema_version }}.
+
+Este presupuesto es un **estimado referencial** basado en `cad/params.toml` (cantidades) y `cad/prices.toml` (precios). **No es una cotización vinculante**. Reemplazar los precios `mid` con cotizaciones reales antes de comprometer financiación.
+
+## 0. Bases del presupuesto
+
+| Variable | Valor |
+|---|---|
+| Moneda | {{ pr.raw.currency }} |
+| Año de referencia | {{ pr.raw.year }} |
+| Región | {{ pr.raw.region }} |
+| Tasa USD ≈ COP | {{ pr.usd_cop | int }} |
+| IVA | {{ "%.0f"|format(pr.iva_pct * 100) }}% |
+| Indirectos | {{ "%.0f"|format(pr.indirect_pct * 100) }}% s/directos |
+| Contingencia | {{ "%.0f"|format(pr.contingency_pct * 100) }}% s/directos |
+| Acero fabricado a procurar | {{ "%.0f"|format(steel_fabricated_kg) }} kg ≈ {{ "%.2f"|format(steel_fabricated_kg / 1000) }} t |
+| Anclajes a roca | {{ anchors }} unidades |
+| Área cubierta | {{ "%.1f"|format(roof_m2) }} m² |
+
+## 1. FASE M1 — Levantamiento + estudios previos
+
+| Concepto | Cant. | Unid. | Precio mid | Subtotal |
+|---|---|---|---|---|
+{%- for item in m1_items %}
+| {{ item.name }} | {{ item.qty }} | {{ item.unit }} | {{ fmt(item.unit_price) }} | **{{ fmt(item.subtotal) }}** |
+{%- endfor %}
+| **Subtotal M1** | | | | **{{ fmt(m1_subtotal) }}** |
+
+## 2. FASE M2 — Ingeniería estructural (honorarios)
+
+| Concepto | Cant. | Unid. | Precio mid | Subtotal |
+|---|---|---|---|---|
+{%- for item in m2_items %}
+| {{ item.name }} | {{ item.qty }} | {{ item.unit }} | {{ fmt(item.unit_price) }} | **{{ fmt(item.subtotal) }}** |
+{%- endfor %}
+| **Subtotal M2** | | | | **{{ fmt(m2_subtotal) }}** |
+
+## 3. FASE M3 — Procura de materiales
+
+Calculado a partir de las cantidades del [BOM](BOM.md) × los precios mid de `cad/prices.toml`.
+
+| Concepto | Cant. | Unid. | Precio mid | Subtotal |
+|---|---|---|---|---|
+{%- for item in m3_items %}
+| {{ item.name }} | {{ "%.1f"|format(item.qty) if item.qty is number else item.qty }} | {{ item.unit }} | {{ fmt(item.unit_price) }} | **{{ fmt(item.subtotal) }}** |
+{%- endfor %}
+| **Subtotal M3** | | | | **{{ fmt(m3_subtotal) }}** |
+
+## 4. FASE M4 — Obra (mano de obra + equipos)
+
+### 4.1 Mano de obra (cuadrilla-día)
+
+| Cuadrilla | Días | Tarifa día mid | Subtotal |
+|---|---|---|---|
+{%- for item in m4_labor %}
+| {{ item.name }} | {{ item.qty }} | {{ fmt(item.unit_price) }} | **{{ fmt(item.subtotal) }}** |
+{%- endfor %}
+| **Subtotal mano de obra** | | | **{{ fmt(m4_labor_subtotal) }}** |
+
+### 4.2 Equipos + transporte
+
+| Concepto | Cant. | Unid. | Precio mid | Subtotal |
+|---|---|---|---|---|
+{%- for item in m4_equipment %}
+| {{ item.name }} | {{ item.qty }} | {{ item.unit }} | {{ fmt(item.unit_price) }} | **{{ fmt(item.subtotal) }}** |
+{%- endfor %}
+| **Subtotal equipos** | | | | **{{ fmt(m4_equipment_subtotal) }}** |
+
+| **Subtotal M4** | **{{ fmt(m4_subtotal) }}** |
+|---|---|
+
+## 5. Resumen ejecutivo
+
+| Fase | Subtotal |
+|---|---|
+| M1 — Levantamiento + estudios previos | {{ fmt(m1_subtotal) }} |
+| M2 — Ingeniería estructural | {{ fmt(m2_subtotal) }} |
+| M3 — Procura | {{ fmt(m3_subtotal) }} |
+| M4 — Obra | {{ fmt(m4_subtotal) }} |
+| **Total directos** | **{{ fmt(direct_total) }}** |
+| Indirectos ({{ "%.0f"|format(pr.indirect_pct * 100) }}%) | {{ fmt(indirect) }} |
+| Contingencia ({{ "%.0f"|format(pr.contingency_pct * 100) }}%) | {{ fmt(contingency) }} |
+| **Subtotal antes de IVA** | **{{ fmt(pre_iva) }}** |
+| IVA ({{ "%.0f"|format(pr.iva_pct * 100) }}%) | {{ fmt(iva) }} |
+| **TOTAL** | **{{ fmt(total) }}** |
+| USD (referencial) | ≈ USD {{ "{:,.0f}".format(total / pr.usd_cop) }} |
+
+### Distribución porcentual
+
+| Categoría | % del total |
+|---|---|
+| Materiales (M3) | {{ "%.1f"|format(m3_subtotal / total * 100) }}% |
+| Mano de obra (M4 §4.1) | {{ "%.1f"|format(m4_labor_subtotal / total * 100) }}% |
+| Honorarios profesionales (M2) | {{ "%.1f"|format(m2_subtotal / total * 100) }}% |
+| Equipos + transporte (M4 §4.2) | {{ "%.1f"|format(m4_equipment_subtotal / total * 100) }}% |
+| Estudios previos (M1) | {{ "%.1f"|format(m1_subtotal / total * 100) }}% |
+| Indirectos | {{ "%.1f"|format(indirect / total * 100) }}% |
+| Contingencia | {{ "%.1f"|format(contingency / total * 100) }}% |
+| IVA | {{ "%.1f"|format(iva / total * 100) }}% |
+
+### Por m²
+
+| Métrica | Valor |
+|---|---|
+| Área cabaña cerrada | {{ "%.0f"|format(enclosed_m2) }} m² |
+| Área plataforma total | {{ "%.0f"|format(platform_m2) }} m² |
+| Costo por m² cabaña cerrada | {{ fmt(total / enclosed_m2) }} / m² |
+| Costo por m² plataforma total | {{ fmt(total / platform_m2) }} / m² |
+
+## 6. Disclaimers
+
+- Cantidades derivadas de `cad/params.toml`. Si los parámetros cambian, regenerá este archivo con `make budget`.
+- Precios `mid` son referencias de mercado Co/{{ pr.raw.year }}, con alta varianza (±30–50%). Cotizá real antes de comprometerte.
+- No incluye: terreno, financiamiento, escrituración, conexión a red eléctrica externa, conexión de acueducto veredal, mobiliario, decoración, jardinería, ni post-entrega.
+- Para cifras vinculantes, contratá un presupuestador o director de obra licenciado.

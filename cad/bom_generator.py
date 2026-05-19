@@ -50,7 +50,6 @@ def render_bom() -> str:
         steel_raw_kg=k.steel_raw_kg,
         steel_fabricated_kg=k.steel_fabricated_kg,
         experiment=p.raw["experiment"],
-        generated_at=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
         git_commit=git_commit_short(),
     )
 

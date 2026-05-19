@@ -46,7 +46,6 @@ def main() -> None:
     (WEB_DATA_DIR / "kpis.json").write_text(
         json.dumps({
             "schema_version": "1.0",
-            "generated_at": datetime.now(timezone.utc).isoformat(),
             "kpis": _stringify(k),
         }, indent=2, ensure_ascii=False),
         encoding="utf-8",

@@ -25,10 +25,13 @@ setup:
 	$(PIP) install --upgrade pip
 	$(PIP) install build123d jinja2 rich
 
-all: bom cad web
+all: bom budget cad web
 
 bom:
 	$(PYTHON) cad/bom_generator.py
+
+budget:
+	$(PYTHON) cad/budget_generator.py
 
 cad:
 	$(PYTHON) cad/cabin.py

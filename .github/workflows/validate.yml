@@ -51,24 +51,30 @@ jobs:
       - name: Install build pipeline
         run: |
           pip install --upgrade pip
-          pip install build123d==0.10.0 jinja2 trimesh==4.12.2 rich
+          pip install build123d==0.10.0 jinja2 trimesh==4.12.2 rich pygltflib
 
-      - name: Regenerate BOM + CAD + web data
+      - name: Regenerate BOM + Presupuesto + CAD + web data
         run: |
           python cad/bom_generator.py
+          python cad/budget_generator.py
           python cad/cabin.py
           python cad/export_web_data.py
 
-      - name: Verify no drift between committed and regenerated
+      - name: Verify no drift on text-generated files
         run: |
-          if git diff --stat | grep -q .; then
-            echo "::error::Drift detectado entre archivos committeados y regenerados:"
-            git --no-pager diff --stat
+          # cabin.glb (binary) excluido — build123d's gltf export incluye
+          # node IDs no-determinísticos. Validamos su CONTENIDO con
+          # validate_cad.py (siguiente step), no byte-equality.
+          DRIFT=$(git diff --stat -- BOM.md PRESUPUESTO.md 'web/data/*.json' | head -20)
+          if [ -n "$DRIFT" ]; then
+            echo "::error::Drift detectado en archivos generados:"
+            echo "$DRIFT"
+            git --no-pager diff -- BOM.md PRESUPUESTO.md 'web/data/*.json' | head -80
             echo ""
             echo "Run 'make all' localmente y commitea los archivos regenerados."
             exit 1
           fi
-          echo "✅ No drift — committed artifacts match params.toml"
+          echo "✅ No drift en BOM / PRESUPUESTO / web/data/*.json"
 
       - name: Validate regenerated GLB
         working-directory: cad

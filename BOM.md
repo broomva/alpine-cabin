@@ -6,7 +6,7 @@
 
 # BOM — Listado Preliminar de Materiales (auto-generado)
 
-Estado: **M0 baseline** — generado el 2026-05-19 13:39 UTC desde commit `2bc260d`.
+Estado: **M0 baseline** — generado desde commit `725c5ee` · params.toml v1.0.
 
 > Este BOM es derivado de `cad/params.toml`. Las cantidades se recalculan automáticamente cuando cambian los parámetros. Margen de desperdicio aplicado: 10–15% según partida.
 
