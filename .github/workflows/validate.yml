@@ -1,0 +1,75 @@
+name: Validate CAD + KPI consistency
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'cad/**'
+      - 'web/data/cabin.glb'
+      - 'BOM.md'
+      - 'PRESUPUESTO.md'
+      - '.github/workflows/validate.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'cad/**'
+      - 'web/data/cabin.glb'
+  workflow_dispatch:
+
+jobs:
+  validate-glb:
+    name: GLB bbox matches params.toml
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install validation deps
+        run: |
+          pip install --upgrade pip
+          pip install trimesh==4.12.2
+
+      - name: Validate CAD bbox + mesh count
+        working-directory: cad
+        run: python validate_cad.py
+
+  regenerate-and-diff:
+    name: Regenerate from params.toml — no drift
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install build pipeline
+        run: |
+          pip install --upgrade pip
+          pip install build123d==0.10.0 jinja2 trimesh==4.12.2 rich
+
+      - name: Regenerate BOM + CAD + web data
+        run: |
+          python cad/bom_generator.py
+          python cad/cabin.py
+          python cad/export_web_data.py
+
+      - name: Verify no drift between committed and regenerated
+        run: |
+          if git diff --stat | grep -q .; then
+            echo "::error::Drift detectado entre archivos committeados y regenerados:"
+            git --no-pager diff --stat
+            echo ""
+            echo "Run 'make all' localmente y commitea los archivos regenerados."
+            exit 1
+          fi
+          echo "✅ No drift — committed artifacts match params.toml"
+
+      - name: Validate regenerated GLB
+        working-directory: cad
+        run: python validate_cad.py

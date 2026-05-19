@@ -2,11 +2,35 @@
 
 Cabaña tipo A-frame de 6 × 7 m elevada sobre plataforma de acero, apoyada en peñas de roca existentes. Liberada en open source desde M0 para que cualquiera pueda hacer fork del diseño, del listado de materiales y de la bitácora de obra.
 
+**🌐 Página interactiva**: **<https://broomva.github.io/alpine-cabin/>** · 📐 STEP/STL en [`cad/exports/`](cad/exports/) · 📄 [README in English](README.en.md)
+
 ![Cabaña de referencia](assets/reference/01-reference-cabin.png)
+
+## Modelo 3D paramétrico
+
+Generado con [build123d](https://github.com/gumyr/build123d) desde [`cad/params.toml`](cad/params.toml). Las 4 vistas se regeneran automáticamente con `make render`.
+
+| | | |
+|---|---|---|
+| ![Vista isométrica](assets/renders/cabin-iso.png) | ![Vista frontal](assets/renders/cabin-front.png) | |
+| Vista isométrica | Vista frontal — gable de vidrio | |
+| ![Vista lateral](assets/renders/cabin-side.png) | ![Vista cenital](assets/renders/cabin-top.png) | |
+| Vista lateral — pórticos A-frame | Vista cenital | |
 
 ## Estado
 
-**M0 — Especificación + BOM preliminar.** Dimensiones y cantidades son de primera pasada y están marcadas explícitamente como preliminares. Perfiles, anclajes, soldaduras y arriostramientos finales deben ser validados por un ingeniero estructural matriculado, después de un estudio geotécnico del sitio (calidad de roca, pendiente, viento, sismicidad).
+**M0.4 — Digital twin paramétrico + governance OSS.** `cad/params.toml` es fuente única de verdad. El BOM, el modelo CAD (STEP/STL/GLTF) y la página interactiva derivan automáticamente. Las dimensiones siguen siendo **preliminares** — perfiles, anclajes, soldaduras y arriostramientos finales deben ser validados por un ingeniero estructural matriculado, después de un estudio geotécnico del sitio.
+
+[![CI](https://github.com/broomva/alpine-cabin/actions/workflows/validate.yml/badge.svg)](https://github.com/broomva/alpine-cabin/actions/workflows/validate.yml)
+[![Pages](https://github.com/broomva/alpine-cabin/actions/workflows/pages.yml/badge.svg)](https://broomva.github.io/alpine-cabin/)
+[![License: CC BY-SA 4.0](https://img.shields.io/badge/License-CC%20BY--SA%204.0-blue.svg)](LICENSE)
+
+### Página interactiva
+
+La página tiene 7 tabs con el diseño completo: overview, guía de construcción paso a paso (140+ sub-pasos), parámetros editables en vivo, BOM, presupuesto, viewer 3D y un asistente de progreso que guarda checkpoints en `localStorage`.
+
+![Overview](assets/dogfood/overview.png)
+*Tab Overview — viewer 3D + KPIs en vivo + summary cards*
 
 ## Qué hay en este repo
 
@@ -31,12 +55,18 @@ Cabaña tipo A-frame de 6 × 7 m elevada sobre plataforma de acero, apoyada en p
 make setup     # crea venv + instala build123d + jinja2 (una vez)
 make all       # regenera BOM + CAD + datos del HTML desde params.toml
 make serve     # sirve la página en http://localhost:8765
+make validate  # verifica que el GLB coincide con params.toml (regression test)
+make render    # regenera los 4 PNG en assets/renders/
+make dogfood   # Playwright recorre las 7 tabs y captura screenshots
 ```
 
 Para experimentar:
-1. Edita `cad/params.toml` (o mueve los sliders en la página).
-2. `make all` regenera todo.
-3. Abre `http://localhost:8765` — el viewer 3D, los KPIs y el BOM están sincronizados con tus parámetros.
+1. Mueve los sliders en https://broomva.github.io/alpine-cabin/ (tab Parámetros).
+2. Descarga el experimento como JSON (botón "Descargar experimento JSON").
+3. Aplica el JSON al repo con `python cad/apply_experiment.py path/al/experimento.json` — esto actualiza `cad/params.toml`, regenera BOM/CAD/web data, y te sugiere el commit.
+4. Push → la página live re-deploya con tu diseño.
+
+Alternativa directa: edita `cad/params.toml` y corre `make all`.
 
 Ver [`ARCHITECTURE.md`](ARCHITECTURE.md) para el diseño completo del sistema.
 
