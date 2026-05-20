@@ -9,15 +9,27 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { CabinBuilder } from "./cabin-builder.js";
 
+// Paleta de la escena por tema. theme.js dispatches `theme-change` y el
+// viewer aplica estos valores a scene.background/fog/grid/hemisphere.
+const SCENE_COLORS = {
+  dark:  { bg: 0x141820, fogNear: 30000, fogFar: 80000, gridA: 0x4a4a4a, gridB: 0x2a2a2a, hemiSky: 0xb0c8e8, hemiGround: 0x3a4228 },
+  light: { bg: 0xeae6dc, fogNear: 30000, fogFar: 80000, gridA: 0xb8b3a4, gridB: 0xd6d2c6, hemiSky: 0xdde8f8, hemiGround: 0xc8c1ad },
+};
+
+function currentTheme() {
+  return document.documentElement.dataset.theme === "light" ? "light" : "dark";
+}
+
 export async function mountViewer(container, params, onLoaded, opts = {}) {
-  let scene, camera, renderer, controls, gridHelper, builder;
+  let scene, camera, renderer, controls, gridHelper, builder, hemi;
   const w = container.clientWidth || 800;
   const h = container.clientHeight || 540;
 
-  // ----- Scene -----
+  // ----- Scene (color inicial según tema activo) -----
+  const initial = SCENE_COLORS[currentTheme()];
   scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x141820);
-  scene.fog = new THREE.Fog(0x141820, 30000, 80000);
+  scene.background = new THREE.Color(initial.bg);
+  scene.fog = new THREE.Fog(initial.bg, initial.fogNear, initial.fogFar);
 
   // ----- Camera -----
   camera = new THREE.PerspectiveCamera(38, w / h, 0.1, 500);
@@ -49,10 +61,11 @@ export async function mountViewer(container, params, onLoaded, opts = {}) {
   rim.position.set(-15, 8, -10);
   scene.add(rim);
 
-  scene.add(new THREE.HemisphereLight(0xb0c8e8, 0x3a4228, 0.35));
+  hemi = new THREE.HemisphereLight(initial.hemiSky, initial.hemiGround, 0.35);
+  scene.add(hemi);
 
   // ----- Grid (toggle opcional, oculto por default) -----
-  gridHelper = new THREE.GridHelper(40, 40, 0x4a4a4a, 0x2a2a2a);
+  gridHelper = new THREE.GridHelper(40, 40, initial.gridA, initial.gridB);
   gridHelper.position.set(3, -1.5, -3.5);
   gridHelper.visible = false;
   scene.add(gridHelper);
@@ -127,6 +140,24 @@ export async function mountViewer(container, params, onLoaded, opts = {}) {
     window.__cabinControls = controls;
     window.__cabinScene = scene;
   }
+
+  // ----- Theme sync — recolor existentes (no recreate) -----
+  const applySceneTheme = (theme) => {
+    const c = SCENE_COLORS[theme] || SCENE_COLORS.dark;
+    scene.background = new THREE.Color(c.bg);
+    scene.fog = new THREE.Fog(c.bg, c.fogNear, c.fogFar);
+    if (gridHelper?.material) {
+      // GridHelper has two LineBasicMaterials: [center+axes color, grid color]
+      const mats = Array.isArray(gridHelper.material) ? gridHelper.material : [gridHelper.material];
+      if (mats[0]) mats[0].color.setHex(c.gridA);
+      if (mats[1]) mats[1].color.setHex(c.gridB);
+    }
+    if (hemi) {
+      hemi.color.setHex(c.hemiSky);
+      hemi.groundColor.setHex(c.hemiGround);
+    }
+  };
+  window.addEventListener("theme-change", (ev) => applySceneTheme(ev.detail?.theme || currentTheme()));
 
   return {
     scene, camera, controls, gridHelper, builder, resize: onResize,

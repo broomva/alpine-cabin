@@ -1150,3 +1150,139 @@ footer {
   .app-header-inner { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
   .summary-card .big { font-size: 1.4rem; }
 }
+
+/* ============================================================
+   THEME TOGGLE BUTTON (header)
+   ============================================================ */
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  font-size: 0.95rem;
+  line-height: 1;
+  border-radius: 999px;
+  background: var(--glass-mid);
+  border: 1px solid var(--glass-border);
+  color: var(--text-mid);
+  transition: background 150ms, border-color 150ms, color 150ms, transform 200ms;
+}
+.theme-toggle:hover {
+  background: var(--glass-strong);
+  border-color: var(--ai-blue-dim);
+  color: var(--ai-blue-bright);
+  transform: rotate(15deg);
+}
+.theme-toggle .theme-icon-light,
+.theme-toggle .theme-icon-dark {
+  display: none;
+  line-height: 1;
+}
+:root[data-theme="light"] .theme-toggle .theme-icon-dark { display: inline; }
+:root:not([data-theme="light"]) .theme-toggle .theme-icon-light { display: inline; }
+
+/* ============================================================
+   LIGHT THEME — token overrides
+   Activated by data-theme="light" on <html>. Dark stays default.
+   Most surfaces inherit via CSS variables; only places with
+   hard-coded dark rgba() need explicit light overrides below.
+   ============================================================ */
+
+:root[data-theme="light"] {
+  --bg-base:        #f6f5f1;
+  --bg-mid:         #ecebe4;
+  --bg-elevated:    #ffffff;
+
+  --glass-soft:     rgba(15, 23, 42, 0.03);
+  --glass-mid:      rgba(255, 255, 255, 0.65);
+  --glass-strong:   rgba(255, 255, 255, 0.85);
+  --glass-border:   rgba(15, 23, 42, 0.10);
+  --glass-border-strong: rgba(15, 23, 42, 0.18);
+  --glass-blur:     18px;
+
+  --ai-blue:        #2c5cc5;
+  --ai-blue-bright: #1c47a8;
+  --ai-blue-dim:    rgba(44, 92, 197, 0.18);
+  --warm-orange:    #a8651f;
+  --warm-orange-bright: #884f14;
+  --good:           #2c7f37;
+  --warn:           #a07020;
+  --danger:         #b53d33;
+
+  --text:           #14181f;
+  --text-mid:       #475063;
+  --text-dim:       #6b7385;
+  --text-faint:     #7a8090;  /* bumped from #9aa0ad for AA contrast on white */
+}
+
+:root[data-theme="light"] body {
+  background:
+    radial-gradient(ellipse 1200px 800px at 80% -10%, rgba(44, 92, 197, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 900px 700px at 10% 110%, rgba(168, 101, 31, 0.06) 0%, transparent 60%),
+    linear-gradient(180deg, var(--bg-base) 0%, var(--bg-mid) 50%, var(--bg-base) 100%);
+}
+
+/* Sticky header: was rgba(7,9,15,0.78). Light needs paper-tint. */
+:root[data-theme="light"] .app-header {
+  background: rgba(246, 245, 241, 0.82);
+  border-bottom-color: var(--glass-border);
+}
+
+/* Hero viewer overlay (hardcoded dark gradient) */
+:root[data-theme="light"] .hero-viewer .viewer-overlay {
+  background: linear-gradient(180deg, transparent 0%, rgba(246, 245, 241, 0.85) 100%);
+}
+
+/* 3D viewer floating buttons (hardcoded dark rgba) */
+:root[data-theme="light"] .hero-viewer .viewer-buttons button,
+:root[data-theme="light"] .cad3d-viewer-buttons button {
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--text);
+}
+
+/* 3D meta footer (hardcoded dark rgba) */
+:root[data-theme="light"] .cad3d-meta {
+  background: rgba(255, 255, 255, 0.78);
+  border-color: var(--glass-border);
+  color: var(--text-mid);
+}
+
+/* Params dock (hardcoded dark rgba) */
+:root[data-theme="light"] .params-dock {
+  background: rgba(255, 255, 255, 0.82);
+  border-color: var(--glass-border-strong);
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.12);
+}
+
+/* Dock show-handle (hardcoded dark rgba) */
+:root[data-theme="light"] .dock-show-handle {
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--ai-blue-bright);
+}
+
+/* Primary/warm button halos: lighter shadow in light mode */
+:root[data-theme="light"] button.primary {
+  box-shadow: 0 4px 14px rgba(44, 92, 197, 0.20);
+}
+:root[data-theme="light"] button.primary:hover {
+  box-shadow: 0 6px 18px rgba(44, 92, 197, 0.28);
+}
+:root[data-theme="light"] button.warm {
+  box-shadow: 0 4px 14px rgba(168, 101, 31, 0.18);
+}
+
+/* Tab active state halo */
+:root[data-theme="light"] .tab-btn.active {
+  box-shadow: 0 2px 10px rgba(44, 92, 197, 0.10);
+}
+
+/* Smooth transitions when toggling */
+html, body, .card, .app-header, button, .tab-btn, .data-table,
+.phase-btn, .checklist-item, .summary-card, .params-dock,
+.assistant-card, .slider-item, .log-entry, .progress-bar,
+.cad3d-meta, .dock-show-handle {
+  transition: background 250ms ease, border-color 250ms ease, color 200ms ease, box-shadow 250ms ease;
+}
