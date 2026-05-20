@@ -7,6 +7,7 @@ Uso: `python cad/cabin.py` (genera cad/exports/cabin.{step,stl,glb,png}).
 """
 from __future__ import annotations
 
+import random
 from math import atan2, degrees
 from pathlib import Path
 
@@ -44,13 +45,19 @@ def make_steel_member(length_m: float, profile_width_mm: float, profile_height_m
 
 
 def build_columns(p: Params) -> bd.Compound:
-    """9 columnas en malla 3 × 3, alturas variables por roca."""
+    """9 columnas en malla 3 × 3, alturas variables por roca.
+
+    Cada columna se ancla con su BASE sobre el terreno (z variable) y su TOPE
+    en `platform_z_mm` (constante = max altura). El terreno sube para llenar
+    el espacio bajo las columnas cortas; las columnas largas pisan piso bajo.
+    """
     prof = p.profile(p.raw["columns"]["profile"])
     cols_n = int(p.raw["platform"]["column_grid_cols"])
     rows_n = int(p.raw["platform"]["column_grid_rows"])
     width_m = p.width_m
     depth_m = p.depth_m
     heights = p.column_heights_m
+    max_h_m = max(max(row) for row in heights)
 
     parts: list[bd.Part] = []
     for row in range(rows_n):
@@ -58,12 +65,13 @@ def build_columns(p: Params) -> bd.Compound:
             x = (col / (cols_n - 1)) * width_m * 1000 if cols_n > 1 else 0
             y = (row / (rows_n - 1)) * depth_m * 1000 if rows_n > 1 else 0
             h_m = heights[row][col]
-            # Columna vertical: caja (prof.width × prof.height) × altura
+            # Top de columna alineado a platform_z; base sube en columnas cortas.
+            z_bottom_mm = (max_h_m - h_m) * 1000
             col_part = bd.Box(
                 prof.width_mm, prof.height_mm, h_m * 1000,
                 align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN),
             )
-            col_part = col_part.translate((x, y, 0))
+            col_part = col_part.translate((x, y, z_bottom_mm))
             parts.append(col_part)
 
     return bd.Compound(label="columns", children=parts)
@@ -165,6 +173,112 @@ def build_aframe(p: Params, platform_z_mm: float) -> bd.Compound:
     return bd.Compound(label="aframe", children=parts)
 
 
+def build_terrain(p: Params) -> bd.Compound:
+    """Loza sólida del terreno inclinado.
+
+    La cara superior pasa por las bases de las columnas. La pendiente va desde
+    `z = (max_h - h_back) * 1000` en y=0 hasta `z = (max_h - h_front) * 1000`
+    en y=depth_m, extrapolada linealmente más allá del footprint.
+    """
+    heights = p.column_heights_m
+    max_h = max(max(r) for r in heights)
+    rows_n = len(heights)
+    h_back  = heights[0][0]
+    h_front = heights[rows_n - 1][0]
+    back_z_mm  = (max_h - h_back)  * 1000.0
+    front_z_mm = (max_h - h_front) * 1000.0
+    depth_mm = p.depth_m * 1000.0
+    width_mm = p.width_m * 1000.0
+    slope = (front_z_mm - back_z_mm) / depth_mm if depth_mm > 0 else 0.0
+
+    margin_y_mm = 3500.0
+    margin_x_mm = 4000.0
+    thickness_mm = 1500.0
+
+    y_back  = -margin_y_mm
+    y_front = depth_mm + margin_y_mm
+    z_top_back  = back_z_mm + slope * (y_back  - 0.0)
+    z_top_front = back_z_mm + slope * (y_front - 0.0)
+    z_bottom = min(z_top_back, z_top_front) - thickness_mm
+
+    # Polígono en YZ (counterclockwise desde +X): top-back → top-front → bot-front → bot-back.
+    pts_yz = [
+        (y_back,  z_top_back),
+        (y_front, z_top_front),
+        (y_front, z_bottom),
+        (y_back,  z_bottom),
+    ]
+    extrude_x = width_mm + 2 * margin_x_mm
+    with bd.BuildPart() as bp:
+        with bd.BuildSketch(bd.Plane.YZ):
+            bd.Polygon(*pts_yz, align=None)
+        bd.extrude(amount=extrude_x)
+
+    terrain = bp.part
+    # extrude empuja en +X normal al plano YZ; centramos sobre el ancho.
+    terrain = terrain.translate((-margin_x_mm, 0, 0))
+    terrain.label = "cabin/terrain"
+    return bd.Compound(label="cabin/terrain", children=[terrain])
+
+
+def build_rocks(p: Params) -> bd.Compound:
+    """Cúmulos rocosos en la base de cada columna.
+
+    Cada columna lleva un cluster de 4 boulders angulares (Box rotados) enterrados
+    en el terreno, justificando visualmente la altura variable de las columnas:
+    las columnas cortas pisan rocas más grandes (terreno elevado), las largas
+    pisan rocas pequeñas. Mismo principio que la foto de referencia.
+
+    Usamos Box rotados en vez de Sphere porque OCCT tessela esferas con ~8k
+    triángulos por defecto, y 36 esferas hacen un GLB de ~5MB; con Box el GLB
+    queda en ~200KB con calidad visual equivalente a esta escala/iluminación.
+    """
+    rng = random.Random(42)  # determinístico por estabilidad del GLB
+    cols_n = int(p.raw["platform"]["column_grid_cols"])
+    rows_n = int(p.raw["platform"]["column_grid_rows"])
+    heights = p.column_heights_m
+    max_h = max(max(r) for r in heights)
+    width_m = p.width_m
+    depth_m = p.depth_m
+
+    def boulder(size_mm: float) -> bd.Part:
+        # Box ligeramente irregular + 3 rotaciones aleatorias = look facetado tipo roca.
+        sx = size_mm * rng.uniform(0.85, 1.25)
+        sy = size_mm * rng.uniform(0.85, 1.25)
+        sz = size_mm * rng.uniform(0.6, 1.05)  # más bajo que ancho (boulders aplastados)
+        b = bd.Box(sx, sy, sz, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.CENTER))
+        b = b.rotate(bd.Axis.X, rng.uniform(-25, 25))
+        b = b.rotate(bd.Axis.Y, rng.uniform(-25, 25))
+        b = b.rotate(bd.Axis.Z, rng.uniform(0, 360))
+        return b
+
+    parts: list[bd.Part] = []
+    for row in range(rows_n):
+        for col in range(cols_n):
+            x = (col / (cols_n - 1)) * width_m * 1000 if cols_n > 1 else 0
+            y = (row / (rows_n - 1)) * depth_m * 1000 if rows_n > 1 else 0
+            h_m = heights[row][col]
+            z_base = (max_h - h_m) * 1000.0  # nivel del terreno bajo esta columna
+
+            # Roca central grande bajo la columna — más alta donde la columna es más corta.
+            r0 = 760.0 + (1.8 - h_m) * 300.0  # 760mm (h=1.8) hasta 1120mm (h=0.6)
+            rock0 = boulder(r0)
+            rock0 = rock0.translate((x, y, z_base - r0 * 0.2))
+            parts.append(rock0)
+
+            # 3 boulders satélite alrededor.
+            for _ in range(3):
+                rx = rng.uniform(-650, 650)
+                ry = rng.uniform(-650, 650)
+                size = rng.uniform(380, 620)
+                rock = boulder(size)
+                rz = z_base - size * 0.2 + rng.uniform(-30, 80)
+                rock = rock.translate((x + rx, y + ry, rz))
+                parts.append(rock)
+
+    return bd.Compound(label="cabin/rocks", children=parts)
+
+
 def build_deck_marker(p: Params, platform_z_mm: float) -> bd.Compound:
     """Marcador visual de la terraza frontal — losa thin para distinguirla."""
     enclosed = float(p.raw["envelope"]["enclosed_depth_m"])
@@ -188,17 +302,30 @@ def build_cabin(p: Params) -> bd.Compound:
     platform = build_platform(p, platform_z_mm)
     aframe = build_aframe(p, platform_z_mm)
     envelope = build_envelope(p, platform_z_mm)
+    terrain = build_terrain(p)
+    rocks = build_rocks(p)
 
     # Etiquetas para que viewer.js detecte tipo de superficie.
     columns.label = "cabin/columns"
     platform.label = "cabin/platform"
     aframe.label = "cabin/aframe"
+    terrain.label = "cabin/terrain"
+    rocks.label = "cabin/rocks"
 
-    return bd.Compound(label="cabin", children=[columns, platform, aframe, envelope])
+    return bd.Compound(
+        label="cabin",
+        children=[terrain, rocks, columns, platform, aframe, envelope],
+    )
 
 
-def export_all(cabin: bd.Compound) -> dict[str, Path]:
-    """Exporta STEP (ingeniero), STL (fabricación), GLB (web)."""
+def export_all(cabin: bd.Compound, envelope_only: bd.Compound | None = None) -> dict[str, Path]:
+    """Exporta STEP (ingeniero), STL (fabricación), GLB (web).
+
+    Si `envelope_only` se provee, también exporta `cabin_envelope.glb` —
+    versión sin terreno ni rocas, usada por validate_cad.py para checks de
+    dimensiones (que de otra forma estarían dominadas por los márgenes del
+    terreno).
+    """
     out: dict[str, Path] = {}
 
     step_path = EXPORTS_DIR / "cabin.step"
@@ -212,13 +339,26 @@ def export_all(cabin: bd.Compound) -> dict[str, Path]:
     except Exception as exc:
         print(f"⚠ STL export falló: {exc}")
 
-    # GLB va a web/data/ para que GitHub Pages lo sirva al HTML interactivo
+    # GLB va a web/data/ para que GitHub Pages lo sirva al HTML interactivo.
+    # Bajamos la fidelidad de teselado para terreno + rocas (sphere/extrude pesado)
+    # — el tamaño cae de ~6.7MB a ~1MB sin pérdida visible en el viewer.
     glb_path = WEB_DATA_DIR / "cabin.glb"
     try:
-        bd.export_gltf(cabin, str(glb_path), binary=True)
+        bd.export_gltf(
+            cabin, str(glb_path), binary=True,
+            linear_deflection=0.05, angular_deflection=0.8,
+        )
         out["glb"] = glb_path
     except Exception as exc:
         print(f"⚠ GLB export falló: {exc}")
+
+    if envelope_only is not None:
+        env_path = WEB_DATA_DIR / "cabin_envelope.glb"
+        try:
+            bd.export_gltf(envelope_only, str(env_path), binary=True)
+            out["envelope_glb"] = env_path
+        except Exception as exc:
+            print(f"⚠ envelope GLB export falló: {exc}")
 
     return out
 
@@ -227,7 +367,27 @@ def main() -> None:
     p = load_params()
     print(f"Construyendo cabaña: {p.width_m} × {p.depth_m} m, apex {p.apex_height_m} m...")
     cabin = build_cabin(p)
-    out = export_all(cabin)
+
+    # Sub-compound sin terreno/rocas — para regression tests de dimensiones.
+    # Importante: build123d re-parenta hijos asignados a otro Compound. Para no
+    # robarle hijos a `cabin`, construimos el envelope-only PARALELAMENTE
+    # (sin reusar nodos). Como las funciones build_*() son determinísticas,
+    # llamarlas otra vez produce idénticos sólidos.
+    columns = build_columns(p)
+    heights = p.column_heights_m
+    platform_z_mm = max(max(row) for row in heights) * 1000.0
+    platform = build_platform(p, platform_z_mm)
+    aframe = build_aframe(p, platform_z_mm)
+    envelope = build_envelope(p, platform_z_mm)
+    columns.label = "cabin/columns"
+    platform.label = "cabin/platform"
+    aframe.label = "cabin/aframe"
+    envelope_only = bd.Compound(
+        label="cabin_envelope",
+        children=[columns, platform, aframe, envelope],
+    )
+
+    out = export_all(cabin, envelope_only=envelope_only)
     for fmt, path in out.items():
         size_kb = path.stat().st_size / 1024
         print(f"  ✅ {fmt.upper():4}  {path.relative_to(EXPORTS_DIR.parent.parent)}  ({size_kb:,.0f} KB)")

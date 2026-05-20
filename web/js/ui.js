@@ -80,7 +80,7 @@ export function mountSliders(container, params, baseline, onChange) {
         <input type="range" data-path="${cfg.path}"
                min="${cfg.min}" max="${cfg.max}" step="${cfg.step}"
                value="${current}" />
-        <span class="slider-value" data-display="${cfg.path}">${formatValue(current, cfg.unit, isInt)}</span>
+        <span class="slider-value" data-display="${cfg.path}" data-unit="${cfg.unit}">${formatValue(current, cfg.unit, isInt)}</span>
       </div>
       <div class="slider-meta">${cfg.meta} · baseline: ${formatValue(base, cfg.unit, isInt)}</div>
     `;

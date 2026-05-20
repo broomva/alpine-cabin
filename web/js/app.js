@@ -55,10 +55,11 @@ async function main() {
   await mountViewer(document.getElementById("viewer"), `${DATA_BASE}/cabin.glb`, () => {
     const status = document.getElementById("viewer-status");
     if (status) status.textContent = "Modelo listo · arrastra para rotar";
-  });
+  }, { controlsRoot: ".hero-viewer" });
 
-  // Sliders en la tab Parámetros
-  mountSliders(document.getElementById("sliders"), liveParams, baseline, onSliderChange);
+  // Sliders: instancias duales (Overview + Dock del 3D), sincronizadas por data-path
+  mountSliders(document.getElementById("sliders-overview"), liveParams, baseline, onSliderChange);
+  mountSliders(document.getElementById("sliders-dock"), liveParams, baseline, onSliderChange);
 
   // KPIs iniciales
   updateAllKpis();
@@ -84,7 +85,12 @@ async function main() {
 
   // Tab change side-effects
   onTabChange((tab) => {
-    if (tab === "cad3d") ensureFullViewerMounted();
+    if (tab === "cad3d") {
+      ensureFullViewerMounted();
+      // El viewer ya mide su container vía ResizeObserver, pero un nudge ayuda
+      // en el primer mount donde clientWidth/Height pueden ser 0 antes del .active.
+      requestAnimationFrame(() => window.dispatchEvent(new Event("resize")));
+    }
   });
 }
 
@@ -95,15 +101,26 @@ async function main() {
 function updateAllKpis() {
   const k = computeKpis(liveParams, prices);
   const base = computeKpis(baseline, prices);
-  for (const id of ["kpi-list", "kpi-list-params"]) {
-    const el = document.getElementById(id);
-    if (el) renderKpis(el, k, base);
-  }
+  const el = document.getElementById("kpi-list");
+  if (el) renderKpis(el, k, base);
   saveExperimentToHash(liveParams, baseline);
+}
+
+function formatSliderValue(v, unit, isInt) {
+  return isInt ? `${v} ${unit}` : `${(+v).toFixed(2)} ${unit}`;
 }
 
 function onSliderChange(path, value) {
   setByPath(liveParams, path, value);
+  // Mantener sincronizadas todas las instancias del mismo slider (Overview ↔ Dock 3D)
+  document.querySelectorAll(`input[type=range][data-path="${path}"]`).forEach((inp) => {
+    if (Number(inp.value) !== Number(value)) inp.value = value;
+  });
+  const isInt = Number.isInteger(value);
+  document.querySelectorAll(`.slider-value[data-display="${path}"]`).forEach((d) => {
+    const unit = d.dataset.unit || "";
+    d.textContent = formatSliderValue(value, unit, isInt);
+  });
   updateAllKpis();
 }
 
@@ -431,7 +448,7 @@ async function ensureFullViewerMounted() {
   if (fullViewerMounted) return;
   const el = document.getElementById("viewer-full");
   if (!el) return;
-  await mountViewer(el, `${DATA_BASE}/cabin.glb`, null);
+  await mountViewer(el, `${DATA_BASE}/cabin.glb`, null, { controlsRoot: ".cad3d-panel" });
   fullViewerMounted = true;
 }
 
@@ -440,7 +457,7 @@ async function ensureFullViewerMounted() {
 // ============================================================
 
 function bindActions() {
-  document.getElementById("btn-reset")?.addEventListener("click", () => {
+  const resetAll = () => {
     liveParams = structuredClone(baseline);
     document.querySelectorAll("input[type=range]").forEach((input) => {
       const path = input.dataset.path;
@@ -448,14 +465,41 @@ function bindActions() {
       input.dispatchEvent(new Event("input"));
     });
     updateAllKpis();
-  });
-
-  document.getElementById("btn-copy-url")?.addEventListener("click", copyExperimentUrl);
-
-  document.getElementById("btn-download")?.addEventListener("click", () => {
+  };
+  const downloadJson = () => {
     const k = computeKpis(liveParams, prices);
     downloadExperiment(liveParams, baseline, k);
-  });
+  };
+
+  document.getElementById("btn-reset")?.addEventListener("click", resetAll);
+  document.getElementById("btn-copy-url")?.addEventListener("click", copyExperimentUrl);
+  document.getElementById("btn-download")?.addEventListener("click", downloadJson);
+
+  // Dock 3D: mismas acciones, espejadas
+  document.querySelector('[data-action="dock-reset"]')?.addEventListener("click", resetAll);
+  document.querySelector('[data-action="dock-download"]')?.addEventListener("click", downloadJson);
+
+  // Dock collapse/expand
+  const dock = document.getElementById("params-dock");
+  const dockBtn = document.getElementById("dock-toggle");
+  const dockHandle = document.getElementById("dock-show-handle");
+  const setDockState = (state) => {
+    if (!dock) return;
+    dock.dataset.state = state;
+    if (dockBtn) {
+      dockBtn.textContent = state === "open" ? "›" : "‹";
+      dockBtn.setAttribute("aria-label", state === "open" ? "Colapsar dock" : "Expandir dock");
+    }
+    if (dockHandle) dockHandle.classList.toggle("visible", state === "closed");
+  };
+  if (dock && dockBtn) {
+    dockBtn.addEventListener("click", () => {
+      setDockState(dock.dataset.state === "open" ? "closed" : "open");
+    });
+  }
+  if (dockHandle) {
+    dockHandle.addEventListener("click", () => setDockState("open"));
+  }
 
   document.getElementById("btn-export-progress")?.addEventListener("click", exportProgressJson);
 

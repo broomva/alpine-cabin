@@ -779,19 +779,213 @@ main {
 }
 
 /* ============================================================
-   FULL-SCREEN 3D
+   PARÁMETROS INLINE (debajo del render en Overview)
    ============================================================ */
 
-.full-viewer-wrap {
-  height: calc(100vh - 220px);
-  min-height: 500px;
-  overflow: hidden;
-  position: relative;
+.params-inline-help {
+  color: var(--text-mid);
+  font-size: 0.9rem;
+  margin: 0 0 1rem;
+  max-width: 78ch;
+}
+.params-inline .slider-grid {
+  margin-bottom: 0.25rem;
+}
+
+/* ============================================================
+   FULL-SCREEN 3D — viewport completo + dock de parámetros
+   ============================================================ */
+
+/* La altura del header sticky (h1 + tabs) ~ 116px. Le damos 124px para holgura. */
+:root {
+  --app-header-h: 124px;
+  --params-dock-w: 340px;
+}
+
+/* Cuando el 3D está activo, el panel rompe el padding de <main> para llegar a borde-a-borde. */
+.tab-panel.cad3d-panel.active {
+  margin: -1rem -2rem -4rem;   /* compensa main padding 1rem 2rem 4rem */
   padding: 0;
 }
-.full-viewer-wrap #viewer {
+
+.cad3d-panel .full-viewer-wrap {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - var(--app-header-h));
+  min-height: 480px;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  overflow: hidden;
+}
+
+.cad3d-panel #viewer-full {
   position: absolute;
   inset: 0;
+}
+
+/* Botones flotantes para reset/grid en 3D — esquina superior izquierda */
+.cad3d-viewer-buttons {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  display: flex;
+  gap: 0.4rem;
+  z-index: 5;
+}
+.cad3d-viewer-buttons button {
+  padding: 0.35rem 0.7rem;
+  font-size: 0.78rem;
+  background: rgba(7, 9, 15, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Meta footer: enlaces step/build123d en esquina inferior izquierda */
+.cad3d-meta {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.76rem;
+  color: var(--text-dim);
+  background: rgba(7, 9, 15, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--glass-border);
+  pointer-events: auto;
+  z-index: 4;
+}
+.cad3d-meta a {
+  color: var(--ai-blue);
+  font-family: var(--font-mono);
+}
+.cad3d-meta .dot { color: var(--text-faint); }
+
+/* ============================================================
+   PARAMS DOCK (flota dentro del tab 3D)
+   ============================================================ */
+
+.params-dock {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+  width: var(--params-dock-w);
+  max-width: calc(100vw - 2rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem 1.1rem;
+  background: rgba(15, 18, 26, 0.78);
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+  border: 1px solid var(--glass-border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+  z-index: 10;
+  transition: transform 250ms ease, opacity 200ms ease;
+}
+
+.params-dock[data-state="closed"] {
+  transform: translateX(calc(100% + 1.5rem));
+  opacity: 0;
+  pointer-events: none;
+}
+
+.params-dock-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+.params-dock-header h3 {
+  margin: 0.1rem 0 0;
+}
+
+.dock-toggle {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  border-radius: 50%;
+  background: var(--glass-mid);
+}
+
+/* Si el dock está colapsado, mostramos un mini-handle anclado al borde derecho */
+.params-dock[data-state="closed"] + /* no hermano viable; usamos un pseudo via JS si lo necesitamos */ * {}
+
+.params-dock-body {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  min-height: 0;
+  margin-right: -0.4rem;  /* permite que el scrollbar caiga sobre el padding */
+  padding-right: 0.4rem;
+}
+
+.slider-grid-dock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.slider-grid-dock .slider-item {
+  padding: 0.6rem 0.75rem;
+}
+
+.dock-actions {
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+.dock-actions button {
+  flex: 1;
+  min-width: 90px;
+}
+
+.dock-hint {
+  margin: 0;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  line-height: 1.45;
+}
+.dock-hint code {
+  background: var(--glass-soft);
+  padding: 0.05rem 0.35rem;
+  border-radius: 4px;
+}
+
+/* "Mostrar dock": pill flotante en el borde derecho, sólo visible cuando el dock está cerrado */
+.dock-show-handle {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 11;
+  padding: 0.5rem 0.95rem;
+  font-size: 0.82rem;
+  background: rgba(15, 18, 26, 0.85);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--ai-blue-dim);
+  border-radius: 999px;
+  display: none;
+  align-items: center;
+  gap: 0.4rem;
+}
+.dock-show-handle.visible {
+  display: inline-flex;
 }
 
 /* ============================================================
@@ -940,6 +1134,15 @@ footer {
   .phases-sidebar { position: static; flex-direction: row; flex-wrap: wrap; max-height: none; }
   .params-layout, .progress-grid { grid-template-columns: 1fr; }
   .assistant-card { position: static; }
+  /* Dock más estrecho en tablet */
+  :root { --params-dock-w: 300px; }
+}
+
+@media (max-width: 720px) {
+  /* En móvil el dock ocupa casi todo el ancho — útil para tocar sliders */
+  :root { --params-dock-w: calc(100vw - 2rem); }
+  .params-dock { bottom: auto; max-height: 60vh; }
+  .cad3d-panel .full-viewer-wrap { height: calc(100vh - var(--app-header-h) - 40px); }
 }
 
 @media (max-width: 640px) {

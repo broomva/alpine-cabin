@@ -1,6 +1,6 @@
 // tabs.js — Sistema de pestañas con sincronización a URL hash.
 
-const TAB_IDS = ["overview", "construir", "parametros", "bom", "presupuesto", "cad3d", "progreso"];
+const TAB_IDS = ["overview", "construir", "bom", "presupuesto", "cad3d", "progreso"];
 const DEFAULT_TAB = "overview";
 
 const listeners = [];

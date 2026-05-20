@@ -13,6 +13,8 @@ function nodeKind(node) {
   let cur = node;
   while (cur) {
     const name = (cur.name || "").toLowerCase();
+    if (name.includes("terrain"))     return "terrain";
+    if (name.includes("rocks"))       return "rock";
     if (name.includes("roof"))        return "roof";
     if (name.includes("glass"))       return "glass";
     if (name.includes("rear_wall"))   return "wood_wall";
@@ -41,6 +43,8 @@ const MATERIALS = {
   }),
   wood_deck: () => new THREE.MeshStandardMaterial({ color: 0x8c5e3f, metalness: 0.05, roughness: 0.78 }),
   wood_wall: () => new THREE.MeshStandardMaterial({ color: 0x6b4a30, metalness: 0.05, roughness: 0.85 }),
+  terrain:   () => new THREE.MeshStandardMaterial({ color: 0x4a5a2a, metalness: 0.0, roughness: 0.95 }),
+  rock:      () => new THREE.MeshStandardMaterial({ color: 0x8a8678, metalness: 0.05, roughness: 0.88, flatShading: true }),
 };
 
 function materialFor(kind) {
@@ -48,11 +52,9 @@ function materialFor(kind) {
   return fn();
 }
 
-let scene, camera, renderer, controls, gridHelper;
-let model = null;
-let onResize = null;
-
-export async function mountViewer(container, glbUrl, onLoaded) {
+export async function mountViewer(container, glbUrl, onLoaded, opts = {}) {
+  let scene, camera, renderer, controls, gridHelper;
+  let model = null;
   const w = container.clientWidth || 800;
   const h = container.clientHeight || 540;
 
@@ -97,24 +99,10 @@ export async function mountViewer(container, glbUrl, onLoaded) {
   hemi.position.set(0, 30, 0);
   scene.add(hemi);
 
-  // ----- Ground (XZ plane en Y-up, en metros) -----
-  const groundGeom = new THREE.PlaneGeometry(60, 60);
-  const groundMat = new THREE.MeshStandardMaterial({
-    color: 0x3a4228,
-    roughness: 0.95,
-    metalness: 0.0,
-  });
-  const ground = new THREE.Mesh(groundGeom, groundMat);
-  ground.rotation.x = -Math.PI / 2; // de XY a XZ (horizontal en Y-up)
-  ground.position.y = -4.01;         // justo bajo la base del modelo
-  ground.position.x = 3;
-  ground.position.z = -3.5;
-  ground.receiveShadow = true;
-  scene.add(ground);
-
-  // ----- Grid helper -----
-  gridHelper = new THREE.GridHelper(30, 30, 0x4a4a4a, 0x2a2a2a);
-  gridHelper.position.set(3, -3.99, -3.5);
+  // ----- Grid helper (referencia opcional — el terreno real viene del GLB) -----
+  gridHelper = new THREE.GridHelper(40, 40, 0x4a4a4a, 0x2a2a2a);
+  gridHelper.position.set(3, -1.5, -3.5);
+  gridHelper.visible = false;
   scene.add(gridHelper);
 
   // ----- Controls (en metros) -----
@@ -165,30 +153,52 @@ export async function mountViewer(container, glbUrl, onLoaded) {
   loop();
 
   // ----- Resize -----
-  onResize = () => {
+  const onResize = () => {
     const w2 = container.clientWidth;
     const h2 = container.clientHeight;
+    if (w2 === 0 || h2 === 0) return;
     camera.aspect = w2 / h2;
     camera.updateProjectionMatrix();
     renderer.setSize(w2, h2);
   };
   window.addEventListener("resize", onResize);
+  // Re-poll size when the panel becomes visible (tab switch can change clientWidth/Height from 0)
+  if (typeof ResizeObserver !== "undefined") {
+    const ro = new ResizeObserver(onResize);
+    ro.observe(container);
+  }
 
-  // ----- Buttons -----
-  document.getElementById("btn-reset-camera").addEventListener("click", () => {
-    camera.position.set(18, 10, 16);
-    const box = new THREE.Box3().setFromObject(model);
-    const center = box.getCenter(new THREE.Vector3());
-    controls.target.copy(center);
-    controls.update();
-  });
+  // ----- Buttons (scoped al controlsRoot del viewer) -----
+  const controlsRoot = opts.controlsRoot
+    ? (typeof opts.controlsRoot === "string"
+        ? document.querySelector(opts.controlsRoot)
+        : opts.controlsRoot)
+    : container.parentElement || document;
 
-  document.getElementById("btn-toggle-grid").addEventListener("click", () => {
-    gridHelper.visible = !gridHelper.visible;
-  });
+  const btnReset = controlsRoot?.querySelector('[data-action="reset-camera"]');
+  const btnGrid = controlsRoot?.querySelector('[data-action="toggle-grid"]');
 
-  // Exponer camera/controls para scripts externos (ej. cad/render_views.py).
-  window.__cabinCamera = camera;
-  window.__cabinControls = controls;
-  window.__cabinScene = scene;
+  if (btnReset) {
+    btnReset.addEventListener("click", () => {
+      camera.position.set(18, 10, 16);
+      const box = new THREE.Box3().setFromObject(model);
+      const center = box.getCenter(new THREE.Vector3());
+      controls.target.copy(center);
+      controls.update();
+    });
+  }
+  if (btnGrid) {
+    btnGrid.addEventListener("click", () => {
+      gridHelper.visible = !gridHelper.visible;
+    });
+  }
+
+  // Exponer camera/controls del primer viewer para scripts externos (ej. cad/render_views.py).
+  if (!window.__cabinCamera) {
+    window.__cabinCamera = camera;
+    window.__cabinControls = controls;
+    window.__cabinScene = scene;
+  }
+
+  return { scene, camera, controls, gridHelper, resize: onResize };
 }

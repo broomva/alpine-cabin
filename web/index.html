@@ -25,7 +25,6 @@
   <nav class="tab-nav" role="tablist">
     <button class="tab-btn" role="tab" data-tab="overview">Overview</button>
     <button class="tab-btn" role="tab" data-tab="construir">Construir <span class="badge" id="construir-badge">0/8</span></button>
-    <button class="tab-btn" role="tab" data-tab="parametros">Parámetros</button>
     <button class="tab-btn" role="tab" data-tab="bom">BOM</button>
     <button class="tab-btn" role="tab" data-tab="presupuesto">Presupuesto</button>
     <button class="tab-btn" role="tab" data-tab="cad3d">3D</button>
@@ -46,8 +45,8 @@
       <div class="card hero-viewer">
         <div id="viewer"></div>
         <div class="viewer-buttons">
-          <button id="btn-reset-camera">⟳ Reset</button>
-          <button id="btn-toggle-grid">▦ Grid</button>
+          <button data-action="reset-camera">⟳ Reset</button>
+          <button data-action="toggle-grid">▦ Grid</button>
         </div>
         <div class="viewer-overlay">
           <span id="viewer-status">Cargando modelo…</span>
@@ -58,7 +57,22 @@
       <div class="card kpi-panel">
         <h3>KPIs en vivo</h3>
         <dl id="kpi-list"></dl>
-        <p class="kpi-note">Los KPIs se recalculan al mover los sliders en la pestaña Parámetros. El modelo 3D representa el baseline.</p>
+        <p class="kpi-note">Los KPIs se recalculan al mover los sliders debajo. El modelo 3D representa el baseline.</p>
+      </div>
+    </div>
+
+    <!-- Parámetros: integrados debajo del render, antes eran tab independiente -->
+    <div class="card params-inline" style="margin-top: 1.5rem">
+      <div class="card-header">
+        <h3 class="card-title">Variar parámetros</h3>
+        <span class="card-eyebrow">cad/params.toml · KPIs se recalculan en vivo</span>
+      </div>
+      <p class="params-inline-help">Mueve los sliders para explorar el espacio de diseño. Cuando estés satisfecho, descarga el experimento JSON y aplícalo al repo con <code>python cad/apply_experiment.py</code> para regenerar el BOM, el presupuesto y el modelo 3D.</p>
+      <div class="slider-grid" id="sliders-overview"></div>
+      <div class="experiment-actions">
+        <button id="btn-reset">Reset baseline</button>
+        <button id="btn-copy-url">Copiar URL del experimento</button>
+        <button id="btn-download" class="primary">Descargar experimento JSON</button>
       </div>
     </div>
 
@@ -96,35 +110,6 @@
     <div class="phases-layout">
       <nav class="phases-sidebar" id="phases-sidebar"></nav>
       <div class="phase-content card elev" id="phase-content"></div>
-    </div>
-  </section>
-
-  <!-- ============================================================== -->
-  <!--   PARÁMETROS                                                   -->
-  <!-- ============================================================== -->
-  <section class="tab-panel" id="tab-parametros" role="tabpanel">
-    <h2>Variar parámetros</h2>
-    <p class="lede">Mueve los sliders para explorar el espacio de diseño. Los KPIs se actualizan en vivo. Cuando estés satisfecho, descarga el experimento JSON y aplícalo al repo con <code>python cad/apply_experiment.py</code> para regenerar el BOM, el presupuesto y el modelo 3D.</p>
-
-    <div class="params-layout">
-      <div class="card">
-        <div class="card-header">
-          <h3 class="card-title">Parámetros editables</h3>
-          <span class="card-eyebrow">cad/params.toml</span>
-        </div>
-        <div class="slider-grid" id="sliders"></div>
-
-        <div class="experiment-actions">
-          <button id="btn-reset">Reset baseline</button>
-          <button id="btn-copy-url">Copiar URL del experimento</button>
-          <button id="btn-download" class="primary">Descargar experimento JSON</button>
-        </div>
-      </div>
-
-      <div class="card kpi-panel">
-        <h3>KPIs en vivo</h3>
-        <dl id="kpi-list-params"></dl>
-      </div>
     </div>
   </section>
 
@@ -179,13 +164,44 @@
   </section>
 
   <!-- ============================================================== -->
-  <!--   3D Full-screen                                               -->
+  <!--   3D Full-screen — viewport completo + dock de parámetros      -->
   <!-- ============================================================== -->
-  <section class="tab-panel" id="tab-cad3d" role="tabpanel">
-    <h2>Modelo CAD 3D</h2>
-    <p class="lede">Modelo paramétrico generado con <a href="https://github.com/gumyr/build123d" target="_blank">build123d</a> desde <code>cad/params.toml</code>. Disponible también como STEP (<a href="https://github.com/broomva/alpine-cabin/blob/main/cad/exports/cabin.step" target="_blank">descargar</a>) y STL para fabricación.</p>
-    <div class="card full-viewer-wrap">
+  <section class="tab-panel cad3d-panel" id="tab-cad3d" role="tabpanel">
+    <div class="full-viewer-wrap">
       <div id="viewer-full"></div>
+
+      <div class="viewer-buttons cad3d-viewer-buttons">
+        <button data-action="reset-camera">⟳ Reset</button>
+        <button data-action="toggle-grid">▦ Grid</button>
+      </div>
+
+      <button class="dock-show-handle" id="dock-show-handle" aria-label="Mostrar parámetros" title="Mostrar parámetros">‹ Parámetros</button>
+
+      <aside class="params-dock" id="params-dock" data-state="open">
+        <header class="params-dock-header">
+          <div>
+            <div class="card-eyebrow">cad/params.toml</div>
+            <h3 class="card-title">Parámetros</h3>
+          </div>
+          <button class="dock-toggle" id="dock-toggle" aria-label="Colapsar dock" title="Colapsar dock">›</button>
+        </header>
+        <div class="params-dock-body">
+          <div class="slider-grid slider-grid-dock" id="sliders-dock"></div>
+          <div class="experiment-actions dock-actions">
+            <button data-action="dock-reset">Reset baseline</button>
+            <button data-action="dock-download" class="primary">⬇ JSON</button>
+          </div>
+          <p class="dock-hint">Modelo 3D representa el baseline · re-export con <code>make cad</code></p>
+        </div>
+      </aside>
+
+      <div class="cad3d-meta">
+        <a href="https://github.com/broomva/alpine-cabin/blob/main/cad/exports/cabin.step" target="_blank">cabin.step</a>
+        <span class="dot">·</span>
+        <a href="https://github.com/gumyr/build123d" target="_blank">build123d</a>
+        <span class="dot">·</span>
+        <span class="mono">arrastra · scroll · shift+drag pan</span>
+      </div>
     </div>
   </section>
 

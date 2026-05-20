@@ -23,6 +23,9 @@ from parameters import load_params
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 GLB_PATH  = REPO_ROOT / "web" / "data" / "cabin.glb"
+# Variante sin terreno/rocas — usada para checks de dimensiones del envelope.
+# El cabin.glb principal incluye terreno + rocas y serviría malas medidas aquí.
+ENVELOPE_GLB_PATH = REPO_ROOT / "web" / "data" / "cabin_envelope.glb"
 PARAMS_PATH = REPO_ROOT / "cad" / "params.toml"
 TOLERANCE_M = 0.5  # 50 cm de tolerancia para overhang/render details
 
@@ -280,8 +283,14 @@ def main():
         print(f"{RED}❌ No existe {GLB_PATH}. Corré `make cad` primero.{RESET}")
         return 1
 
+    # Para checks de dimensiones usamos el GLB sin terreno/rocas si existe;
+    # si no, caemos al cabin.glb completo (medidas estarán infladas pero al menos no fallan).
+    measure_path = ENVELOPE_GLB_PATH if ENVELOPE_GLB_PATH.exists() else GLB_PATH
+    if measure_path is ENVELOPE_GLB_PATH:
+        print(f"{DIM}  Usando {measure_path.relative_to(REPO_ROOT)} para checks de bbox{RESET}")
+
     p = load_params()
-    scene = load_glb()
+    scene = load_glb(measure_path)
     dims = glb_dimensions(scene)
 
     print(f"\n{DIM}Bbox del GLB:")
