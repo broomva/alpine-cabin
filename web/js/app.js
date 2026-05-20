@@ -28,6 +28,20 @@ let params, prices, baselineKpis, phasesData;
 let liveParams;
 let baseline;
 
+// Viewer handles — uno por cada instancia (overview + 3D full).
+// Ambos se reconstruyen al mover sliders.
+const viewers = { overview: null, full: null };
+let _rebuildScheduled = false;
+function scheduleViewerRebuild() {
+  if (_rebuildScheduled) return;
+  _rebuildScheduled = true;
+  requestAnimationFrame(() => {
+    _rebuildScheduled = false;
+    if (viewers.overview) viewers.overview.update(liveParams);
+    if (viewers.full)     viewers.full.update(liveParams);
+  });
+}
+
 // ============================================================
 // Boot
 // ============================================================
@@ -50,12 +64,17 @@ async function main() {
   await initProgress(phasesData);
   initTabs();
 
-  // Inicialmente solo el viewer del Overview existe y se monta tarde
-  // El viewer-full se monta lazy cuando se entra a la tab "3D"
-  await mountViewer(document.getElementById("viewer"), `${DATA_BASE}/cabin.glb`, () => {
-    const status = document.getElementById("viewer-status");
-    if (status) status.textContent = "Modelo listo · arrastra para rotar";
-  }, { controlsRoot: ".hero-viewer" });
+  // Viewer del Overview (procedural — los sliders lo actualizan en vivo).
+  // El viewer-full del tab 3D se monta lazy cuando se entra a esa tab.
+  viewers.overview = await mountViewer(
+    document.getElementById("viewer"),
+    liveParams,
+    () => {
+      const status = document.getElementById("viewer-status");
+      if (status) status.textContent = "Modelo listo · arrastra para rotar";
+    },
+    { controlsRoot: ".hero-viewer" },
+  );
 
   // Sliders: instancias duales (Overview + Dock del 3D), sincronizadas por data-path
   mountSliders(document.getElementById("sliders-overview"), liveParams, baseline, onSliderChange);
@@ -116,12 +135,15 @@ function onSliderChange(path, value) {
   document.querySelectorAll(`input[type=range][data-path="${path}"]`).forEach((inp) => {
     if (Number(inp.value) !== Number(value)) inp.value = value;
   });
-  const isInt = Number.isInteger(value);
+  // Format from the slider's step attr, no del tipo de value (5.0 vs 5 — ambos son Number)
+  const refInp = document.querySelector(`input[type=range][data-path="${path}"]`);
+  const isInt = refInp ? Number.isInteger(Number(refInp.step)) : Number.isInteger(value);
   document.querySelectorAll(`.slider-value[data-display="${path}"]`).forEach((d) => {
     const unit = d.dataset.unit || "";
     d.textContent = formatSliderValue(value, unit, isInt);
   });
   updateAllKpis();
+  scheduleViewerRebuild();
 }
 
 function setByPath(obj, path, value) {
@@ -448,7 +470,7 @@ async function ensureFullViewerMounted() {
   if (fullViewerMounted) return;
   const el = document.getElementById("viewer-full");
   if (!el) return;
-  await mountViewer(el, `${DATA_BASE}/cabin.glb`, null, { controlsRoot: ".cad3d-panel" });
+  viewers.full = await mountViewer(el, liveParams, null, { controlsRoot: ".cad3d-panel" });
   fullViewerMounted = true;
 }
 
@@ -465,6 +487,7 @@ function bindActions() {
       input.dispatchEvent(new Event("input"));
     });
     updateAllKpis();
+    scheduleViewerRebuild();
   };
   const downloadJson = () => {
     const k = computeKpis(liveParams, prices);

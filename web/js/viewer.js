@@ -1,60 +1,16 @@
-// viewer.js — Three.js viewer cargando cabin.glb.
+// viewer.js — Three.js viewer con geometría procedural (sliders → realtime).
+//
+// La cabaña se construye en JS vía CabinBuilder en lugar de cargar cabin.glb.
+// El GLB sigue exportándose desde build123d como autoridad para STEP/STL y
+// para validación CAD, pero el web ya no lo descarga — render en tiempo real
+// de los sliders del dock/overview.
 
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { CabinBuilder } from "./cabin-builder.js";
 
-/**
- * Determina el tipo de componente caminando hacia arriba en el árbol de
- * nodos del GLB, buscando un label de la forma "cabin/<kind>/...". Las
- * etiquetas las pone cad/envelope.py y cad/cabin.py.
- */
-function nodeKind(node) {
-  let cur = node;
-  while (cur) {
-    const name = (cur.name || "").toLowerCase();
-    if (name.includes("terrain"))     return "terrain";
-    if (name.includes("rocks"))       return "rock";
-    if (name.includes("roof"))        return "roof";
-    if (name.includes("glass"))       return "glass";
-    if (name.includes("rear_wall"))   return "wood_wall";
-    if (name.includes("deck"))        return "wood_deck";
-    if (name.includes("platform"))    return "platform";
-    if (name.includes("aframe"))      return "steel";
-    if (name.includes("columns"))     return "steel";
-    cur = cur.parent;
-  }
-  return "steel";
-}
-
-const MATERIALS = {
-  steel:     () => new THREE.MeshStandardMaterial({ color: 0x4a4d57, metalness: 0.78, roughness: 0.32 }),
-  platform:  () => new THREE.MeshStandardMaterial({ color: 0x2a2c33, metalness: 0.55, roughness: 0.55 }),
-  roof:      () => new THREE.MeshStandardMaterial({ color: 0x161616, metalness: 0.62, roughness: 0.42 }),
-  glass:     () => new THREE.MeshPhysicalMaterial({
-    color: 0x88aaff,
-    metalness: 0.0,
-    roughness: 0.05,
-    transmission: 0.85,
-    transparent: true,
-    opacity: 0.35,
-    ior: 1.5,
-    thickness: 0.012,
-  }),
-  wood_deck: () => new THREE.MeshStandardMaterial({ color: 0x8c5e3f, metalness: 0.05, roughness: 0.78 }),
-  wood_wall: () => new THREE.MeshStandardMaterial({ color: 0x6b4a30, metalness: 0.05, roughness: 0.85 }),
-  terrain:   () => new THREE.MeshStandardMaterial({ color: 0x4a5a2a, metalness: 0.0, roughness: 0.95 }),
-  rock:      () => new THREE.MeshStandardMaterial({ color: 0x8a8678, metalness: 0.05, roughness: 0.88, flatShading: true }),
-};
-
-function materialFor(kind) {
-  const fn = MATERIALS[kind] || MATERIALS.steel;
-  return fn();
-}
-
-export async function mountViewer(container, glbUrl, onLoaded, opts = {}) {
-  let scene, camera, renderer, controls, gridHelper;
-  let model = null;
+export async function mountViewer(container, params, onLoaded, opts = {}) {
+  let scene, camera, renderer, controls, gridHelper, builder;
   const w = container.clientWidth || 800;
   const h = container.clientHeight || 540;
 
@@ -63,7 +19,7 @@ export async function mountViewer(container, glbUrl, onLoaded, opts = {}) {
   scene.background = new THREE.Color(0x141820);
   scene.fog = new THREE.Fog(0x141820, 30000, 80000);
 
-  // ----- Camera (Y-up — build123d exporta gltf con Y como altura) -----
+  // ----- Camera -----
   camera = new THREE.PerspectiveCamera(38, w / h, 0.1, 500);
   camera.position.set(18, 10, 16);
 
@@ -74,9 +30,8 @@ export async function mountViewer(container, glbUrl, onLoaded, opts = {}) {
   renderer.shadowMap.enabled = true;
   container.appendChild(renderer.domElement);
 
-  // ----- Lights (en METROS, modelo viene escalado de build123d gltf) -----
-  const ambient = new THREE.AmbientLight(0xffffff, 0.55);
-  scene.add(ambient);
+  // ----- Lights -----
+  scene.add(new THREE.AmbientLight(0xffffff, 0.55));
 
   const sun = new THREE.DirectionalLight(0xfff0d8, 1.4);
   sun.position.set(20, 30, 15);
@@ -94,18 +49,15 @@ export async function mountViewer(container, glbUrl, onLoaded, opts = {}) {
   rim.position.set(-15, 8, -10);
   scene.add(rim);
 
-  // Hemisphere para llenar sombras
-  const hemi = new THREE.HemisphereLight(0xb0c8e8, 0x3a4228, 0.35);
-  hemi.position.set(0, 30, 0);
-  scene.add(hemi);
+  scene.add(new THREE.HemisphereLight(0xb0c8e8, 0x3a4228, 0.35));
 
-  // ----- Grid helper (referencia opcional — el terreno real viene del GLB) -----
+  // ----- Grid (toggle opcional, oculto por default) -----
   gridHelper = new THREE.GridHelper(40, 40, 0x4a4a4a, 0x2a2a2a);
   gridHelper.position.set(3, -1.5, -3.5);
   gridHelper.visible = false;
   scene.add(gridHelper);
 
-  // ----- Controls (en metros) -----
+  // ----- Controls -----
   controls = new OrbitControls(camera, renderer.domElement);
   controls.target.set(3, 2, -3.5);
   controls.enableDamping = true;
@@ -114,35 +66,16 @@ export async function mountViewer(container, glbUrl, onLoaded, opts = {}) {
   controls.minDistance = 4;
   controls.update();
 
-  // ----- Load GLB -----
-  const loader = new GLTFLoader();
-  await new Promise((resolve, reject) => {
-    loader.load(
-      glbUrl,
-      (gltf) => {
-        model = gltf.scene;
-        // El modelo viene de build123d en mm, con materiales planos.
-        // Tintamos los compounds por label.
-        model.traverse((node) => {
-          if (node.isMesh) {
-            node.castShadow = true;
-            node.receiveShadow = true;
-            node.material = materialFor(nodeKind(node));
-          }
-        });
-        scene.add(model);
-        // Centrar control target en la cabaña
-        const box = new THREE.Box3().setFromObject(model);
-        const center = box.getCenter(new THREE.Vector3());
-        controls.target.copy(center);
-        controls.update();
-        if (onLoaded) onLoaded();
-        resolve();
-      },
-      undefined,
-      (err) => reject(err),
-    );
-  });
+  // ----- Procedural cabin -----
+  builder = new CabinBuilder(scene);
+  builder.rebuild(params);
+
+  // Centrar target en la cabaña
+  const box = new THREE.Box3().setFromObject(builder.group);
+  controls.target.copy(box.getCenter(new THREE.Vector3()));
+  controls.update();
+
+  if (onLoaded) onLoaded();
 
   // ----- Animate -----
   function loop() {
@@ -162,13 +95,11 @@ export async function mountViewer(container, glbUrl, onLoaded, opts = {}) {
     renderer.setSize(w2, h2);
   };
   window.addEventListener("resize", onResize);
-  // Re-poll size when the panel becomes visible (tab switch can change clientWidth/Height from 0)
   if (typeof ResizeObserver !== "undefined") {
-    const ro = new ResizeObserver(onResize);
-    ro.observe(container);
+    new ResizeObserver(onResize).observe(container);
   }
 
-  // ----- Buttons (scoped al controlsRoot del viewer) -----
+  // ----- Buttons -----
   const controlsRoot = opts.controlsRoot
     ? (typeof opts.controlsRoot === "string"
         ? document.querySelector(opts.controlsRoot)
@@ -176,14 +107,12 @@ export async function mountViewer(container, glbUrl, onLoaded, opts = {}) {
     : container.parentElement || document;
 
   const btnReset = controlsRoot?.querySelector('[data-action="reset-camera"]');
-  const btnGrid = controlsRoot?.querySelector('[data-action="toggle-grid"]');
-
+  const btnGrid  = controlsRoot?.querySelector('[data-action="toggle-grid"]');
   if (btnReset) {
     btnReset.addEventListener("click", () => {
       camera.position.set(18, 10, 16);
-      const box = new THREE.Box3().setFromObject(model);
-      const center = box.getCenter(new THREE.Vector3());
-      controls.target.copy(center);
+      const b = new THREE.Box3().setFromObject(builder.group);
+      controls.target.copy(b.getCenter(new THREE.Vector3()));
       controls.update();
     });
   }
@@ -193,12 +122,16 @@ export async function mountViewer(container, glbUrl, onLoaded, opts = {}) {
     });
   }
 
-  // Exponer camera/controls del primer viewer para scripts externos (ej. cad/render_views.py).
   if (!window.__cabinCamera) {
     window.__cabinCamera = camera;
     window.__cabinControls = controls;
     window.__cabinScene = scene;
   }
 
-  return { scene, camera, controls, gridHelper, resize: onResize };
+  return {
+    scene, camera, controls, gridHelper, builder, resize: onResize,
+    update(newParams) {
+      builder.rebuild(newParams);
+    },
+  };
 }
