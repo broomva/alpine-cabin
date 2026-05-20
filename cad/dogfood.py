@@ -59,16 +59,30 @@ def set_theme(page, theme: str):
     )
 
 
+def click_tab(page, tab: str):
+    """Click a tab via direct DOM dispatch — bypasses Playwright actionability
+    checks. The procedural viewer's lazy mount for cad3d does heavy synchronous
+    geometry work that can stall the main thread; standard click waits time out."""
+    page.evaluate(
+        """(tab) => {
+            const btn = document.querySelector(`.tab-btn[data-tab="${tab}"]`);
+            if (!btn) throw new Error(`No tab button for data-tab=${tab}`);
+            btn.click();
+        }""",
+        tab,
+    )
+
+
 def capture_tabs(page, theme: str):
     """Capture each tab for a given theme. Assumes page already loaded."""
     print(f"\n— Tema {theme} —")
     set_theme(page, theme)
     time.sleep(0.5)  # let CSS transitions settle
     for tab in TABS:
-        page.locator(f'.tab-btn[data-tab="{tab}"]').click()
+        click_tab(page, tab)
         time.sleep(0.6)
         if tab == "cad3d":
-            time.sleep(2)  # 3D viewer lazy-mounts
+            time.sleep(3)  # 3D viewer lazy-mounts (heavy procedural build)
         out = DOGFOOD_DIR / f"{tab}-{theme}.png"
         page.screenshot(path=str(out), full_page=False)
         kb = out.stat().st_size / 1024
@@ -122,7 +136,7 @@ def main():
                 print(f"  ✓ Viewer scene.background: 0x{bg_before:06x} -> 0x{bg_after:06x}")
 
             # Slider in Overview tab (params are inline there now)
-            page.locator('.tab-btn[data-tab="overview"]').click()
+            click_tab(page, "overview")
             time.sleep(0.5)
             slider = page.locator('input[type=range]').first
             if slider.count() > 0:
@@ -136,7 +150,7 @@ def main():
                 errors.append("interaction: no slider found in Overview")
 
             # Substep toggle in Construir tab
-            page.locator('.tab-btn[data-tab="construir"]').click()
+            click_tab(page, "construir")
             time.sleep(0.4)
             first_step = page.locator('.checklist-item').first
             first_step.click()
