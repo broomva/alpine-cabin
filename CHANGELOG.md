@@ -7,7 +7,12 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/), y 
 ## [Unreleased]
 
 ### Added
-- (próximos cambios irán aquí)
+- **Light-mode toggle**: botón ☀/☾ en el header alterna entre tema oscuro (default, arcan-glass) y tema claro (paper-warm). Persiste en `localStorage` (`alpine-cabin-theme.v1`); el inicial respeta `prefers-color-scheme`. `web/js/theme.js` aplica `data-theme="light"|"dark"` al `<html>` y dispatches `theme-change` CustomEvent.
+- **3D viewer reacciona al tema**: `web/js/viewer.js` escucha `theme-change` y actualiza `scene.background`, `fog`, `GridHelper`, `HemisphereLight` para coincidir con el tema.
+- **Dogfood bi-tema**: `cad/dogfood.py` ahora captura cada tab × {dark, light} (12 screenshots en `assets/dogfood/<tab>-<theme>.png`); valida toggle + localStorage persistence + slider + substep.
+
+### Tickets
+- BRO-1194
 
 ## [0.3.7] — 2026-05-18 — Pages live + renders + UI redesign
 

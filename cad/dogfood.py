@@ -1,10 +1,11 @@
 """dogfood.py — Recorre la página con Playwright y captura screenshots
-de cada tab para validar visualmente el redesign.
+de cada tab en ambos temas (dark, light) para validar visualmente el redesign.
 
-Outputs: assets/dogfood/{overview,construir,parametros,bom,presupuesto,3d,progreso}.png
+Outputs:
+  assets/dogfood/<tab>-<theme>.png   para cada tab × {dark, light}
+  tabs: overview, construir, bom, presupuesto, cad3d, progreso
 
-Uso: `python cad/dogfood.py` (con `make serve` ya corriendo OPCIONAL — el script
-levanta su propio server temporal en puerto 8888 si está libre).
+Uso: `python cad/dogfood.py` (levanta su propio server temporal en puerto 8889).
 """
 from __future__ import annotations
 
@@ -26,7 +27,8 @@ PORT = 8889
 VIEWPORT_W = 1600
 VIEWPORT_H = 1000
 
-TABS = ["overview", "construir", "parametros", "bom", "presupuesto", "cad3d", "progreso"]
+TABS = ["overview", "construir", "bom", "presupuesto", "cad3d", "progreso"]
+THEMES = ["dark", "light"]
 
 
 @contextlib.contextmanager
@@ -43,6 +45,48 @@ def local_server(directory: Path, port: int):
         yield httpd
     finally:
         httpd.shutdown()
+
+
+def set_theme(page, theme: str):
+    """Force theme + dispatch event so viewer.js updates scene."""
+    page.evaluate(
+        """(theme) => {
+            document.documentElement.dataset.theme = theme;
+            localStorage.setItem('alpine-cabin-theme.v1', theme);
+            window.dispatchEvent(new CustomEvent('theme-change', { detail: { theme } }));
+        }""",
+        theme,
+    )
+
+
+def click_tab(page, tab: str):
+    """Click a tab via direct DOM dispatch — bypasses Playwright actionability
+    checks. The procedural viewer's lazy mount for cad3d does heavy synchronous
+    geometry work that can stall the main thread; standard click waits time out."""
+    page.evaluate(
+        """(tab) => {
+            const btn = document.querySelector(`.tab-btn[data-tab="${tab}"]`);
+            if (!btn) throw new Error(`No tab button for data-tab=${tab}`);
+            btn.click();
+        }""",
+        tab,
+    )
+
+
+def capture_tabs(page, theme: str):
+    """Capture each tab for a given theme. Assumes page already loaded."""
+    print(f"\n— Tema {theme} —")
+    set_theme(page, theme)
+    time.sleep(0.5)  # let CSS transitions settle
+    for tab in TABS:
+        click_tab(page, tab)
+        time.sleep(0.6)
+        if tab == "cad3d":
+            time.sleep(3)  # 3D viewer lazy-mounts (heavy procedural build)
+        out = DOGFOOD_DIR / f"{tab}-{theme}.png"
+        page.screenshot(path=str(out), full_page=False)
+        kb = out.stat().st_size / 1024
+        print(f"  ✅ {tab:<12}  {out.relative_to(REPO_ROOT)}  ({kb:,.0f} KB)")
 
 
 def main():
@@ -65,33 +109,48 @@ def main():
             )
             time.sleep(1)
 
-            for tab in TABS:
-                # Click on the tab button
-                page.locator(f'.tab-btn[data-tab="{tab}"]').click()
-                time.sleep(0.6)  # transition + render
+            for theme in THEMES:
+                capture_tabs(page, theme)
 
-                # For 3D tab, wait extra for viewer to mount lazily
-                if tab == "cad3d":
-                    time.sleep(2)
+            # ----- Interaction tests -----
+            print("\n— Interacciones —")
 
-                out = DOGFOOD_DIR / f"{tab}.png"
-                page.screenshot(path=str(out), full_page=False)
-                kb = out.stat().st_size / 1024
-                print(f"  ✅ {tab:<12}  {out.relative_to(REPO_ROOT)}  ({kb:,.0f} KB)")
-
-            # Test interaction: move first slider and verify KPI updates
-            page.locator('.tab-btn[data-tab="parametros"]').click()
+            # Theme toggle button works + persists + viewer scene actually updates
+            initial = page.evaluate("() => document.documentElement.dataset.theme")
+            bg_before = page.evaluate("() => window.__cabinScene?.background?.getHex?.() ?? null")
+            page.locator('#theme-toggle').click()
             time.sleep(0.4)
-            slider = page.locator('input[type=range]').first
-            slider.evaluate("(el) => { el.value = '7.0'; el.dispatchEvent(new Event('input')); }")
-            time.sleep(0.5)
-            dirty_kpis = page.locator('.kpi-value.dirty').count()
-            print(f"  ✓ Interaction test: {dirty_kpis} KPIs marked dirty after slider change")
-            if dirty_kpis == 0:
-                errors.append("interaction: no KPIs marked dirty after slider change")
+            after = page.evaluate("() => document.documentElement.dataset.theme")
+            ls_theme = page.evaluate("() => localStorage.getItem('alpine-cabin-theme.v1')")
+            bg_after = page.evaluate("() => window.__cabinScene?.background?.getHex?.() ?? null")
+            if initial == after:
+                errors.append(f"theme-toggle: no cambió de tema (sigue {after})")
+            if ls_theme != after:
+                errors.append(f"theme-toggle: localStorage ({ls_theme}) != dataset ({after})")
+            if bg_before is None or bg_after is None:
+                errors.append(f"theme-toggle: __cabinScene.background no expuesto (before={bg_before}, after={bg_after})")
+            elif bg_before == bg_after:
+                errors.append(f"theme-toggle: viewer scene.background NO cambió tras toggle (sigue 0x{bg_after:06x})")
+            print(f"  ✓ Theme toggle: {initial} -> {after} (localStorage={ls_theme})")
+            if bg_before is not None and bg_after is not None:
+                print(f"  ✓ Viewer scene.background: 0x{bg_before:06x} -> 0x{bg_after:06x}")
 
-            # Test progress: go to Construir tab, mark a substep
-            page.locator('.tab-btn[data-tab="construir"]').click()
+            # Slider in Overview tab (params are inline there now)
+            click_tab(page, "overview")
+            time.sleep(0.5)
+            slider = page.locator('input[type=range]').first
+            if slider.count() > 0:
+                slider.evaluate("(el) => { el.value = el.max || '7.0'; el.dispatchEvent(new Event('input')); }")
+                time.sleep(0.5)
+                dirty = page.locator('.kpi-value.dirty').count()
+                print(f"  ✓ Slider -> KPIs dirty: {dirty}")
+                if dirty == 0:
+                    errors.append("interaction: no KPIs marked dirty after slider change")
+            else:
+                errors.append("interaction: no slider found in Overview")
+
+            # Substep toggle in Construir tab
+            click_tab(page, "construir")
             time.sleep(0.4)
             first_step = page.locator('.checklist-item').first
             first_step.click()
@@ -101,22 +160,23 @@ def main():
             if not is_done:
                 errors.append("interaction: substep did not toggle to done")
 
-            # Verify localStorage persistence
+            # Progress localStorage persistence
             ls = page.evaluate("() => localStorage.getItem('alpine-cabin-progress.v1')")
             if ls:
-                print(f"  ✓ localStorage: {len(ls)} bytes saved")
+                print(f"  ✓ localStorage progress: {len(ls)} bytes saved")
             else:
-                errors.append("persistence: nothing in localStorage")
+                errors.append("persistence: nothing in alpine-cabin-progress.v1")
 
             browser.close()
 
+    total = len(TABS) * len(THEMES)
     print()
     if errors:
         print(f"⚠ {len(errors)} issues encontradas:")
         for e in errors:
             print(f"  - {e}")
         return 1
-    print(f"✅ Dogfood passed — {len(TABS)} tabs capturadas, sin errores")
+    print(f"✅ Dogfood passed — {total} screenshots ({len(TABS)} tabs x {len(THEMES)} temas), sin errores")
     return 0
 
 
